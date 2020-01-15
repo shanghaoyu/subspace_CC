@@ -205,8 +205,10 @@ PROGRAM ccm_kspace
      end if 
      !call compute_v3nf_memory
 
-     subspace_num = 2
+     subspace_num = 1
      do loop = 0, subspace_num-1
+       !cE = 1
+       call init_chp_constants
        !dens = 0.16*(1+loop*0.01)  
        call setup_channel_structures
        if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
