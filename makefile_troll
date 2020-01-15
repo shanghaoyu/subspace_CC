@@ -1,0 +1,32 @@
+MPI_DIR = /home/g1u/sw/intel_openmpi
+MPI_LIBDIR = ${MPI_DIR}/lib
+MPI_INCLUDEDIR =${MPI_DIR}/include
+MPI_INCLUDE = -I${MPI_INCLUDEDIR} -I${MPI_LIBDIR}
+MPI_LIBS = -L${MPI_LIBDIR} -lmpi_f90 -lmpi_f77 -lmpi -ldl -lm -lnuma -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl
+MKLPATH = /opt/intel/mkl
+MKLINCLUDE = ${MKLPATH}/include
+LOCAL_INCLUDE = -I${MKLINCLUDE} -I${MKLINCLUDE}/intel64/lp64
+LOCAL_LIBS = -L${MKLPATH}/lib/intel64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
+FC=ifort -heap-arrays 1024 -fltconsistency -openmp
+FCD = ifort -check all -g -traceback -heap-arrays 1024 -fltconsistency -openmp
+FCV = ifort -g -heap-arrays 1024 -fltconsistency
+
+INCLUDE = ${LOCAL_INCLUDE} ${MPI_INCLUDE}
+LIBS= ${LOCAL_LIBS} ${MPI_LIBS}
+
+XLF= ${FC} -O3 ${INCLUDE}
+
+all_objects = ccm_modules.o chiral_module_andreas_with_delta.o ccm_library.o ccm_main.o ccm_iter.o ccm_energy.o ccm_t2_eqn.o ccm_diis.o ccm_mapping.o ccm_t3_channels.o ccm_triples.o ccm_t3_eqn.o ccm_t3full_channels.o ccm_v3nf_channels.o
+
+prog_ccm.exe : ${all_objects}
+	${XLF} -o prog_ccm.exe ${all_objects} ${LIBS}
+
+%.o: %.f90
+	${XLF} -c $<
+
+%.o: %.f
+	${XLF} -c $<
+
+clean:
+	rm *.mod *.o
+

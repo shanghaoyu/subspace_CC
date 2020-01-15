@@ -1,0 +1,19 @@
+export OMP_NUM_THREADS = 4
+
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in > SNM28_CCDT_cD2_cE022_rho_0.15_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in2 > SNM28_CCDT_cD2_cE022_rho_0.16_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in3 > SNM28_CCDT_cD2_cE022_rho_0.165_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in4 > SNM28_CCDT_cD2_cE022_rho_0.17_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in5 > SNM28_CCDT_cD2_cE022_rho_0.175_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in6 > SNM28_CCDT_cD2_cE022_rho_0.18_N3.out & 
+wait 
+/home/g1u/sw/intel_openmpi/bin/mpiexec -np 8 ./prog_ccm.exe  ccm_in8 > SNM28_CCDT_cD2_cE022_rho_0.185_N3.out & 
+wait 
+
+
+
