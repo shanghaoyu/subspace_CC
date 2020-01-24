@@ -12,12 +12,12 @@
 14
 ! specify: pnm/snm, input type: density/kfermi 
 pnm, density
-! specify boundary conditions (PBC/TABC/TABCsp) 
-subspace_cal 
+! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/solve_general_EV) 
+solve_general_EV 
 ! dens/kf, ntwist,  nmax
 0.16, 1, 2
 ! specify cluster approximation: CCD, CCDT 
-CCD(T)
+CCD
 ! tnf switch (T/F) and specify 3nf approximation: 0=tnf0b, 1=tnf1b, 2=tnf2b
 T, 3
 ! 3nf cutoff(MeV),non-local reg. exp 

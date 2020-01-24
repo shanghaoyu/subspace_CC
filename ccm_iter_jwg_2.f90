@@ -2600,7 +2600,7 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
   character(len=100) :: t2_file,str_temp
 
   !!! print t2 amplitudes
-  write(str_temp,"(i2)")subspace_count 
+  write(str_temp,"(i3)")subspace_count 
   str_temp = adjustl(str_temp)
   t2_file=trim(str_temp)//'.txt'
   !if ( iam == 0 ) write(6,*) "t2_file=",t2_file,"end"
@@ -2614,8 +2614,8 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
      do bra = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
         do ket = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
 
-           write(223,'(3(I4,1x),1x,2(g20.10,1x))') channel, bra, ket, &
-                REAL(t2_ccm(channel)%val(bra,ket)), AIMAG(t2_ccm(channel)%val(bra,ket))
+         if ( iam == 0 )  write(223,'(3(I4,1x),1x,2(g20.10,1x))') channel, bra, ket, &
+                REAL(t2_ccm(channel)%val(ket,bra)), AIMAG(t2_ccm(channel)%val(ket,bra))
         end do
      end do
   end do

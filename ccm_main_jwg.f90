@@ -12,12 +12,12 @@ PROGRAM ccm_kspace
   use single_particle_orbits
   USE constants
   use deltafull_parameters  
-
+  use subspace
   
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
   complex*16 :: e0_av, mbpt2_av, eccsd_av, eccsdt_av,ener1
-  integer :: nx, ny, nz, i , nxx, nyy, nzz, subspace_num, loop
+  integer :: nx, ny, nz, i , nxx, nyy, nzz,  loop
   integer :: spec_points(10,10,10)
   character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
   call mpi_init(ierror)
@@ -191,7 +191,7 @@ PROGRAM ccm_kspace
      mbpt2_av = mbpt2 
      eccsdt_av = eccsdt
 
-  case( 'subspace_cal' )
+  case( 'subspace_cal' )  !calculate t_ij_ab for different LECs
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 
@@ -205,8 +205,8 @@ PROGRAM ccm_kspace
      end if 
      !call compute_v3nf_memory
 
-     subspace_num = 1
-     do loop = 0, subspace_num-1
+     subspace_num = 5
+     do loop = 1, subspace_num
        !cE = 1
        call init_chp_constants
        !dens = 0.16*(1+loop*0.01)  
@@ -237,7 +237,33 @@ PROGRAM ccm_kspace
      eccsdt_av = eccsdt
 
 
+  case( 'solve_general_EV' ) !solve the general eigenvalue problem
+     subspace_num = 5
 
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+     !call compute_v3nf_memory
+     call setup_channel_structures
+     
+     if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+     call normal_ordered_hamiltonian
+     
+
+     call setup_subspace_allocation
+     call read_subspace_matrix
+
+     call H_bar_ijab 
+     call vacuum_expectation_value_H_bar
+     call get_N_matrix
+ 
   end select
  
  
@@ -1553,6 +1579,8 @@ SUBROUTINE normal_ordered_hamiltonian
      e0 = e0 + tkin(i,i)
   end do
   
+  if ( iam == 0 ) write(6,*) 'kinetic energy =', e0 
+  if ( iam == 0 ) write(6,*) 'below_ef =', below_ef 
   do i = 1, below_ef
      do j = 1, below_ef
         nx2 = all_orbit%nx(i) + all_orbit%nx(j)
@@ -1568,7 +1596,6 @@ SUBROUTINE normal_ordered_hamiltonian
         if ( bra * ket == 0 ) cycle
         
         e0 = e0 + 0.5d0 * vnn_hhhh(channel)%val(bra,ket) 
-        
      end do
   end do
   if ( iam == 0 ) write(6,*) 'Vacuum expectation value', e0 
