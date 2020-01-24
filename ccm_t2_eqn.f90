@@ -181,7 +181,10 @@ SUBROUTINE t2_intermediate(switch)
               if ( bra2 == 0 ) cycle 
               sum1 = sum1 + I6(b,c)*t2_ccm(channel)%val(bra2,ket)
            end do
-           
+          ! !!! jwg
+          ! if ( iam == 0 ) write(6,*) 'b,c=',b,',',c,'  I6(b,c)=',I6(b,c)         
+
+ 
            t2_ccm_eqn(channel)%val(bra,ket) = t2_ccm_eqn(channel)%val(bra,ket) + sum1 
            bra3 = pp_hhpp%ival(b,a) 
            t2_ccm_eqn(channel)%val(bra3,ket) = t2_ccm_eqn(channel)%val(bra3,ket) - sum1 

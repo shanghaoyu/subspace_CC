@@ -18,23 +18,27 @@ SUBROUTINE setup_subspace_allocation
   !if ( iam == 0 ) write(6,*) 'subspace_num' , subspace_num
   !if ( iam == 0 ) write(6,*) 'channels_num' , channels%number_hhpp_confs
 
-  memory = 0.d0
 
   if ( .not. allocated(t2_subspace)) allocate( t2_subspace(subspace_num,channel_num) )
   if ( .not. allocated(l2_subspace)) allocate( l2_subspace(subspace_num,channel_num) )
+  if ( .not. allocated(H_bar_subspace)) allocate( H_bar_subspace(subspace_num,channel_num) )
+  if ( .not. allocated(kinetic_bar_subspace)) allocate( kinetic_bar_subspace(subspace_num,channel_num) )
 
   do loop1 = 1, subspace_num
      do channel   = 1, channel_num
    
         dim1 = size(  lookup_hhpp_configs(1,channel)%ival, 2)
         dim2 = size(  lookup_hhpp_configs(2,channel)%ival, 2)
-        memory = memory + dble(dim1*dim2)*16./1.e9
    
         allocate( t2_subspace(loop1,channel)%val(dim2, dim1) )
         allocate( l2_subspace(loop1,channel)%val(dim2, dim1) )
+        allocate( H_bar_subspace(loop1,channel)%val(dim2, dim1) )
+        allocate( kinetic_bar_subspace(loop1,channel)%val(dim2, dim1) )
         
         t2_subspace(loop1,channel)%val = 0.0D0
         l2_subspace(loop1,channel)%val = 0.0D0
+        H_bar_subspace(loop1,channel)%val = 0.0D0
+        kinetic_bar_subspace(loop1,channel)%val = 0.0D0
 
      end do
   end do
@@ -210,7 +214,8 @@ SUBROUTINE H_bar_ijab
   USE one_body_operators
   USE t2_storage
   USE subspace
-  use configurations
+  USE configurations
+  USE diis_mod
 
   IMPLICIT NONE
   INTEGER :: count, itimes, ntimes, channel, bra, ket, ij, ab, loop1, channel_num
@@ -223,13 +228,20 @@ SUBROUTINE H_bar_ijab
   if ( iam == 0 ) write(6,*) 'channels_num' , channel_num
 
 
-  if ( .not. allocated(H_bar_subspace)) allocate( H_bar_subspace(subspace_num,channel_num))
   call setup_t_amplitudes
 
+  !
+  ! Allocate energy denominators
+  !
+  if ( .not. allocated(d2ij)) allocate( d2ij(1:below_ef))
+  if ( .not. allocated(d2ab)) allocate( d2ab(below_ef+1:tot_orbs))
+  d2ij = 0.d0; d2ab = 0.d0
 
-! set t2 amplitude
+
   do loop1 = 1, subspace_num
 
+    
+    ! set t2 amplitude for given subspace 
     do channel   = 1, channels%number_hhpp_confs
        do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
           do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
@@ -237,16 +249,35 @@ SUBROUTINE H_bar_ijab
           end do
        end do
     end do
+   
+    fock_mtx = fock_mtx_2 
+    call t2_intermediate(0) 
+    
+    ! set H_bar_subsapce for given subspace 
+    do channel   = 1, channels%number_hhpp_confs
+       do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+          do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+             H_bar_subspace(loop1,channel)%val(ab,ij) = t2_ccm_eqn(channel)%val(ab,ij)
+          end do
+       end do
+    end do
   
-
+    fock_mtx = fock_mtx_1 
+    call t2_intermediate(0) 
+    
+    ! set H_bar_subsapce for given subspace 
+    do channel   = 1, channels%number_hhpp_confs
+       do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+          do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+             kinetic_bar_subspace(loop1,channel)%val(ab,ij) = t2_ccm_eqn(channel)%val(ab,ij)
+          end do
+       end do
+    end do
 
 
   end do  
-
   ener1 = 0.d0
-  call ccd_energy_save(ener1 )
-  
-  if ( iam == 0 ) write(6,*) 'ccd_energy=' , ener1
+  call ccd_energy_save(ener1)  
 
 
 END SUBROUTINE H_bar_ijab
@@ -311,19 +342,57 @@ SUBROUTINE get_H_matrix
            do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
               do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
 
-                 H3 = H3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) 
-                 K3 = K3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) 
+                 H3 = H3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) * H_bar_subspace(ket,channel)%val(ab,ij) 
+                 K3 = K3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) * kinetic_bar_subspace(ket,channel)%val(ab,ij)
 
               end do
            end do  
         end do
 
         H_matrix(bar,ket) = H0 + H3
-
+        K_matrix(bar,ket) = K0 + K3
      end do
   end do 
 
 
-
 END SUBROUTINE get_H_matrix
+
+
+SUBROUTINE print_N_H_K_matrix
+  USE subspace
+  USE PARALLEL 
+
+  IMPLICIT NONE
+  INTEGER :: channel, bar,ket, loop1, ij, ab
+  character(LEN=50) :: inputfile, output_file, str_temp, str_temp2  
+ 
+  output_file='H_matrix_1.txt'
+  open (227,file= output_file)
+  do bar = 1, subspace_num
+   !  do ket = 1, subspace_num
+        if ( iam == 0 ) write(227,*) H_matrix(bar,:)
+   !  end do
+  end do
+  close(227)
+
+  output_file='K_matrix.txt'
+  open (228,file= output_file)
+  do bar = 1, subspace_num
+   !  do ket = 1, subspace_num
+        if ( iam == 0 ) write(228,*) K_matrix(bar,:)
+   !  end do
+  end do
+  close(228)
+
+  output_file='N_matrix.txt'
+  open (229,file= output_file)
+  do bar = 1, subspace_num
+   !  do ket = 1, subspace_num
+        if ( iam == 0 ) write(229,*) N_matrix(bar,:)
+   !  end do
+  end do
+  close(229)
+
+
+END SUBROUTINE print_N_H_K_matrix
 

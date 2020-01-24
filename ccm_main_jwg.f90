@@ -259,10 +259,13 @@ PROGRAM ccm_kspace
 
      call setup_subspace_allocation
      call read_subspace_matrix
-
-     call H_bar_ijab 
+!
+     call H_bar_ijab  
      call vacuum_expectation_value_H_bar
      call get_N_matrix
+     call get_H_matrix
+     call print_N_H_K_matrix
+
  
   end select
  
@@ -1445,7 +1448,8 @@ SUBROUTINE normal_ordered_hamiltonian
   use chiral_potentials
   use t2_storage
   use ang_mom_functions
-  
+  use subspace 
+ 
   IMPLICIT NONE 
   INTEGER :: i,j,k,l,p,q,r, ia,ic,h, nx2,ny2,nz2,tz2,sz2,channel,bra,ket, ndim2, i1
   complex*16 :: sum2, sum3, sum4, norm, sum1, gmat, vint1, vint2 
@@ -1501,7 +1505,11 @@ SUBROUTINE normal_ordered_hamiltonian
   
   if ( .not. allocated(tkin)) allocate( tkin(all_orbit%total_orbits, all_orbit%total_orbits) )
   if ( .not. allocated(fock_mtx)) allocate( fock_mtx(all_orbit%total_orbits, all_orbit%total_orbits) )
+  if ( .not. allocated(fock_mtx_1)) allocate( fock_mtx_1(all_orbit%total_orbits, all_orbit%total_orbits) )
+  if ( .not. allocated(fock_mtx_2)) allocate( fock_mtx_2(all_orbit%total_orbits, all_orbit%total_orbits) )
   fock_mtx = 0.d0
+  fock_mtx_1 = 0.d0
+  fock_mtx_2 = 0.d0
   tkin = 0.d0 
   e0 = 0.d0 
   !changed for N3LO 3NF tests!!!!!
@@ -1516,7 +1524,7 @@ SUBROUTINE normal_ordered_hamiltonian
   !tkin = tkin + vext 
   
   fock_mtx = tkin
-  
+    
   
   do ia = 1, all_orbit%total_orbits
      do ic = 1, all_orbit%total_orbits
@@ -1572,7 +1580,64 @@ SUBROUTINE normal_ordered_hamiltonian
      end do
   end do
 
+! jwg start 
+! set fock_mtx_1 to be kinetic matrix, fock_mtx_2 to be external field
+  fock_mtx_1 = tkin
   
+  do ia = 1, all_orbit%total_orbits
+     do ic = 1, all_orbit%total_orbits
+        if ( all_orbit%nx(ia) /= all_orbit%nx(ic) ) cycle 
+        if ( all_orbit%ny(ia) /= all_orbit%ny(ic) ) cycle
+        if ( all_orbit%nz(ia) /= all_orbit%nz(ic) ) cycle
+        if ( all_orbit%itzp(ia) /= all_orbit%itzp(ic) ) cycle
+        
+        do h = 1, below_ef
+           
+           nx2 = all_orbit%nx(ia) + all_orbit%nx(h)
+           ny2 = all_orbit%ny(ia) + all_orbit%ny(h)
+           nz2 = all_orbit%nz(ia) + all_orbit%nz(h)
+           tz2 = (all_orbit%itzp(ia) + all_orbit%itzp(h))/2
+                      
+           if ( ia > below_ef .and. ic > below_ef ) then
+              channel = locate_channel(4,tz2, nx2, ny2, nz2) 
+              if ( channel == 0 ) cycle 
+              
+              bra = hp_hphp%ival(h,ia)
+              ket = hp_hphp%ival(h,ic)
+              if ( bra * ket == 0 ) cycle
+              gmat = vnn_hphp(channel)%val(bra,ket) 
+           elseif ( ia <= below_ef .and. ic <= below_ef ) then
+              channel = locate_channel(1,tz2, nx2, ny2, nz2) 
+              if ( channel == 0 ) cycle
+              
+              bra = hh_hhhh%ival(h,ia)
+              ket = hh_hhhh%ival(h,ic)
+              if ( bra * ket == 0 ) cycle
+              gmat = vnn_hhhh(channel)%val(bra,ket) 
+           elseif ( ia > below_ef .and. ic <= below_ef ) then
+              channel = locate_channel(2,tz2, nx2, ny2, nz2) 
+              if ( channel == 0 ) cycle
+              
+              bra = hh_hhhp%ival(h,ic)
+              ket = hp_hhhp%ival(h,ia)
+              if ( bra * ket == 0 ) cycle
+              gmat = vnn_hhhp(channel)%val(bra,ket) 
+           elseif ( ia <= below_ef .and. ic > below_ef ) then
+              channel = locate_channel(2,tz2, nx2, ny2, nz2) 
+              if ( channel == 0 ) cycle
+              
+              bra = hh_hhhp%ival(h,ia)
+              ket = hp_hhhp%ival(h,ic)
+              if ( bra * ket == 0 ) cycle
+              gmat = vnn_hhhp(channel)%val(bra,ket) 
+              
+           end if
+              
+           fock_mtx_2(ia,ic) = fock_mtx_2(ia,ic) + gmat
+        end DO
+     end do
+  end do
+! jwg end 
   
   e0 = 0.d0 
   do i = 1, below_ef
@@ -1916,7 +1981,7 @@ SUBROUTINE normal_ordered_hamiltonian
   
   
   fock_mtx = fock_mtx + fock_mtx_3nf 
-  
+  fock_mtx_2 = fock_mtx_2 + fock_mtx_3nf 
   
   if ( tnf_approx == 1 ) then
      deallocate( fock_mtx_3nf ) 
