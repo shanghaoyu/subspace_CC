@@ -218,7 +218,7 @@ SUBROUTINE H_bar_ijab
   USE diis_mod
 
   IMPLICIT NONE
-  INTEGER :: count, itimes, ntimes, channel, bra, ket, ij, ab, loop1, channel_num
+  INTEGER :: count, itimes, ntimes, channel, bra, ket, ij, ab, loop1, loop2, channel_num
   complex*16 :: ener1, ener2, dener
   logical :: switch
   real*8  ::  startwtime , endwtime
@@ -237,6 +237,13 @@ SUBROUTINE H_bar_ijab
   if ( .not. allocated(d2ab)) allocate( d2ab(below_ef+1:tot_orbs))
   d2ij = 0.d0; d2ab = 0.d0
 
+  if ( iam == 0 ) write(6,*)  'fock_mtx2:' 
+  do loop1=  1 , below_ef
+     if ( iam == 0 ) write(6,"(20((1X,F10.5)))") REAL(fock_mtx_2(loop1,1:below_ef))
+  end do
+
+
+
 
   do loop1 = 1, subspace_num
 
@@ -250,7 +257,8 @@ SUBROUTINE H_bar_ijab
        end do
     end do
    
-    fock_mtx = fock_mtx_2 
+    fock_mtx = fock_mtx_all 
+ 
     call t2_intermediate(0) 
     
     ! set H_bar_subsapce for given subspace 
@@ -262,7 +270,9 @@ SUBROUTINE H_bar_ijab
        end do
     end do
   
-    fock_mtx = fock_mtx_1 
+!    fock_mtx = fock_mtx_1
+    fock_mtx = 0
+!    if ( iam == 0 ) write(6,*) 'fock_mtx_1 =', fock_mtx_1 
     call t2_intermediate(0) 
     
     ! set H_bar_subsapce for given subspace 
@@ -274,10 +284,10 @@ SUBROUTINE H_bar_ijab
        end do
     end do
 
+!  call ccd_energy_save(ener1)  
 
   end do  
-  ener1 = 0.d0
-  call ccd_energy_save(ener1)  
+  !ener1 = 0.d0
 
 
 END SUBROUTINE H_bar_ijab
@@ -349,8 +359,11 @@ SUBROUTINE get_H_matrix
            end do  
         end do
 
+        if ( iam == 0 ) write(6,*) 'H0=', H0, ' H3=', H3
+        if ( iam == 0 ) write(6,*) 'K0=', K0, ' K3=', K3
         H_matrix(bar,ket) = H0 + H3
-        K_matrix(bar,ket) = K0 + K3
+        !K_matrix(bar,ket) = K0 + K3
+        K_matrix(bar,ket) = K0 
      end do
   end do 
 
@@ -368,27 +381,30 @@ SUBROUTINE print_N_H_K_matrix
  
   output_file='H_matrix_1.txt'
   open (227,file= output_file)
+     if ( iam == 0 ) write(227,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(227,*) H_matrix(bar,:)
+        if ( iam == 0 ) write(227,*) REAL(H_matrix(bar,:))
    !  end do
   end do
   close(227)
 
   output_file='K_matrix.txt'
   open (228,file= output_file)
+     if ( iam == 0 ) write(228,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(228,*) K_matrix(bar,:)
+        if ( iam == 0 ) write(228,*) REAL(K_matrix(bar,:))
    !  end do
   end do
   close(228)
 
   output_file='N_matrix.txt'
   open (229,file= output_file)
+     if ( iam == 0 ) write(229,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(229,*) N_matrix(bar,:)
+        if ( iam == 0 ) write(229,*) REAL(N_matrix(bar,:))
    !  end do
   end do
   close(229)

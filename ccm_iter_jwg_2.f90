@@ -4,9 +4,10 @@ SUBROUTINE ccd_iter
   USE CONSTANTS
   USE one_body_operators
   USE t2_storage
+  USE configurations
   
   IMPLICIT NONE
-  INTEGER :: count, itimes, ntimes, channel, bra, ket, i
+  INTEGER :: count, itimes, ntimes, channel, bra, ket, i, ij, ab
   complex*16 :: ener1, ener2, dener
   logical :: switch 
   real*8  ::  startwtime , endwtime
@@ -95,6 +96,16 @@ SUBROUTINE ccd_iter
         if(iam ==0)write(6,'(a,2i5,2e16.8)')'dener',iam,itimes,real(dener) 
      end if
   end do
+
+!!! jwg start
+  do channel = 1, channels%number_hhpp_confs
+     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+           if(iam ==0)write(6,*)  t2_ccm_eqn(channel)%val(ab,ij)
+        end do 
+     end do
+  end do
+!!! jwg end
   
 !!$  if ( iam == 0 ) write(6,*) '------------------------'
 !!$  if ( iam == 0 ) write(6,*) 'Adding T2V3 contribution to T2'

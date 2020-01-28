@@ -267,18 +267,11 @@ subroutine diis_setup
   
   ii=0
   do channel   = 1, channels%number_hhpp_confs  
-
-    ! if(iam == 0) write(6,*)'channel = ', channel
-    ! if(iam == 0) write(6,*)'bra = ', size(  lookup_hhpp_configs(2,channel)%ival, 2)
-    ! if(iam == 0) write(6,*)'ket = ', size(  lookup_hhpp_configs(1,channel)%ival, 2)
-
      DO bra=1, size(  lookup_hhpp_configs(2,channel)%ival, 2) 
-
         a = lookup_hhpp_configs(2,channel)%ival(1,bra)
         b = lookup_hhpp_configs(2,channel)%ival(2,bra) 
         
         DO ket=1, size(  lookup_hhpp_configs(1,channel)%ival, 2) 
-   
            i= lookup_hhpp_configs(1,channel)%ival(1,ket) 
            j = lookup_hhpp_configs(1,channel)%ival(2,ket) 
            
@@ -290,6 +283,7 @@ subroutine diis_setup
   
   n_diis=ii
   nn_diis= subspace
+  if(iam == 0) write(6,*)'diis space',n_diis
   allocate(t2_diis(n_diis,nn_diis+1))
   allocate(t2_diisd(n_diis,nn_diis))
    

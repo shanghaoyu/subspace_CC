@@ -1637,6 +1637,20 @@ SUBROUTINE normal_ordered_hamiltonian
         end DO
      end do
   end do
+
+!  do ia = 1, all_orbit%total_orbits
+!      do ic = 1, all_orbit%total_orbits
+!         if ( iam == 0 ) write(6,*) 'fock_mtx_1 =', fock_mtx_1(ia,ic) 
+!      end do
+!  end do
+! 
+!  do ia = 1, all_orbit%total_orbits
+!      do ic = 1, all_orbit%total_orbits
+!         if ( iam == 0 ) write(6,*) 'fock_mtx_2 =', fock_mtx_2(ia,ic) 
+!      end do
+!  end do
+
+
 ! jwg end 
   
   e0 = 0.d0 
@@ -1982,7 +1996,8 @@ SUBROUTINE normal_ordered_hamiltonian
   
   fock_mtx = fock_mtx + fock_mtx_3nf 
   fock_mtx_2 = fock_mtx_2 + fock_mtx_3nf 
-  
+  fock_mtx_all = fock_mtx 
+ 
   if ( tnf_approx == 1 ) then
      deallocate( fock_mtx_3nf ) 
      deallocate( ijk_confs )

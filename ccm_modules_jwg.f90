@@ -1285,7 +1285,7 @@ MODULE subspace
 
   complex*16, public, allocatable :: vacuum_H_bar(:)
   complex*16, public, allocatable :: N_matrix(:,:), H_matrix(:,:) , K_matrix(:,:)
-  complex*16, public, allocatable, dimension(:,:) :: fock_mtx_1, fock_mtx_2
+  complex*16, public, allocatable, dimension(:,:) :: fock_mtx_all, fock_mtx_1, fock_mtx_2
   
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: t2_test(:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: t2_subspace(:,:)

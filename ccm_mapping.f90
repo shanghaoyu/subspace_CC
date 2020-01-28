@@ -451,7 +451,6 @@ end if
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_hphp_confs 
   if( .not. allocated(check_my_channel_hphp))allocate( check_my_channel_hphp(1:number_channels) )
-  mapping_hphp = 0 
   check_my_channel_hphp = 0
   
   do local_ch_id = 1, number_channels 
@@ -624,8 +623,8 @@ SUBROUTINE setup_proc_mappings_hppp
   ltot_work=0
   tot_work = 0
   
-  if( .not. allocated(work))allocate( work(1:num_procs) )
-  if( .not. allocated(memory))allocate( memory(1:num_procs) )
+  allocate( work(1:num_procs) )
+  allocate( memory(1:num_procs) )
   work = 0.d0
   memory = 0.d0
   
@@ -653,7 +652,7 @@ SUBROUTINE setup_proc_mappings_hppp
   work_pr_proc = int( ltot_work/int(num_procs,8) )
   work = 0.d0
   
-  if( .not. allocated(mapping_hppp))allocate( mapping_hppp(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping_hppp(1:num_procs, 1:number_channels, 1:5) )
   mapping_hppp = 0 
   if ( iam == 0 ) write(6,*) ltot_work, work_pr_proc, number_channels 
 
@@ -755,7 +754,7 @@ SUBROUTINE setup_proc_mappings_hppp
   
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_hppp_confs 
-  if( .not. allocated(check_my_channel_hppp))allocate( check_my_channel_hppp(1:number_channels) )
+  allocate( check_my_channel_hppp(1:number_channels) )
   check_my_channel_hppp = 0
   
   do local_ch_id = 1, number_channels 
@@ -787,8 +786,8 @@ SUBROUTINE setup_proc_mappings_ph
   REAL*8, allocatable :: work(:), memory(:)
   integer(8):: ltot_work
   
-  if( .not. allocated(work))allocate( work(1:num_procs) )
-  if( .not. allocated(memory))allocate( memory(1:num_procs) )
+  allocate( work(1:num_procs) )
+  allocate( memory(1:num_procs) )
   work = 0.d0
   memory = 0.d0
   
@@ -815,7 +814,7 @@ SUBROUTINE setup_proc_mappings_ph
   work_pr_proc = int( ltot_work/int(num_procs,8) )
   work = 0.d0
 
-  if( .not. allocated(mapping_ph_hphp))allocate( mapping_ph_hphp(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping_ph_hphp(1:num_procs, 1:number_channels, 1:5) )
   mapping_ph_hphp = 0 
   if ( iam == 0 ) write(6,*) ltot_work, work_pr_proc, number_channels 
 
@@ -916,12 +915,11 @@ SUBROUTINE setup_proc_mappings_ph
   
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_ph_hphp_confs 
-  if( .not. allocated(check_my_channel_ph_hphp))allocate( check_my_channel_ph_hphp(1:number_channels) )
+  allocate( check_my_channel_ph_hphp(1:number_channels) )
   check_my_channel_ph_hphp = 0
   
 
-  if( .not. allocated(my_ph_hphp_channel_low))allocate( my_ph_hphp_channel_low(0:num_procs-1) )
-  if( .not. allocated(my_ph_hphp_channel_high))allocate( my_ph_hphp_channel_high(0:num_procs-1) )
+  allocate( my_ph_hphp_channel_low(0:num_procs-1), my_ph_hphp_channel_high(0:num_procs-1) )
   my_ph_hphp_channel_low(iam)  = number_channels + 1
   my_ph_hphp_channel_high(iam) = 0 
   do local_ch_id = 1, number_channels 
@@ -982,15 +980,15 @@ SUBROUTINE setup_proc_t3_mappings
   
   number_channels = channels%number_t3_confs 
   
-  if( .not. allocated(work))allocate( work(1:num_procs) )
-  if( .not. allocated(memory))allocate( memory(1:num_procs) )
+  allocate( work(1:num_procs) )
+  allocate( memory(1:num_procs) )
   work = 0.d0
   memory = 0.d0
   
   work_pr_proc = int( ltot_work/int(num_procs,8) )
   work = 0.d0
   
-  if( .not. allocated(mapping_t3))allocate( mapping_t3(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping_t3(1:num_procs, 1:number_channels, 1:5) )
   mapping_t3 = 0 
   if ( iam == 0 ) write(6,*) ltot_work, work_pr_proc, number_channels 
 
@@ -1094,8 +1092,8 @@ SUBROUTINE setup_proc_t3_mappings
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_t3_confs 
 
-  if( .not. allocated(my_t3channel_low))allocate( my_t3channel_low(0:num_procs-1), my_t3channel_high(0:num_procs-1) )
-  if( .not. allocated(check_my_t3channel))allocate( check_my_t3channel(1:number_channels) )
+  allocate( my_t3channel_low(0:num_procs-1), my_t3channel_high(0:num_procs-1) )
+  allocate( check_my_t3channel(1:number_channels) )
   check_my_t3channel = 0
   
   my_t3channel_low(iam)  = number_channels + 1
@@ -1111,8 +1109,8 @@ SUBROUTINE setup_proc_t3_mappings
   
   call mpi_barrier(mpi_comm_world, ierror)
   !write(6,*) iam, my_t3channel_low(iam), my_t3channel_high(iam)
-  if( .not. allocated(t3_ccm))allocate( t3_ccm(my_t3channel_low(iam):my_t3channel_high(iam)) )
-  if( .not. allocated(v3nf_ppphhh))allocate( v3nf_ppphhh(my_t3channel_low(iam):my_t3channel_high(iam)) )
+  allocate( t3_ccm(my_t3channel_low(iam):my_t3channel_high(iam)) )
+  allocate( v3nf_ppphhh(my_t3channel_low(iam):my_t3channel_high(iam)) )
   call mpi_barrier(mpi_comm_world, ierror)
   
   deallocate( work, memory )

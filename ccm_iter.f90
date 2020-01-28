@@ -132,7 +132,7 @@ SUBROUTINE ccd_iter
   eccsd = e0 + ener2 
   endwtime = MPI_WTIME()
   if ( iam == 0 ) write(6,*) 'Total execution time CCD', endwtime - startwtime
- 
+  
   IF ( cc_approx == 'CCD(T)') then 
     if ( iam == 0 ) write(*,*) "preparing to do CCD(T): "
      do i = 1, size( vnn_hhpp ) 
