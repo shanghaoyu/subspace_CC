@@ -13,11 +13,12 @@ PROGRAM ccm_kspace
   USE constants
   use deltafull_parameters  
   use subspace
-  
+  use minnesota_potentials 
+ 
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
   complex*16 :: e0_av, mbpt2_av, eccsd_av, eccsdt_av,ener1
-  integer :: nx, ny, nz, i , nxx, nyy, nzz,  loop
+  integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop
   integer :: spec_points(10,10,10)
   character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
   call mpi_init(ierror)
@@ -190,6 +191,26 @@ PROGRAM ccm_kspace
      eccsd_av = eccsd
      mbpt2_av = mbpt2 
      eccsdt_av = eccsdt
+     
+    ! do p = 1, below_ef
+    !    do q = 1, below_ef
+    !       do r = 1, below_ef
+    !          do s = 1, below_ef
+    !             if ( iam == 0 ) write(6,*) 'minnesota=', minnesota(p,q,r,s)
+    !          end do 
+    !       end do 
+    !    end do 
+    ! end do
+
+!     if ( iam == 0 ) write(6,*) 'all_orbit%nx:'
+!     do loop = 1, 14
+!        if ( iam == 0 ) write(6,*) all_orbit%nx(loop)  
+!     end do 
+!
+!     if ( iam == 0 ) write(6,*) 'all_orbit%kx:'
+!     do loop = 1, 14
+!        if ( iam == 0 ) write(6,*) all_orbit%kx(loop)  
+!     end do 
 
   case( 'subspace_cal' )  !calculate t_ij_ab for different LECs
 
@@ -205,7 +226,7 @@ PROGRAM ccm_kspace
      end if 
      !call compute_v3nf_memory
 
-     subspace_num = 5
+     subspace_num = 1
      do loop = 1, subspace_num
        !cE = 1
        call init_chp_constants

@@ -11,7 +11,7 @@ SUBROUTINE ccd_iter
   complex*16 :: ener1, ener2, dener
   logical :: switch 
   real*8  ::  startwtime , endwtime
-  
+  character(LEN=50) :: output_file
   !
   ! Setup initial t1 and t2 amplitudes
   !
@@ -97,14 +97,38 @@ SUBROUTINE ccd_iter
      end if
   end do
 
+!call t2_intermediate(0)
 !!! jwg start
-  do channel = 1, channels%number_hhpp_confs
-     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
-        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-           if(iam ==0)write(6,*)  t2_ccm_eqn(channel)%val(ab,ij)
-        end do 
-     end do
-  end do
+! print H_bar
+!  output_file='H_bar_test.txt'
+!  open (229,file= output_file)
+!
+!  if(iam ==0)write(229,*)  'H_bar:'
+!  do channel = 1, channels%number_hhpp_confs
+!     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+!        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+!           if(iam ==0)write(229,*)  t2_ccm_eqn(channel)%val(ab,ij)
+!        end do 
+!     end do
+!  end do
+!  close(229) 
+!! print t2 amplitude
+!  output_file='t2_test.txt'
+!  open (230,file= output_file)
+!
+!  if(iam ==0)write(230,*)  't2:'
+!  do channel = 1, channels%number_hhpp_confs
+!     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+!        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+!           if(iam ==0)write(230,*)  t2_ccm(channel)%val(ab,ij)
+!        end do 
+!     end do
+!  end do
+!  close(230) 
+
+
+
+
 !!! jwg end
   
 !!$  if ( iam == 0 ) write(6,*) '------------------------'

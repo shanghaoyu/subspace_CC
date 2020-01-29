@@ -222,6 +222,7 @@ SUBROUTINE H_bar_ijab
   complex*16 :: ener1, ener2, dener
   logical :: switch
   real*8  ::  startwtime , endwtime
+  character(LEN=50) :: output_file
 
   channel_num = channels%number_hhpp_confs
   if ( iam == 0 ) write(6,*) 'subspace_num' , subspace_num
@@ -237,9 +238,9 @@ SUBROUTINE H_bar_ijab
   if ( .not. allocated(d2ab)) allocate( d2ab(below_ef+1:tot_orbs))
   d2ij = 0.d0; d2ab = 0.d0
 
-  if ( iam == 0 ) write(6,*)  'fock_mtx2:' 
+  if ( iam == 0 ) write(6,*)  'fock_mtxall:' 
   do loop1=  1 , below_ef
-     if ( iam == 0 ) write(6,"(20((1X,F10.5)))") REAL(fock_mtx_2(loop1,1:below_ef))
+     if ( iam == 0 ) write(6,"(20((1X,F10.5)))") REAL(fock_mtx(loop1,1:below_ef))
   end do
 
 
@@ -257,7 +258,7 @@ SUBROUTINE H_bar_ijab
        end do
     end do
    
-    fock_mtx = fock_mtx_all 
+    !fock_mtx = fock_mtx_all 
  
     call t2_intermediate(0) 
     
@@ -271,7 +272,7 @@ SUBROUTINE H_bar_ijab
     end do
   
 !    fock_mtx = fock_mtx_1
-    fock_mtx = 0
+    !fock_mtx = 0
 !    if ( iam == 0 ) write(6,*) 'fock_mtx_1 =', fock_mtx_1 
     call t2_intermediate(0) 
     
@@ -283,6 +284,36 @@ SUBROUTINE H_bar_ijab
           end do
        end do
     end do
+
+!  output_file='H_bar_mine.txt'
+!  open (229,file= output_file)
+!
+  if(iam ==0)write(229,*)  'H_bar:'
+  do channel = 1, channels%number_hhpp_confs
+     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+           if(iam ==0)write(229,*)  t2_ccm_eqn(channel)%val(ab,ij)
+        end do 
+     end do
+  end do
+  close(229)
+! print t2 amplitude
+  output_file='t2_mine.txt'
+  open (230,file= output_file)
+
+  if(iam ==0)write(230,*)  't2:'
+  do channel = 1, channels%number_hhpp_confs
+     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+           if(iam ==0)write(230,*)  t2_ccm(channel)%val(ab,ij)
+        end do 
+     end do
+  end do
+  close(230)
+
+
+
+
 
 !  call ccd_energy_save(ener1)  
 
