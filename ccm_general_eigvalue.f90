@@ -218,8 +218,8 @@ SUBROUTINE H_bar_ijab
   USE diis_mod
 
   IMPLICIT NONE
-  INTEGER :: count, itimes, ntimes, channel, bra, ket, ij, ab, loop1, loop2, channel_num
-  complex*16 :: ener1, ener2, dener
+  INTEGER :: count, itimes, ntimes, channel, bra, ket, ij, ab, i,j ,a ,b,loop1, loop2, channel_num
+  complex*16 :: ener1, ener2, dener, d2f5d
   logical :: switch
   real*8  ::  startwtime , endwtime
   character(LEN=50) :: output_file
@@ -265,22 +265,38 @@ SUBROUTINE H_bar_ijab
     ! set H_bar_subsapce for given subspace 
     do channel   = 1, channels%number_hhpp_confs
        do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+          i= lookup_hhpp_configs(1,channel)%ival(1,ij) 
+          j = lookup_hhpp_configs(1,channel)%ival(2,ij) 
+
           do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-             H_bar_subspace(loop1,channel)%val(ab,ij) = t2_ccm_eqn(channel)%val(ab,ij)
+             a = lookup_hhpp_configs(2,channel)%ival(1,ab)
+             b = lookup_hhpp_configs(2,channel)%ival(2,ab) 
+ 
+             d2f5d= ( d2ij(i) + d2ij(j) - d2ab(a)-d2ab(b) )
+
+             H_bar_subspace(loop1,channel)%val(ab,ij) = t2_ccm_eqn(channel)%val(ab,ij) 
+             H_bar_subspace(loop1,channel)%val(ab,ij) = H_bar_subspace(loop1,channel)%val(ab,ij) - t2_subspace(loop1,channel)%val(ab,ij) *  d2f5d
           end do
        end do
     end do
-  
+
+
 !    fock_mtx = fock_mtx_1
     !fock_mtx = 0
 !    if ( iam == 0 ) write(6,*) 'fock_mtx_1 =', fock_mtx_1 
-    call t2_intermediate(0) 
+!    call t2_intermediate(0) 
     
     ! set H_bar_subsapce for given subspace 
     do channel   = 1, channels%number_hhpp_confs
        do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
-          do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-             kinetic_bar_subspace(loop1,channel)%val(ab,ij) = t2_ccm_eqn(channel)%val(ab,ij)
+          i= lookup_hhpp_configs(1,channel)%ival(1,ij) 
+          j = lookup_hhpp_configs(1,channel)%ival(2,ij) 
+
+         do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+             a = lookup_hhpp_configs(2,channel)%ival(1,ab)
+             b = lookup_hhpp_configs(2,channel)%ival(2,ab) 
+ 
+            kinetic_bar_subspace(loop1,channel)%val(ab,ij) = 0 
           end do
        end do
     end do
@@ -288,28 +304,28 @@ SUBROUTINE H_bar_ijab
 !  output_file='H_bar_mine.txt'
 !  open (229,file= output_file)
 !
-  if(iam ==0)write(229,*)  'H_bar:'
-  do channel = 1, channels%number_hhpp_confs
-     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
-        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-           if(iam ==0)write(229,*)  t2_ccm_eqn(channel)%val(ab,ij)
-        end do 
-     end do
-  end do
-  close(229)
-! print t2 amplitude
-  output_file='t2_mine.txt'
-  open (230,file= output_file)
-
-  if(iam ==0)write(230,*)  't2:'
-  do channel = 1, channels%number_hhpp_confs
-     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
-        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-           if(iam ==0)write(230,*)  t2_ccm(channel)%val(ab,ij)
-        end do 
-     end do
-  end do
-  close(230)
+!  if(iam ==0)write(229,*)  'H_bar:'
+!  do channel = 1, channels%number_hhpp_confs
+!     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+!        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+!           if(iam ==0)write(229,*)  t2_ccm_eqn(channel)%val(ab,ij)
+!        end do 
+!     end do
+!  end do
+!  close(229)
+!! print t2 amplitude
+!  output_file='t2_mine.txt'
+!  open (230,file= output_file)
+!
+!  if(iam ==0)write(230,*)  't2:'
+!  do channel = 1, channels%number_hhpp_confs
+!     do ij = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+!        do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+!           if(iam ==0)write(230,*)  t2_ccm(channel)%val(ab,ij)
+!        end do 
+!     end do
+!  end do
+!  close(230)
 
 
 

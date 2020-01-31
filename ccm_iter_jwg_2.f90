@@ -98,8 +98,8 @@ SUBROUTINE ccd_iter
   end do
 
 !call t2_intermediate(0)
-!!! jwg start
-! print H_bar
+!!!! jwg start
+!! print H_bar
 !  output_file='H_bar_test.txt'
 !  open (229,file= output_file)
 !
@@ -125,11 +125,7 @@ SUBROUTINE ccd_iter
 !     end do
 !  end do
 !  close(230) 
-
-
-
-
-!!! jwg end
+!!!! jwg end
   
 !!$  if ( iam == 0 ) write(6,*) '------------------------'
 !!$  if ( iam == 0 ) write(6,*) 'Adding T2V3 contribution to T2'
@@ -2624,17 +2620,18 @@ end SUBROUTINE diag_2particles
 SUBROUTINE print_gs_amplitudes(subspace_count)
 !  USE diis_mod
   USE PARALLEL
-!  USE CONSTANTS
+  USE CONSTANTS
 !  USE one_body_operators
   USE t2_storage
   use configurations 
- 
+  use deltafull_parameters 
 
   IMPLICIT NONE 
   INTEGER :: channel, bra, ket, subspace_count
   character(len=100) :: t2_file,str_temp
 
   !!! print t2 amplitudes
+  if ( iam == 0 ) write(6,*) 'LEC_c1_input=',LEC_c1_input
   write(str_temp,"(i3)")subspace_count 
   str_temp = adjustl(str_temp)
   t2_file=trim(str_temp)//'.txt'
@@ -2654,6 +2651,8 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
         end do
      end do
   end do
+  
+  if ( iam == 0 ) write(223,*) 'ccd=',eccsd
   close(223)
 
 end SUBROUTINE print_gs_amplitudes

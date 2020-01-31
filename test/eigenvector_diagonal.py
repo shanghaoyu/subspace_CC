@@ -65,7 +65,7 @@ for loop1 in range(subspace_dimension):
 
 
 ev_sorted = sorted(ev_all)
-print(ev_sorted[0]/14)
+print(ev_sorted[0])
 
 
 

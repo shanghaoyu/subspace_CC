@@ -225,9 +225,15 @@ PROGRAM ccm_kspace
         call sigmaXsigma_dot_q_table
      end if 
      !call compute_v3nf_memory
+   
+     LEC_num = 17 
+     if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
+     if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
 
-     subspace_num = 1
+
+     subspace_num = 10
      do loop = 1, subspace_num
+       LEC_c1_input = LEC
        !cE = 1
        call init_chp_constants
        !dens = 0.16*(1+loop*0.01)  
