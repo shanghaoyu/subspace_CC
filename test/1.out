@@ -71,6 +71,8 @@ CC approx CCD(T)
  K_f   1.6795012352211809     
  Nmax           2
  Total number of states         250
+ LEC_max= -0.81400001764297480      -0.53900001168251033      -0.71500001549720771        1.0560000228881836      -0.37302210808503627      -0.37412540810894968      -0.37387570810353754      -0.27934500605463980        2.7792996602396962       0.73909881601953498      -0.24144780523324014       -1.0069378218247891        1.0614890230071545       0.49031731062734130      -0.98494552134811875      -0.49940001082420349      -0.20460000443458556     
+ LEC_max= -0.66599998235702518      -0.44099998831748960      -0.58499998450279234       0.86399997711181642      -0.30519989191496372      -0.30610259189105038      -0.30589829189646245      -0.22855499394536019        2.2739723397603036       0.60471718398046492      -0.19754819476675986      -0.82385817817521101       0.86849097699284550       0.40116868937265870      -0.80586447865188127      -0.40859998917579654      -0.16739999556541443     
  K-mesh   0.0000000000000000     
  K-mesh  -1.4152848269290821     
  K-mesh   1.4152848269290821     
@@ -118,16 +120,15 @@ CC approx CCD(T)
     24       83.01063872       -1   0   1   1   1 particle  
     25       83.01063872       -1  -1   0  -1   1 particle  
  Sz and Tz for vacuum state   0.0000000000000000        14.000000000000000     
- LEC_c1_input= -0.87319999999999998     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
- -0.87319999999999998     
+ -0.73999999999999999     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
- -0.87319999999999998     
+ -0.73999999999999999     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -178,83 +179,83 @@ CC approx CCD(T)
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1200593055691570E-002
+ Time to setup hhhh block   4.0877864288631827E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.7961032793391496E-002
+ Time to setup hhhp block   6.7565591249149293E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2741683952044696     
+ Time to setup hhpp block   1.3001418266794644     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2893248838954605     
+ Time to setup hphp block   1.2871870895032771     
  Setting up vnn for pppp block
- Time to setup pppp block   45.958657777518965     
+ Time to setup pppp block   45.562311691930518     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   8.6207367712631822E-004
+ Time to setup ph hpph block   8.4403675282374024E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value               (141.89542240690315,0.0000000000000000)
- 3NF vacuum expectation value               (5.7563729393134109,0.0000000000000000)
- Vacuum expectation value with 3nf               (15.891760254092206,0.0000000000000000)
- Time for e0   7.1116426261141896E-004
- Time for f3nf   7.2590007446706295E-002
- e0 3nf               (80.589221183453759,0.0000000000000000)               (80.589221150387758,0.0000000000000000)
+ Vacuum expectation value               (160.11882964398180,0.0000000000000000)
+ 3NF vacuum expectation value               (5.7007951229921350,0.0000000000000000)
+ Vacuum expectation value with 3nf               (17.137854383276551,0.0000000000000000)
+ Time for e0   6.7442195722833276E-004
+ Time for f3nf   7.2382276644930243E-002
+ e0 3nf               (79.811131754542316,0.0000000000000000)               (79.811131721889893,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.4153318786993623E-003
+ Time to setup v3nf_2bNO hhhh block   9.3078719801269472E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1841699062497355     
+ Time to setup v3nf_2bNO hhpp block   1.1630727759329602     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64540719171054661     
+ Time to setup v3nf_2bNO hphp block  0.63955952139804140     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.4255185655783862     
+ Time to setup v3nf_2bNO pppp block   5.3215763955959119     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (179.55861639338588,-1.62045345007758413E-017)
+ CCD energy        (196.45581046247037,-1.65191239067075414E-017)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy        (182.94981513356413,-4.65391644410047961E-018)
-dener    0    1  0.33911987E+01
- CCD energy         (185.12720161225172,7.46587539037434111E-017)
-dener    0    2  0.21773865E+01
- CCD energy        (186.50905436313849,-4.54513654690422282E-017)
-dener    0    3  0.13818528E+01
- CCD energy         (187.37511402136772,7.22497932096860704E-017)
-dener    0    4  0.86605966E+00
- CCD energy         (187.90969954267365,1.29102644204463738E-016)
-dener    0    5  0.53458552E+00
-diis_mat    1    1  0.1678E-02
-diis_mat    1    2  0.1116E-02
-diis_mat    1    3  0.7468E-03
-diis_mat    1    4  0.5049E-03
-diis_mat    1    5  0.3461E-03
+ CCD energy        (199.80852139307083,-6.30973900674202501E-017)
+dener    0    1  0.33527109E+01
+ CCD energy         (201.96250106591179,3.74790907483388321E-017)
+dener    0    2  0.21539797E+01
+ CCD energy        (203.32946379231461,-1.56313999934793191E-016)
+dener    0    3  0.13669627E+01
+ CCD energy        (204.18533213490866,-1.58534497585295007E-016)
+dener    0    4  0.85586834E+00
+ CCD energy        (204.71230379846895,-1.33877790333435059E-016)
+dener    0    5  0.52697166E+00
+diis_mat    1    1  0.1657E-02
+diis_mat    1    2  0.1109E-02
+diis_mat    1    3  0.7472E-03
+diis_mat    1    4  0.5091E-03
+diis_mat    1    5  0.3521E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1116E-02
-diis_mat    2    2  0.7458E-03
-diis_mat    2    3  0.5023E-03
-diis_mat    2    4  0.3424E-03
-diis_mat    2    5  0.2371E-03
+diis_mat    2    1  0.1109E-02
+diis_mat    2    2  0.7461E-03
+diis_mat    2    3  0.5065E-03
+diis_mat    2    4  0.3483E-03
+diis_mat    2    5  0.2436E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.7468E-03
-diis_mat    3    2  0.5023E-03
-diis_mat    3    3  0.3412E-03
-diis_mat    3    4  0.2351E-03
-diis_mat    3    5  0.1648E-03
+diis_mat    3    1  0.7472E-03
+diis_mat    3    2  0.5065E-03
+diis_mat    3    3  0.3471E-03
+diis_mat    3    4  0.2415E-03
+diis_mat    3    5  0.1712E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5049E-03
-diis_mat    4    2  0.3424E-03
-diis_mat    4    3  0.2351E-03
-diis_mat    4    4  0.1640E-03
-diis_mat    4    5  0.1168E-03
+diis_mat    4    1  0.5091E-03
+diis_mat    4    2  0.3483E-03
+diis_mat    4    3  0.2415E-03
+diis_mat    4    4  0.1704E-03
+diis_mat    4    5  0.1228E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3461E-03
-diis_mat    5    2  0.2371E-03
-diis_mat    5    3  0.1648E-03
-diis_mat    5    4  0.1168E-03
-diis_mat    5    5  0.8456E-04
+diis_mat    5    1  0.3521E-03
+diis_mat    5    2  0.2436E-03
+diis_mat    5    3  0.1712E-03
+diis_mat    5    4  0.1228E-03
+diis_mat    5    5  0.9002E-04
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -263,53 +264,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1 -0.8856E+02 -0.6113E-05
-sol_vec    2  0.4515E+03  0.3241E-04
-sol_vec    3 -0.8446E+03 -0.6366E-04
-sol_vec    4  0.6829E+03  0.5481E-04
-sol_vec    5 -0.2003E+03 -0.1744E-04
-sol_vec    6 -0.8542E-07 -0.3658E-14
- CCD energy         (188.67748536612947,1.26430215238261481E-008)
-dener    0    6  0.76778582E+00
- CCD energy         (188.56429582511228,6.31357484350197893E-009)
-dener    0    7 -0.11318954E+00
- CCD energy         (188.49623668852723,2.47569078596546974E-009)
-dener    0    8 -0.68059137E-01
- CCD energy         (188.45677155416709,2.19734149652661670E-010)
-dener    0    9 -0.39465134E-01
- CCD energy        (188.43523746699037,-1.04058400001815514E-009)
-dener    0   10 -0.21534087E-01
- CCD energy        (188.42477973550402,-1.68237136704951185E-009)
-dener    0   11 -0.10457731E-01
-diis_mat    1    1  0.9776E-06
-diis_mat    1    2  0.6462E-06
-diis_mat    1    3  0.4402E-06
-diis_mat    1    4  0.3117E-06
-diis_mat    1    5  0.2311E-06
+sol_vec    1 -0.6343E+02 -0.5639E-05
+sol_vec    2  0.3161E+03  0.2977E-04
+sol_vec    3 -0.5750E+03 -0.5828E-04
+sol_vec    4  0.4484E+03  0.5005E-04
+sol_vec    5 -0.1250E+03 -0.1590E-04
+sol_vec    6 -0.7294E-07 -0.3304E-14
+ CCD energy         (205.38171397387993,1.19920436406795197E-008)
+dener    0    6  0.66941018E+00
+ CCD energy         (205.29366304956773,6.16170585177513097E-009)
+dener    0    7 -0.88050924E-01
+ CCD energy         (205.24058399292255,2.60669254814650932E-009)
+dener    0    8 -0.53079057E-01
+ CCD energy         (205.20967944470178,4.99327600426702289E-010)
+dener    0    9 -0.30904548E-01
+ CCD energy        (205.19269397130049,-6.94517030382369616E-010)
+dener    0   10 -0.16985473E-01
+ CCD energy        (205.18431879286317,-1.31880999518916276E-009)
+dener    0   11 -0.83751784E-02
+diis_mat    1    1  0.5064E-06
+diis_mat    1    2  0.3191E-06
+diis_mat    1    3  0.2053E-06
+diis_mat    1    4  0.1365E-06
+diis_mat    1    5  0.9523E-07
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.6462E-06
-diis_mat    2    2  0.4841E-06
-diis_mat    2    3  0.3786E-06
-diis_mat    2    4  0.3076E-06
-diis_mat    2    5  0.2577E-06
+diis_mat    2    1  0.3191E-06
+diis_mat    2    2  0.2282E-06
+diis_mat    2    3  0.1714E-06
+diis_mat    2    4  0.1350E-06
+diis_mat    2    5  0.1110E-06
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.4402E-06
-diis_mat    3    2  0.3786E-06
-diis_mat    3    3  0.3331E-06
-diis_mat    3    4  0.2966E-06
-diis_mat    3    5  0.2654E-06
+diis_mat    3    1  0.2053E-06
+diis_mat    3    2  0.1714E-06
+diis_mat    3    3  0.1483E-06
+diis_mat    3    4  0.1312E-06
+diis_mat    3    5  0.1175E-06
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.3117E-06
-diis_mat    4    2  0.3076E-06
-diis_mat    4    3  0.2966E-06
-diis_mat    4    4  0.2802E-06
-diis_mat    4    5  0.2604E-06
+diis_mat    4    1  0.1365E-06
+diis_mat    4    2  0.1350E-06
+diis_mat    4    3  0.1312E-06
+diis_mat    4    4  0.1252E-06
+diis_mat    4    5  0.1174E-06
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2311E-06
-diis_mat    5    2  0.2577E-06
-diis_mat    5    3  0.2654E-06
-diis_mat    5    4  0.2604E-06
-diis_mat    5    5  0.2473E-06
+diis_mat    5    1  0.9523E-07
+diis_mat    5    2  0.1110E-06
+diis_mat    5    3  0.1175E-06
+diis_mat    5    4  0.1174E-06
+diis_mat    5    5  0.1131E-06
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -318,53 +319,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.1390E+03 -0.2437E-05
-sol_vec    2 -0.7394E+03  0.1219E-04
-sol_vec    3  0.1469E+04 -0.2274E-04
-sol_vec    4 -0.1290E+04  0.1874E-04
-sol_vec    5  0.4232E+03 -0.5759E-05
-sol_vec    6 -0.1480E-10  0.2551E-16
- CCD energy        (188.46403750808167,-4.71668809086176415E-011)
-dener    0   12  0.39257773E-01
- CCD energy        (188.46322920890813,-8.29693425312054829E-011)
-dener    0   13 -0.80829917E-03
- CCD energy        (188.46272938572662,-9.87521980861022224E-011)
-dener    0   14 -0.49982318E-03
- CCD energy        (188.46242185748974,-1.02422346030965885E-010)
-dener    0   15 -0.30752824E-03
- CCD energy        (188.46223372316805,-9.90727483173793362E-011)
-dener    0   16 -0.18813432E-03
- CCD energy        (188.46211935353392,-9.19433381884105300E-011)
-dener    0   17 -0.11436963E-03
-diis_mat    1    1  0.1356E-10
-diis_mat    1    2  0.1859E-10
-diis_mat    1    3  0.1982E-10
-diis_mat    1    4  0.1902E-10
-diis_mat    1    5  0.1724E-10
+sol_vec    1  0.1285E+03 -0.9263E-06
+sol_vec    2 -0.6856E+03  0.4628E-05
+sol_vec    3  0.1366E+04 -0.8625E-05
+sol_vec    4 -0.1204E+04  0.7106E-05
+sol_vec    5  0.3965E+03 -0.2183E-05
+sol_vec    6  0.3850E-12  0.7575E-17
+ CCD energy         (205.21272654788646,2.25053787641204332E-011)
+dener    0   12  0.28407755E-01
+ CCD energy        (205.21222067575536,-6.20532251398352530E-013)
+dener    0   13 -0.50587213E-03
+ CCD energy        (205.21190689250162,-1.31689783156008910E-011)
+dener    0   14 -0.31378325E-03
+ CCD energy        (205.21171343908833,-1.92416630853010845E-011)
+dener    0   15 -0.19345341E-03
+ CCD energy        (205.21159505473778,-2.14413583520847792E-011)
+dener    0   16 -0.11838435E-03
+ CCD energy        (205.21152325995124,-2.14060377991721738E-011)
+dener    0   17 -0.71794787E-04
+diis_mat    1    1  0.7377E-11
+diis_mat    1    2  0.8621E-11
+diis_mat    1    3  0.8618E-11
+diis_mat    1    4  0.7978E-11
+diis_mat    1    5  0.7060E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1859E-10
-diis_mat    2    2  0.2367E-10
-diis_mat    2    3  0.2458E-10
-diis_mat    2    4  0.2329E-10
-diis_mat    2    5  0.2098E-10
+diis_mat    2    1  0.8621E-11
+diis_mat    2    2  0.9940E-11
+diis_mat    2    3  0.9884E-11
+diis_mat    2    4  0.9132E-11
+diis_mat    2    5  0.8082E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1982E-10
-diis_mat    3    2  0.2458E-10
-diis_mat    3    3  0.2527E-10
-diis_mat    3    4  0.2383E-10
-diis_mat    3    5  0.2142E-10
+diis_mat    3    1  0.8618E-11
+diis_mat    3    2  0.9884E-11
+diis_mat    3    3  0.9808E-11
+diis_mat    3    4  0.9057E-11
+diis_mat    3    5  0.8019E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.1902E-10
-diis_mat    4    2  0.2329E-10
-diis_mat    4    3  0.2383E-10
-diis_mat    4    4  0.2244E-10
-diis_mat    4    5  0.2015E-10
+diis_mat    4    1  0.7978E-11
+diis_mat    4    2  0.9132E-11
+diis_mat    4    3  0.9057E-11
+diis_mat    4    4  0.8365E-11
+diis_mat    4    5  0.7409E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1724E-10
-diis_mat    5    2  0.2098E-10
-diis_mat    5    3  0.2142E-10
-diis_mat    5    4  0.2015E-10
-diis_mat    5    5  0.1810E-10
+diis_mat    5    1  0.7060E-11
+diis_mat    5    2  0.8082E-11
+diis_mat    5    3  0.8019E-11
+diis_mat    5    4  0.7409E-11
+diis_mat    5    5  0.6568E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -373,24 +374,24 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.8838E+02 -0.3006E-04
-sol_vec    2 -0.4814E+03  0.1539E-03
-sol_vec    3  0.9790E+03 -0.2926E-03
-sol_vec    4 -0.8810E+03  0.2451E-03
-sol_vec    5  0.2960E+03 -0.7626E-04
-sol_vec    6  0.1468E-14 -0.1081E-20
- CCD energy         (188.46192932674995,2.30430638093617878E-011)
-dener    0   18 -0.19002678E-03
- CCD energy         (188.46192848191151,1.56815246217956686E-011)
-dener    0   19 -0.84483845E-06
- Total execution time CCD   1.5200794487609528     
+sol_vec    1  0.9344E+02 -0.7529E-06
+sol_vec    2 -0.5065E+03  0.5242E-05
+sol_vec    3  0.1025E+04 -0.1276E-04
+sol_vec    4 -0.9184E+03  0.1303E-04
+sol_vec    5  0.3073E+03 -0.4759E-05
+sol_vec    6  0.7072E-15  0.2049E-20
+ CCD energy        (205.21141327068702,-4.81018949517109512E-012)
+dener    0   18 -0.10998926E-03
+ CCD energy        (205.21141323296820,-2.71059889898348020E-012)
+dener    0   19 -0.37718827E-07
+ Total execution time CCD   1.4872582835378125     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.245281012437772     
+ Time to setup hppp block   13.052192036120687     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -797,21 +798,21 @@ dener    0   19 -0.84483845E-06
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7459444487467408     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.18536           -0.18973
+ EXECUTION TIME FOR CCD(T)   3.7377188790123910     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.19282           -0.19685
+ LEC_c1_input= -0.73999999999999999     
  t2_file=1.txt                                                                                               end2
  channels_num           25
  wtf end 
- LEC_c1_input=  -1.0303760000000000     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
-  -1.0303760000000000     
+ -0.68999999925494193     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
-  -1.0303760000000000     
+ -0.68999999925494193     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -862,83 +863,83 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.18536           
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1234465665183961E-002
+ Time to setup hhhh block   4.1047612205147743E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.8113500776235014E-002
+ Time to setup hhhp block   6.7619023320730776E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2699749116436578     
+ Time to setup hhpp block   1.2548688235692680     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2702043121098541     
+ Time to setup hphp block   1.2590964843402617     
  Setting up vnn for pppp block
- Time to setup pppp block   46.478453581163194     
+ Time to setup pppp block   45.315469030465465     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   8.6330488556995988E-004
+ Time to setup ph hpph block   8.4805412916466594E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value               (120.39180186715087,0.0000000000000000)
- 3NF vacuum expectation value               (5.8219547625725179,0.0000000000000000)
- Vacuum expectation value with 3nf               (14.421369181654724,0.0000000000000000)
- Time for e0   5.5691826855763793E-004
- Time for f3nf   7.2923072380945086E-002
- e0 3nf               (81.507366709569283,0.0000000000000000)               (81.507366676015252,0.0000000000000000)
+ Vacuum expectation value               (166.95944807815090,0.0000000000000000)
+ 3NF vacuum expectation value               (5.6799325790171169,0.0000000000000000)
+ Vacuum expectation value with 3nf               (17.605607441742183,0.0000000000000000)
+ Time for e0   5.5934989359229803E-004
+ Time for f3nf   7.2936696175020188E-002
+ e0 3nf               (79.519056138736815,0.0000000000000000)               (79.519056106239631,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.2138869804330170E-003
+ Time to setup v3nf_2bNO hhhh block   9.0907912235707045E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1829996370361187     
+ Time to setup v3nf_2bNO hhpp block   1.1809980047401041     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64630779984872788     
+ Time to setup v3nf_2bNO hphp block  0.63776410138234496     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.4303107140003704     
+ Time to setup v3nf_2bNO pppp block   5.3181384995114058     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (159.55938190103976,-6.40642882706578578E-017)
+ CCD energy        (202.78646949870404,-1.00956489594013594E-018)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy         (163.00315222375167,1.56531690110725200E-017)
-dener    0    1  0.34437703E+01
- CCD energy         (165.21222606422771,2.16984429843332045E-017)
-dener    0    2  0.22090738E+01
- CCD energy         (166.61381895033139,3.00212617224742097E-016)
-dener    0    3  0.14015929E+01
- CCD energy         (167.49294057007526,2.42658422609802901E-016)
-dener    0    4  0.87912162E+00
- CCD energy         (168.03688667613349,3.51357736381379723E-016)
-dener    0    5  0.54394611E+00
-diis_mat    1    1  0.1714E-02
-diis_mat    1    2  0.1132E-02
-diis_mat    1    3  0.7514E-03
-diis_mat    1    4  0.5034E-03
-diis_mat    1    5  0.3416E-03
+ CCD energy         (206.12620377903428,3.00887299427562036E-018)
+dener    0    1  0.33397343E+01
+ CCD energy         (208.27223677624386,1.34896137835950013E-016)
+dener    0    2  0.21460330E+01
+ CCD energy        (209.63406080085517,-9.98893245047825633E-017)
+dener    0    3  0.13618240E+01
+ CCD energy         (210.48632079225575,1.10100730189293309E-016)
+dener    0    4  0.85225999E+00
+ CCD energy        (211.01051504657056,-9.88758508618333977E-017)
+dener    0    5  0.52419425E+00
+diis_mat    1    1  0.1652E-02
+diis_mat    1    2  0.1108E-02
+diis_mat    1    3  0.7484E-03
+diis_mat    1    4  0.5114E-03
+diis_mat    1    5  0.3548E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1132E-02
-diis_mat    2    2  0.7505E-03
-diis_mat    2    3  0.5010E-03
-diis_mat    2    4  0.3380E-03
-diis_mat    2    5  0.2314E-03
+diis_mat    2    1  0.1108E-02
+diis_mat    2    2  0.7473E-03
+diis_mat    2    3  0.5088E-03
+diis_mat    2    4  0.3511E-03
+diis_mat    2    5  0.2464E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.7514E-03
-diis_mat    3    2  0.5010E-03
-diis_mat    3    3  0.3368E-03
-diis_mat    3    4  0.2293E-03
-diis_mat    3    5  0.1588E-03
+diis_mat    3    1  0.7484E-03
+diis_mat    3    2  0.5088E-03
+diis_mat    3    3  0.3499E-03
+diis_mat    3    4  0.2443E-03
+diis_mat    3    5  0.1739E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5034E-03
-diis_mat    4    2  0.3380E-03
-diis_mat    4    3  0.2293E-03
-diis_mat    4    4  0.1580E-03
-diis_mat    4    5  0.1109E-03
+diis_mat    4    1  0.5114E-03
+diis_mat    4    2  0.3511E-03
+diis_mat    4    3  0.2443E-03
+diis_mat    4    4  0.1731E-03
+diis_mat    4    5  0.1253E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3416E-03
-diis_mat    5    2  0.2314E-03
-diis_mat    5    3  0.1588E-03
-diis_mat    5    4  0.1109E-03
-diis_mat    5    5  0.7906E-04
+diis_mat    5    1  0.3548E-03
+diis_mat    5    2  0.2464E-03
+diis_mat    5    3  0.1739E-03
+diis_mat    5    4  0.1253E-03
+diis_mat    5    5  0.9227E-04
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -947,53 +948,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1 -0.1683E+03  0.7721E-04
-sol_vec    2  0.8808E+03 -0.4119E-03
-sol_vec    3 -0.1698E+04  0.8131E-03
-sol_vec    4  0.1424E+04 -0.7025E-03
-sol_vec    5 -0.4377E+03  0.2241E-03
-sol_vec    6 -0.1254E-06  0.4768E-13
- CCD energy        (169.00329777525030,-1.50238780868169829E-007)
-dener    0    6  0.96641110E+00
- CCD energy        (168.81025296022352,-7.08861676476144193E-008)
-dener    0    7 -0.19304482E+00
- CCD energy        (168.69471375238169,-2.32131930441141900E-008)
-dener    0    8 -0.11553921E+00
- CCD energy         (168.62823505788739,4.40797181242470422E-009)
-dener    0    9 -0.66478694E-01
- CCD energy         (168.59247991598411,1.94573739632105436E-008)
-dener    0   10 -0.35755142E-01
- CCD energy         (168.57566078829038,2.67389690789673022E-008)
-dener    0   11 -0.16819128E-01
-diis_mat    1    1  0.3475E-05
-diis_mat    1    2  0.2429E-05
-diis_mat    1    3  0.1757E-05
-diis_mat    1    4  0.1320E-05
-diis_mat    1    5  0.1029E-05
+sol_vec    1 -0.5626E+02 -0.5582E-05
+sol_vec    2  0.2776E+03  0.2942E-04
+sol_vec    3 -0.4984E+03 -0.5754E-04
+sol_vec    4  0.3818E+03  0.4938E-04
+sol_vec    5 -0.1037E+03 -0.1568E-04
+sol_vec    6 -0.6915E-07 -0.3177E-14
+ CCD energy         (211.64595649719425,1.19417480509294452E-008)
+dener    0    6  0.63544145E+00
+ CCD energy         (211.56501761017142,6.18280829968028306E-009)
+dener    0    7 -0.80938887E-01
+ CCD energy         (211.51618871322921,2.66529401419174011E-009)
+dener    0    8 -0.48828897E-01
+ CCD energy         (211.48772547679775,5.74947399434149073E-010)
+dener    0    9 -0.28463236E-01
+ CCD energy        (211.47205015912235,-6.13982419224916783E-010)
+dener    0   10 -0.15675318E-01
+ CCD energy        (211.46428892801643,-1.24024477521696836E-009)
+dener    0   11 -0.77612311E-02
+diis_mat    1    1  0.4021E-06
+diis_mat    1    2  0.2483E-06
+diis_mat    1    3  0.1556E-06
+diis_mat    1    4  0.1002E-06
+diis_mat    1    5  0.6763E-07
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.2429E-05
-diis_mat    2    2  0.1923E-05
-diis_mat    2    3  0.1572E-05
-diis_mat    2    4  0.1319E-05
-diis_mat    2    5  0.1127E-05
+diis_mat    2    1  0.2483E-06
+diis_mat    2    2  0.1741E-06
+diis_mat    2    3  0.1284E-06
+diis_mat    2    4  0.9979E-07
+diis_mat    2    5  0.8133E-07
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1757E-05
-diis_mat    3    2  0.1572E-05
-diis_mat    3    3  0.1415E-05
-diis_mat    3    4  0.1274E-05
-diis_mat    3    5  0.1143E-05
+diis_mat    3    1  0.1556E-06
+diis_mat    3    2  0.1284E-06
+diis_mat    3    3  0.1105E-06
+diis_mat    3    4  0.9761E-07
+diis_mat    3    5  0.8753E-07
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.1320E-05
-diis_mat    4    2  0.1319E-05
-diis_mat    4    3  0.1274E-05
-diis_mat    4    4  0.1199E-05
-diis_mat    4    5  0.1108E-05
+diis_mat    4    1  0.1002E-06
+diis_mat    4    2  0.9979E-07
+diis_mat    4    3  0.9761E-07
+diis_mat    4    4  0.9373E-07
+diis_mat    4    5  0.8846E-07
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1029E-05
-diis_mat    5    2  0.1127E-05
-diis_mat    5    3  0.1143E-05
-diis_mat    5    4  0.1108E-05
-diis_mat    5    5  0.1041E-05
+diis_mat    5    1  0.6763E-07
+diis_mat    5    2  0.8133E-07
+diis_mat    5    3  0.8753E-07
+diis_mat    5    4  0.8846E-07
+diis_mat    5    5  0.8587E-07
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -1002,53 +1003,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.1812E+03 -0.2441E-04
-sol_vec    2 -0.9546E+03  0.1260E-03
-sol_vec    3  0.1877E+04 -0.2417E-03
-sol_vec    4 -0.1632E+04  0.2039E-03
-sol_vec    5  0.5292E+03 -0.6384E-04
-sol_vec    6 -0.2206E-09 -0.2265E-16
- CCD energy        (168.65309041358958,-2.58767015508180732E-009)
-dener    0   12  0.77429625E-01
- CCD energy        (168.65098082654487,-1.27745615212725032E-009)
-dener    0   13 -0.21095870E-02
- CCD energy        (168.64967660513628,-5.21722642340124256E-010)
-dener    0   14 -0.13042214E-02
- CCD energy        (168.64886872899160,-1.02490557987649960E-010)
-dener    0   15 -0.80787614E-03
- CCD energy         (168.64836590105966,1.15477594697433965E-010)
-dener    0   16 -0.50282793E-03
- CCD energy         (168.64805005748053,2.15542598692829757E-010)
-dener    0   17 -0.31584358E-03
-diis_mat    1    1  0.2047E-09
-diis_mat    1    2  0.2425E-09
-diis_mat    1    3  0.2464E-09
-diis_mat    1    4  0.2324E-09
-diis_mat    1    5  0.2100E-09
+sol_vec    1  0.1261E+03  0.1696E-04
+sol_vec    2 -0.6734E+03 -0.8585E-04
+sol_vec    3  0.1343E+04  0.1619E-03
+sol_vec    4 -0.1185E+04 -0.1347E-03
+sol_vec    5  0.3904E+03  0.4171E-04
+sol_vec    6  0.2550E-11 -0.5744E-16
+ CCD energy         (211.48987118289796,5.98258305189528955E-010)
+dener    0   12  0.25582255E-01
+ CCD energy         (211.48943506130098,5.18127939141492583E-010)
+dener    0   13 -0.43612160E-03
+ CCD energy         (211.48916438262418,4.51381749010566345E-010)
+dener    0   14 -0.27067868E-03
+ CCD energy         (211.48899748763540,3.93940031459402526E-010)
+dener    0   15 -0.16689499E-03
+ CCD energy         (211.48889542232183,3.43591292247521283E-010)
+dener    0   16 -0.10206531E-03
+ CCD energy         (211.48883363584784,2.99097534210766775E-010)
+dener    0   17 -0.61786474E-04
+diis_mat    1    1  0.6569E-11
+diis_mat    1    2  0.7206E-11
+diis_mat    1    3  0.6997E-11
+diis_mat    1    4  0.6370E-11
+diis_mat    1    5  0.5577E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.2425E-09
-diis_mat    2    2  0.2920E-09
-diis_mat    2    3  0.2992E-09
-diis_mat    2    4  0.2839E-09
-diis_mat    2    5  0.2579E-09
+diis_mat    2    1  0.7206E-11
+diis_mat    2    2  0.7944E-11
+diis_mat    2    3  0.7736E-11
+diis_mat    2    4  0.7062E-11
+diis_mat    2    5  0.6201E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.2464E-09
-diis_mat    3    2  0.2992E-09
-diis_mat    3    3  0.3080E-09
-diis_mat    3    4  0.2932E-09
-diis_mat    3    5  0.2671E-09
+diis_mat    3    1  0.6997E-11
+diis_mat    3    2  0.7736E-11
+diis_mat    3    3  0.7547E-11
+diis_mat    3    4  0.6899E-11
+diis_mat    3    5  0.6067E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.2324E-09
-diis_mat    4    2  0.2839E-09
-diis_mat    4    3  0.2932E-09
-diis_mat    4    4  0.2798E-09
-diis_mat    4    5  0.2555E-09
+diis_mat    4    1  0.6370E-11
+diis_mat    4    2  0.7062E-11
+diis_mat    4    3  0.6899E-11
+diis_mat    4    4  0.6315E-11
+diis_mat    4    5  0.5560E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2100E-09
-diis_mat    5    2  0.2579E-09
-diis_mat    5    3  0.2671E-09
-diis_mat    5    4  0.2555E-09
-diis_mat    5    5  0.2337E-09
+diis_mat    5    1  0.5577E-11
+diis_mat    5    2  0.6201E-11
+diis_mat    5    3  0.6067E-11
+diis_mat    5    4  0.5560E-11
+diis_mat    5    5  0.4901E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -1057,79 +1058,24 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.7259E+02  0.4205E-06
-sol_vec    2 -0.4008E+03 -0.1403E-05
-sol_vec    3  0.8260E+03  0.1220E-05
-sol_vec    4 -0.7532E+03  0.1927E-06
-sol_vec    5  0.2563E+03 -0.4305E-06
-sol_vec    6  0.1154E-13 -0.1459E-20
- CCD energy        (168.64727728180284,-1.08984192873243161E-011)
-dener    0   18 -0.77277568E-03
- CCD energy        (168.64727187590074,-7.46934863351968151E-012)
-dener    0   19 -0.54059021E-05
- CCD energy        (168.64726834132037,-5.10091357548876394E-012)
-dener    0   20 -0.35345804E-05
- CCD energy        (168.64726600265004,-3.46154644513304608E-012)
-dener    0   21 -0.23386703E-05
- CCD energy        (168.64726443270766,-2.32611398217046759E-012)
-dener    0   22 -0.15699424E-05
- CCD energy        (168.64726336061284,-1.53958566954157290E-012)
-dener    0   23 -0.10720948E-05
-diis_mat    1    1  0.9271E-14
-diis_mat    1    2  0.8154E-14
-diis_mat    1    3  0.7106E-14
-diis_mat    1    4  0.6149E-14
-diis_mat    1    5  0.5293E-14
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.8154E-14
-diis_mat    2    2  0.7122E-14
-diis_mat    2    3  0.6171E-14
-diis_mat    2    4  0.5316E-14
-diis_mat    2    5  0.4559E-14
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.7106E-14
-diis_mat    3    2  0.6171E-14
-diis_mat    3    3  0.5325E-14
-diis_mat    3    4  0.4571E-14
-diis_mat    3    5  0.3909E-14
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.6149E-14
-diis_mat    4    2  0.5316E-14
-diis_mat    4    3  0.4571E-14
-diis_mat    4    4  0.3914E-14
-diis_mat    4    5  0.3341E-14
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.5293E-14
-diis_mat    5    2  0.4559E-14
-diis_mat    5    3  0.3909E-14
-diis_mat    5    4  0.3341E-14
-diis_mat    5    5  0.2848E-14
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.8043E+02 -0.1397E-02
-sol_vec    2 -0.4380E+03  0.7258E-02
-sol_vec    3  0.8905E+03 -0.1403E-01
-sol_vec    4 -0.8018E+03  0.1195E-01
-sol_vec    5  0.2698E+03 -0.3777E-02
-sol_vec    6  0.1439E-17  0.9019E-22
- CCD energy        (168.64726003205826,-7.61002970221041993E-012)
-dener    0   24 -0.33285546E-05
- CCD energy        (168.64726010308112,-4.53771318303169219E-012)
-dener    0   25  0.71022875E-07
- Total execution time CCD   2.0566369210719131     
+sol_vec    1  0.9521E+02  0.1264E-04
+sol_vec    2 -0.5151E+03 -0.7010E-04
+sol_vec    3  0.1041E+04  0.1438E-03
+sol_vec    4 -0.9308E+03 -0.1291E-03
+sol_vec    5  0.3110E+03  0.4277E-04
+sol_vec    6  0.5463E-15  0.1638E-20
+ CCD energy        (211.48874190795655,-2.39572432195002422E-012)
+dener    0   18 -0.91727891E-04
+ CCD energy        (211.48874213275894,-2.49626078562484593E-012)
+dener    0   19  0.22480239E-06
+ Total execution time CCD   1.4818914037896320     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.951419992838055     
+ Time to setup hppp block   13.052720120234881     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -1536,21 +1482,21 @@ dener    0   25  0.71022875E-07
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7604542979388498     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.17724           -0.18202
+ EXECUTION TIME FOR CCD(T)   3.7565625357092358     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.19577           -0.19967
+ LEC_c1_input= -0.68999999925494193     
  t2_file=2.txt                                                                                               end2
  channels_num           25
  wtf end 
- LEC_c1_input=  -1.2158436799999999     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
-  -1.2158436799999999     
+ -0.63999999850988387     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
-  -1.2158436799999999     
+ -0.63999999850988387     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -1601,83 +1547,83 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.17724           
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1507187939714640E-002
+ Time to setup hhhh block   4.0988226595800370E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.8155549233779311E-002
+ Time to setup hhhp block   6.7546316131483763E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2768916618078947     
+ Time to setup hhpp block   1.2681491963448934     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2823507117573172     
+ Time to setup hphp block   1.3057848159223795     
  Setting up vnn for pppp block
- Time to setup pppp block   46.328985310101416     
+ Time to setup pppp block   45.918110713071655     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.5290192570537329E-004
+ Time to setup ph hpph block   2.4948123609647155E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value               (95.017529630242663,0.0000000000000000)
- 3NF vacuum expectation value               (5.8993413140182609,0.0000000000000000)
- Vacuum expectation value with 3nf               (12.686307716178451,0.0000000000000000)
- Time for e0   5.6077964836731553E-004
- Time for f3nf   7.2786018485203385E-002
- e0 3nf               (82.590778430385612,0.0000000000000000)               (82.590778396255658,0.0000000000000000)
+ Vacuum expectation value               (173.80006651232154,0.0000000000000000)
+ 3NF vacuum expectation value               (5.6590700350420997,0.0000000000000000)
+ Vacuum expectation value with 3nf               (18.073360500207922,0.0000000000000000)
+ Time for e0   5.5811909260228276E-004
+ Time for f3nf   7.1702171000652015E-002
+ e0 3nf               (79.226980522931314,0.0000000000000000)               (79.226980490589398,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.0883458615280688E-003
+ Time to setup v3nf_2bNO hhhh block   9.1010094620287418E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1939722216920927     
+ Time to setup v3nf_2bNO hhpp block   1.1795317505020648     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64329059503506869     
+ Time to setup v3nf_2bNO hphp block  0.65153092955006287     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3722240782226436     
+ Time to setup v3nf_2bNO pppp block   5.6785501027479768     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (135.87578793322209,-6.98939409167483169E-017)
+ CCD energy         (209.11051388259614,1.60711804264734265E-017)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy         (139.39121975831057,2.47407738065216299E-017)
-dener    0    1  0.35154318E+01
- CCD energy        (141.64311884766201,-1.62789145471983156E-017)
-dener    0    2  0.22518991E+01
- CCD energy         (143.07087637301967,6.39243057766379742E-017)
-dener    0    3  0.14277575E+01
- CCD energy        (143.96676093026707,-1.07359520230348490E-016)
-dener    0    4  0.89588456E+00
- CCD energy        (144.52222350707183,-1.27573750998222948E-016)
-dener    0    5  0.55546258E+00
-diis_mat    1    1  0.1770E-02
-diis_mat    1    2  0.1160E-02
-diis_mat    1    3  0.7633E-03
-diis_mat    1    4  0.5062E-03
-diis_mat    1    5  0.3395E-03
+ CCD energy         (212.43808714623080,2.73175535954129088E-017)
+dener    0    1  0.33275733E+01
+ CCD energy         (214.57664044708545,6.70756914412751866E-017)
+dener    0    2  0.21385533E+01
+ CCD energy         (215.93357732841469,5.30185450245198552E-017)
+dener    0    3  0.13569369E+01
+ CCD energy         (216.78235090572340,1.80285667220363016E-016)
+dener    0    4  0.84877358E+00
+ CCD energy         (217.30381360857473,1.39891726022928238E-016)
+dener    0    5  0.52146270E+00
+diis_mat    1    1  0.1648E-02
+diis_mat    1    2  0.1107E-02
+diis_mat    1    3  0.7501E-03
+diis_mat    1    4  0.5141E-03
+diis_mat    1    5  0.3579E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1160E-02
-diis_mat    2    2  0.7626E-03
-diis_mat    2    3  0.5040E-03
-diis_mat    2    4  0.3361E-03
-diis_mat    2    5  0.2270E-03
+diis_mat    2    1  0.1107E-02
+diis_mat    2    2  0.7491E-03
+diis_mat    2    3  0.5115E-03
+diis_mat    2    4  0.3541E-03
+diis_mat    2    5  0.2494E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.7633E-03
-diis_mat    3    2  0.5040E-03
-diis_mat    3    3  0.3350E-03
-diis_mat    3    4  0.2251E-03
-diis_mat    3    5  0.1535E-03
+diis_mat    3    1  0.7501E-03
+diis_mat    3    2  0.5115E-03
+diis_mat    3    3  0.3529E-03
+diis_mat    3    4  0.2474E-03
+diis_mat    3    5  0.1768E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5062E-03
-diis_mat    4    2  0.3361E-03
-diis_mat    4    3  0.2251E-03
-diis_mat    4    4  0.1527E-03
-diis_mat    4    5  0.1054E-03
+diis_mat    4    1  0.5141E-03
+diis_mat    4    2  0.3541E-03
+diis_mat    4    3  0.2474E-03
+diis_mat    4    4  0.1760E-03
+diis_mat    4    5  0.1279E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3395E-03
-diis_mat    5    2  0.2270E-03
-diis_mat    5    3  0.1535E-03
-diis_mat    5    4  0.1054E-03
-diis_mat    5    5  0.7379E-04
+diis_mat    5    1  0.3579E-03
+diis_mat    5    2  0.2494E-03
+diis_mat    5    3  0.1768E-03
+diis_mat    5    4  0.1279E-03
+diis_mat    5    5  0.9462E-04
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -1686,53 +1632,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.1228E+03  0.1557E-04
-sol_vec    2 -0.6790E+03 -0.8408E-04
-sol_vec    3  0.1391E+04  0.1675E-03
-sol_vec    4 -0.1251E+04 -0.1456E-03
-sol_vec    5  0.4168E+03  0.4663E-04
-sol_vec    6  0.5868E-07  0.8352E-14
- CCD energy        (145.02584863718141,-2.47311349378271976E-008)
-dener    0    6  0.50362513E+00
- CCD energy        (145.12542904701948,-9.69147149351547506E-009)
-dener    0    7  0.99580410E-01
- CCD energy        (145.18471645551398,-7.87436517720193068E-010)
-dener    0    8  0.59287408E-01
- CCD energy         (145.21835880151687,4.21743548791423993E-009)
-dener    0    9  0.33642346E-01
- CCD energy         (145.23589320000249,6.77949551888460516E-009)
-dener    0   10  0.17534398E-01
- CCD energy         (145.24349928011151,7.84180446514774964E-009)
-dener    0   11  0.76060801E-02
-diis_mat    1    1  0.1500E-05
-diis_mat    1    2  0.1153E-05
-diis_mat    1    3  0.9099E-06
-diis_mat    1    4  0.7347E-06
-diis_mat    1    5  0.6049E-06
+sol_vec    1 -0.4977E+02 -0.6249E-05
+sol_vec    2  0.2427E+03  0.3291E-04
+sol_vec    3 -0.4291E+03 -0.6430E-04
+sol_vec    4  0.3216E+03  0.5514E-04
+sol_vec    5 -0.8437E+02 -0.1750E-04
+sol_vec    6 -0.6564E-07 -0.3108E-14
+ CCD energy         (217.90595061474204,1.34033276321207081E-008)
+dener    0    6  0.60213701E+00
+ CCD energy         (217.83141545212760,6.97858373805336590E-009)
+dener    0    7 -0.74535163E-01
+ CCD energy         (217.78641901305551,3.04871950881140090E-009)
+dener    0    8 -0.44996439E-01
+ CCD energy         (217.76016259934920,7.08603306616180070E-010)
+dener    0    9 -0.26256414E-01
+ CCD energy        (217.74567703462000,-6.26544056458500221E-010)
+dener    0   10 -0.14485565E-01
+ CCD energy        (217.73847906399726,-1.33372352367698511E-009)
+dener    0   11 -0.71979706E-02
+diis_mat    1    1  0.3189E-06
+diis_mat    1    2  0.1925E-06
+diis_mat    1    3  0.1169E-06
+diis_mat    1    4  0.7235E-07
+diis_mat    1    5  0.4666E-07
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1153E-05
-diis_mat    2    2  0.9871E-06
-diis_mat    2    3  0.8528E-06
-diis_mat    2    4  0.7406E-06
-diis_mat    2    5  0.6449E-06
+diis_mat    2    1  0.1925E-06
+diis_mat    2    2  0.1320E-06
+diis_mat    2    3  0.9534E-07
+diis_mat    2    4  0.7285E-07
+diis_mat    2    5  0.5876E-07
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.9099E-06
-diis_mat    3    2  0.8528E-06
-diis_mat    3    3  0.7855E-06
-diis_mat    3    4  0.7136E-06
-diis_mat    3    5  0.6412E-06
+diis_mat    3    1  0.1169E-06
+diis_mat    3    2  0.9534E-07
+diis_mat    3    3  0.8157E-07
+diis_mat    3    4  0.7202E-07
+diis_mat    3    5  0.6474E-07
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.7347E-06
-diis_mat    4    2  0.7406E-06
-diis_mat    4    3  0.7136E-06
-diis_mat    4    4  0.6674E-06
-diis_mat    4    5  0.6111E-06
+diis_mat    4    1  0.7235E-07
+diis_mat    4    2  0.7285E-07
+diis_mat    4    3  0.7202E-07
+diis_mat    4    4  0.6978E-07
+diis_mat    4    5  0.6637E-07
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.6049E-06
-diis_mat    5    2  0.6449E-06
-diis_mat    5    3  0.6412E-06
-diis_mat    5    4  0.6111E-06
-diis_mat    5    5  0.5663E-06
+diis_mat    5    1  0.4666E-07
+diis_mat    5    2  0.5876E-07
+diis_mat    5    3  0.6474E-07
+diis_mat    5    4  0.6637E-07
+diis_mat    5    5  0.6505E-07
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -1741,53 +1687,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.9416E+02 -0.6043E-05
-sol_vec    2 -0.5086E+03  0.3100E-04
-sol_vec    3  0.1027E+04 -0.5915E-04
-sol_vec    4 -0.9180E+03  0.4970E-04
-sol_vec    5  0.3067E+03 -0.1551E-04
-sol_vec    6 -0.1104E-10 -0.4239E-16
- CCD energy         (145.19403840194903,2.47541696402936784E-011)
-dener    0   12 -0.49460878E-01
- CCD energy        (145.19430208956038,-7.07292028587428027E-011)
-dener    0   13  0.26368761E-03
- CCD energy        (145.19449291811091,-1.19001649010515965E-010)
-dener    0   14  0.19082855E-03
- CCD energy        (145.19463458124119,-1.38601544525396566E-010)
-dener    0   15  0.14166313E-03
- CCD energy        (145.19474224065513,-1.41344620848692198E-010)
-dener    0   16  0.10765941E-03
- CCD energy        (145.19482575418900,-1.34682575387526608E-010)
-dener    0   17  0.83513534E-04
-diis_mat    1    1  0.3541E-11
-diis_mat    1    2  0.6866E-11
-diis_mat    1    3  0.8326E-11
-diis_mat    1    4  0.8677E-11
-diis_mat    1    5  0.8397E-11
+sol_vec    1  0.1242E+03 -0.2853E-05
+sol_vec    2 -0.6638E+03  0.1433E-04
+sol_vec    3  0.1325E+04 -0.2682E-04
+sol_vec    4 -0.1170E+04  0.2218E-04
+sol_vec    5  0.3856E+03 -0.6837E-05
+sol_vec    6  0.3917E-11  0.9990E-17
+ CCD energy        (217.76160873741554,-4.84668545720090113E-011)
+dener    0   12  0.23129673E-01
+ CCD energy        (217.76122940397173,-6.40952801403925504E-011)
+dener    0   13 -0.37933344E-03
+ CCD energy        (217.76099393286773,-6.96312250293640320E-011)
+dener    0   14 -0.23547110E-03
+ CCD energy        (217.76084881418083,-6.91621181818818348E-011)
+dener    0   15 -0.14511869E-03
+ CCD energy        (217.76076019133734,-6.53150090904595491E-011)
+dener    0   16 -0.88622843E-04
+ CCD energy        (217.76070669494942,-5.97528959271234413E-011)
+dener    0   17 -0.53496388E-04
+diis_mat    1    1  0.5972E-11
+diis_mat    1    2  0.6200E-11
+diis_mat    1    3  0.5857E-11
+diis_mat    1    4  0.5248E-11
+diis_mat    1    5  0.4547E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.6866E-11
-diis_mat    2    2  0.9466E-11
-diis_mat    2    3  0.1037E-10
-diis_mat    2    4  0.1030E-10
-diis_mat    2    5  0.9698E-11
+diis_mat    2    1  0.6200E-11
+diis_mat    2    2  0.6551E-11
+diis_mat    2    3  0.6247E-11
+diis_mat    2    4  0.5633E-11
+diis_mat    2    5  0.4906E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.8326E-11
-diis_mat    3    2  0.1037E-10
-diis_mat    3    3  0.1093E-10
-diis_mat    3    4  0.1063E-10
-diis_mat    3    5  0.9875E-11
+diis_mat    3    1  0.5857E-11
+diis_mat    3    2  0.6247E-11
+diis_mat    3    3  0.5987E-11
+diis_mat    3    4  0.5417E-11
+diis_mat    3    5  0.4730E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.8677E-11
-diis_mat    4    2  0.1030E-10
-diis_mat    4    3  0.1063E-10
-diis_mat    4    4  0.1022E-10
-diis_mat    4    5  0.9425E-11
+diis_mat    4    1  0.5248E-11
+diis_mat    4    2  0.5633E-11
+diis_mat    4    3  0.5417E-11
+diis_mat    4    4  0.4912E-11
+diis_mat    4    5  0.4297E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.8397E-11
-diis_mat    5    2  0.9698E-11
-diis_mat    5    3  0.9875E-11
-diis_mat    5    4  0.9425E-11
-diis_mat    5    5  0.8655E-11
+diis_mat    5    1  0.4547E-11
+diis_mat    5    2  0.4906E-11
+diis_mat    5    3  0.4730E-11
+diis_mat    5    4  0.4297E-11
+diis_mat    5    5  0.3765E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -1796,24 +1742,24 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.3378E+02  0.2600E-04
-sol_vec    2 -0.1929E+03 -0.1331E-03
-sol_vec    3  0.4132E+03  0.2538E-03
-sol_vec    4 -0.3934E+03 -0.2132E-03
-sol_vec    5  0.1403E+03  0.6658E-04
-sol_vec    6  0.3370E-15 -0.2750E-20
- CCD energy        (145.19519254624188,-8.27664274378463125E-012)
-dener    0   18  0.36679205E-03
- CCD energy        (145.19519248419124,-4.89566880163248173E-012)
-dener    0   19 -0.62050667E-07
- Total execution time CCD   1.5065095007303171     
+sol_vec    1  0.9713E+02 -0.1660E-04
+sol_vec    2 -0.5245E+03  0.8649E-04
+sol_vec    3  0.1058E+04 -0.1676E-03
+sol_vec    4 -0.9443E+03  0.1429E-03
+sol_vec    5  0.3150E+03 -0.4527E-04
+sol_vec    6  0.4192E-15  0.5339E-21
+ CCD energy         (217.76063027647078,5.29723920743281774E-014)
+dener    0   18 -0.76418479E-04
+ CCD energy         (217.76063075830083,5.26440682294956019E-013)
+dener    0   19  0.48183006E-06
+ Total execution time CCD   1.5668000981677324     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.387014275125694     
+ Time to setup hppp block   13.582775102753658     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -2220,21 +2166,21 @@ dener    0   19 -0.62050667E-07
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7692513227229938     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.16859           -0.17388
+ EXECUTION TIME FOR CCD(T)   3.8955443223239854     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.19879           -0.20256
+ LEC_c1_input= -0.63999999850988387     
  t2_file=3.txt                                                                                               end2
  channels_num           25
  wtf end 
- LEC_c1_input=  -1.4346955423999999     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
-  -1.4346955423999999     
+ -0.58999999403953551     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
-  -1.4346955423999999     
+ -0.58999999403953551     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -2285,83 +2231,83 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.16859           
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1237216792069376E-002
+ Time to setup hhhh block   4.1226960776839405E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.8198223074432462E-002
+ Time to setup hhhp block   6.7645627597812563E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2735433315392584     
+ Time to setup hhpp block   1.2625615388969891     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2737145088613033     
+ Time to setup hphp block   1.2993496707058512     
  Setting up vnn for pppp block
- Time to setup pppp block   45.804830031003803     
+ Time to setup pppp block   46.407689585874323     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.8375542024150491E-004
+ Time to setup ph hpph block   2.5321904104202986E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value               (65.075888390691759,0.0000000000000000)
- 3NF vacuum expectation value               (5.9906574447242393,0.0000000000000000)
- Vacuum expectation value with 3nf               (10.638935186916509,0.0000000000000000)
- Time for e0   5.6100933579728007E-004
- Time for f3nf   7.2195084067061543E-002
- e0 3nf               (83.869204260948862,0.0000000000000000)               (83.869204226139345,0.0000000000000000)
+ Vacuum expectation value               (180.64068545615675,0.0000000000000000)
+ 3NF vacuum expectation value               (5.6382074895126966,0.0000000000000000)
+ Vacuum expectation value with 3nf               (18.541113593523896,0.0000000000000000)
+ Time for e0   5.5785611039027572E-004
+ Time for f3nf   7.2473005158826709E-002
+ e0 3nf               (78.934904885364446,0.0000000000000000)               (78.934904853177756,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.0884173405356705E-003
+ Time to setup v3nf_2bNO hhhh block   9.1956435935571790E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1780198511551134     
+ Time to setup v3nf_2bNO hhpp block   1.2014728232752532     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64439546526409686     
+ Time to setup v3nf_2bNO hphp block  0.72174341313075274     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3692444314947352     
+ Time to setup v3nf_2bNO pppp block   5.4301843098946847     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (107.81117293227072,-7.49934045165348316E-018)
+ CCD energy         (215.42794884211577,3.36873202113626952E-017)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy         (111.42401307775788,5.46039784204399593E-018)
-dener    0    1  0.36128401E+01
- CCD energy         (113.73363049468445,3.73729999757964715E-017)
-dener    0    2  0.23096174E+01
- CCD energy         (115.19600673944345,2.84041913087449558E-017)
-dener    0    3  0.14623762E+01
- CCD energy        (116.11339087392359,-2.77073158908629680E-016)
-dener    0    4  0.91738413E+00
- CCD energy        (116.68300463401640,-7.01165390794130056E-017)
-dener    0    5  0.56961376E+00
-diis_mat    1    1  0.1855E-02
-diis_mat    1    2  0.1206E-02
-diis_mat    1    3  0.7858E-03
-diis_mat    1    4  0.5153E-03
-diis_mat    1    5  0.3412E-03
+ CCD energy        (218.74418493904798,-1.74058916904890541E-017)
+dener    0    1  0.33162361E+01
+ CCD energy         (220.87573104427543,1.27937762775822329E-016)
+dener    0    2  0.21315461E+01
+ CCD energy        (222.22803588195291,-2.58429630152834511E-018)
+dener    0    3  0.13523048E+01
+ CCD energy         (223.07344710741498,2.28119949592204919E-016)
+dener    0    4  0.84541123E+00
+ CCD energy        (223.59222526109531,-5.81064593553100496E-017)
+dener    0    5  0.51877815E+00
+diis_mat    1    1  0.1645E-02
+diis_mat    1    2  0.1108E-02
+diis_mat    1    3  0.7525E-03
+diis_mat    1    4  0.5173E-03
+diis_mat    1    5  0.3612E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1206E-02
-diis_mat    2    2  0.7854E-03
-diis_mat    2    3  0.5134E-03
-diis_mat    2    4  0.3381E-03
-diis_mat    2    5  0.2250E-03
+diis_mat    2    1  0.1108E-02
+diis_mat    2    2  0.7514E-03
+diis_mat    2    3  0.5147E-03
+diis_mat    2    4  0.3575E-03
+diis_mat    2    5  0.2527E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.7858E-03
-diis_mat    3    2  0.5134E-03
-diis_mat    3    3  0.3370E-03
-diis_mat    3    4  0.2232E-03
-diis_mat    3    5  0.1497E-03
+diis_mat    3    1  0.7525E-03
+diis_mat    3    2  0.5147E-03
+diis_mat    3    3  0.3563E-03
+diis_mat    3    4  0.2507E-03
+diis_mat    3    5  0.1799E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5153E-03
-diis_mat    4    2  0.3381E-03
-diis_mat    4    3  0.2232E-03
-diis_mat    4    4  0.1490E-03
-diis_mat    4    5  0.1009E-03
+diis_mat    4    1  0.5173E-03
+diis_mat    4    2  0.3575E-03
+diis_mat    4    3  0.2507E-03
+diis_mat    4    4  0.1791E-03
+diis_mat    4    5  0.1307E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3412E-03
-diis_mat    5    2  0.2250E-03
-diis_mat    5    3  0.1497E-03
-diis_mat    5    4  0.1009E-03
-diis_mat    5    5  0.6914E-04
+diis_mat    5    1  0.3612E-03
+diis_mat    5    2  0.2527E-03
+diis_mat    5    3  0.1799E-03
+diis_mat    5    4  0.1307E-03
+diis_mat    5    5  0.9709E-04
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -2370,53 +2316,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.1415E+01  0.3497E-07
-sol_vec    2 -0.2348E+02 -0.1943E-06
-sol_vec    3  0.8498E+02  0.3950E-06
-sol_vec    4 -0.1147E+03 -0.3478E-06
-sol_vec    5  0.5276E+02  0.1121E-06
-sol_vec    6  0.1879E-07  0.2095E-16
- CCD energy        (117.45076398719061,-1.33023444696873475E-011)
-dener    0    6  0.76775935E+00
- CCD energy         (117.43255804413612,1.20581682232568492E-011)
-dener    0    7 -0.18205943E-01
- CCD energy         (117.42194484603426,2.59611309892894459E-011)
-dener    0    8 -0.10613198E-01
- CCD energy         (117.41610270712795,3.25709790046074930E-011)
-dener    0    9 -0.58421389E-02
- CCD energy         (117.41321402399828,3.46572951444639360E-011)
-dener    0   10 -0.28886831E-02
- CCD energy         (117.41211370799417,3.40442102679880361E-011)
-dener    0   11 -0.11003160E-02
-diis_mat    1    1  0.2896E-07
-diis_mat    1    2  0.2231E-07
-diis_mat    1    3  0.1755E-07
-diis_mat    1    4  0.1408E-07
-diis_mat    1    5  0.1148E-07
+sol_vec    1 -0.4376E+02 -0.3494E-05
+sol_vec    2  0.2105E+03  0.1838E-04
+sol_vec    3 -0.3652E+03 -0.3589E-04
+sol_vec    4  0.2660E+03  0.3076E-04
+sol_vec    5 -0.6656E+02 -0.9757E-05
+sol_vec    6 -0.6240E-07 -0.1467E-14
+ CCD energy         (224.16143695128522,7.49690800827334272E-009)
+dener    0    6  0.56921169E+00
+ CCD energy         (224.09276823649799,3.92002761799468083E-009)
+dener    0    7 -0.68668715E-01
+ CCD energy         (224.05128740602515,1.72940580209738679E-009)
+dener    0    8 -0.41480830E-01
+ CCD energy         (224.02705975401622,4.22760890952458492E-010)
+dener    0    9 -0.24227652E-01
+ CCD energy        (224.01367221062142,-3.24621622759160238E-010)
+dener    0   10 -0.13387543E-01
+ CCD energy        (224.00699847908035,-7.22207629837386032E-010)
+dener    0   11 -0.66737315E-02
+diis_mat    1    1  0.2514E-06
+diis_mat    1    2  0.1477E-06
+diis_mat    1    3  0.8624E-07
+diis_mat    1    4  0.5059E-07
+diis_mat    1    5  0.3049E-07
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.2231E-07
-diis_mat    2    2  0.2047E-07
-diis_mat    2    3  0.1848E-07
-diis_mat    2    4  0.1648E-07
-diis_mat    2    5  0.1455E-07
+diis_mat    2    1  0.1477E-06
+diis_mat    2    2  0.9870E-07
+diis_mat    2    3  0.6944E-07
+diis_mat    2    4  0.5194E-07
+diis_mat    2    5  0.4134E-07
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1755E-07
-diis_mat    3    2  0.1848E-07
-diis_mat    3    3  0.1813E-07
-diis_mat    3    4  0.1705E-07
-diis_mat    3    5  0.1560E-07
+diis_mat    3    1  0.8624E-07
+diis_mat    3    2  0.6944E-07
+diis_mat    3    3  0.5907E-07
+diis_mat    3    4  0.5218E-07
+diis_mat    3    5  0.4710E-07
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.1408E-07
-diis_mat    4    2  0.1648E-07
-diis_mat    4    3  0.1705E-07
-diis_mat    4    4  0.1654E-07
-diis_mat    4    5  0.1542E-07
+diis_mat    4    1  0.5059E-07
+diis_mat    4    2  0.5194E-07
+diis_mat    4    3  0.5218E-07
+diis_mat    4    4  0.5121E-07
+diis_mat    4    5  0.4922E-07
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1148E-07
-diis_mat    5    2  0.1455E-07
-diis_mat    5    3  0.1560E-07
-diis_mat    5    4  0.1542E-07
-diis_mat    5    5  0.1454E-07
+diis_mat    5    1  0.3049E-07
+diis_mat    5    2  0.4134E-07
+diis_mat    5    3  0.4710E-07
+diis_mat    5    4  0.4922E-07
+diis_mat    5    5  0.4886E-07
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -2425,53 +2371,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1 -0.2123E+04 -0.4459E-01
-sol_vec    2  0.1082E+05  0.2278E+00
-sol_vec    3 -0.2050E+05 -0.4331E+00
-sol_vec    4  0.1713E+05  0.3630E+00
-sol_vec    5 -0.5317E+04 -0.1131E+00
-sol_vec    6  0.6188E-10  0.1261E-14
- CCD energy        (117.40244938965301,-3.93658813898318279E-007)
-dener    0   12 -0.96643183E-02
- CCD energy        (117.41016795358411,-2.38716940987990374E-007)
-dener    0   13  0.77185639E-02
- CCD energy        (117.41487797044232,-1.43978878434739027E-007)
-dener    0   14  0.47100169E-02
- CCD energy        (117.41773028550365,-8.64267434653955471E-008)
-dener    0   15  0.28523151E-02
- CCD energy        (117.41944116654005,-5.17382482717943136E-008)
-dener    0   16  0.17108810E-02
- CCD energy        (117.42045511502144,-3.10268729780583590E-008)
-dener    0   17  0.10139485E-02
-diis_mat    1    1  0.1359E-08
-diis_mat    1    2  0.1741E-08
-diis_mat    1    3  0.1824E-08
-diis_mat    1    4  0.1745E-08
-diis_mat    1    5  0.1588E-08
+sol_vec    1  0.1227E+03  0.3081E-07
+sol_vec    2 -0.6562E+03 -0.2090E-06
+sol_vec    3  0.1310E+04  0.4823E-06
+sol_vec    4 -0.1157E+04 -0.4629E-06
+sol_vec    5  0.3818E+03  0.1589E-06
+sol_vec    6  0.4704E-11  0.1617E-17
+ CCD energy         (224.02794790185854,2.86268967757991551E-011)
+dener    0   12  0.20949423E-01
+ CCD energy         (224.02761584069435,1.29619752085408815E-011)
+dener    0   13 -0.33206116E-03
+ CCD energy         (224.02740975667007,3.82223075094259209E-012)
+dener    0   14 -0.20608402E-03
+ CCD energy        (224.02728286850311,-1.27550565029387106E-012)
+dener    0   15 -0.12688817E-03
+ CCD energy        (224.02720553631963,-3.90435314757714338E-012)
+dener    0   16 -0.77332183E-04
+ CCD energy        (224.02715902791351,-5.05612307027910033E-012)
+dener    0   17 -0.46508406E-04
+diis_mat    1    1  0.5477E-11
+diis_mat    1    2  0.5432E-11
+diis_mat    1    3  0.5007E-11
+diis_mat    1    4  0.4420E-11
+diis_mat    1    5  0.3792E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1741E-08
-diis_mat    2    2  0.2214E-08
-diis_mat    2    3  0.2310E-08
-diis_mat    2    4  0.2205E-08
-diis_mat    2    5  0.2003E-08
+diis_mat    2    1  0.5432E-11
+diis_mat    2    2  0.5523E-11
+diis_mat    2    3  0.5163E-11
+diis_mat    2    4  0.4600E-11
+diis_mat    2    5  0.3974E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1824E-08
-diis_mat    3    2  0.2310E-08
-diis_mat    3    3  0.2405E-08
-diis_mat    3    4  0.2293E-08
-diis_mat    3    5  0.2082E-08
+diis_mat    3    1  0.5007E-11
+diis_mat    3    2  0.5163E-11
+diis_mat    3    3  0.4863E-11
+diis_mat    3    4  0.4354E-11
+diis_mat    3    5  0.3776E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.1745E-08
-diis_mat    4    2  0.2205E-08
-diis_mat    4    3  0.2293E-08
-diis_mat    4    4  0.2186E-08
-diis_mat    4    5  0.1984E-08
+diis_mat    4    1  0.4420E-11
+diis_mat    4    2  0.4600E-11
+diis_mat    4    3  0.4354E-11
+diis_mat    4    4  0.3911E-11
+diis_mat    4    5  0.3400E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1588E-08
-diis_mat    5    2  0.2003E-08
-diis_mat    5    3  0.2082E-08
-diis_mat    5    4  0.1984E-08
-diis_mat    5    5  0.1801E-08
+diis_mat    5    1  0.3792E-11
+diis_mat    5    2  0.3974E-11
+diis_mat    5    3  0.3776E-11
+diis_mat    5    4  0.3400E-11
+diis_mat    5    5  0.2962E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -2480,79 +2426,24 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.5929E+02  0.1259E-04
-sol_vec    2 -0.3340E+03 -0.6068E-04
-sol_vec    3  0.7015E+03  0.1080E-03
-sol_vec    4 -0.6509E+03 -0.8448E-04
-sol_vec    5  0.2250E+03  0.2453E-04
-sol_vec    6  0.1855E-12  0.6944E-17
- CCD energy        (117.42177456667959,-1.50833775048005457E-009)
-dener    0   18  0.13194517E-02
- CCD energy        (117.42180639991682,-9.69706471986389813E-010)
-dener    0   19  0.31833237E-04
- CCD energy        (117.42182666342839,-6.26102152795659334E-010)
-dener    0   20  0.20263512E-04
- CCD energy        (117.42183956692824,-4.06586833552348111E-010)
-dener    0   21  0.12903500E-04
- CCD energy        (117.42184778751285,-2.66084240380613968E-010)
-dener    0   22  0.82205846E-05
- CCD energy        (117.42185302832695,-1.75930490695679308E-010)
-dener    0   23  0.52408141E-05
-diis_mat    1    1  0.1335E-12
-diis_mat    1    2  0.1130E-12
-diis_mat    1    3  0.9492E-13
-diis_mat    1    4  0.7931E-13
-diis_mat    1    5  0.6602E-13
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1130E-12
-diis_mat    2    2  0.9607E-13
-diis_mat    2    3  0.8090E-13
-diis_mat    2    4  0.6766E-13
-diis_mat    2    5  0.5631E-13
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.9492E-13
-diis_mat    3    2  0.8090E-13
-diis_mat    3    3  0.6820E-13
-diis_mat    3    4  0.5706E-13
-diis_mat    3    5  0.4749E-13
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.7931E-13
-diis_mat    4    2  0.6766E-13
-diis_mat    4    3  0.5706E-13
-diis_mat    4    4  0.4775E-13
-diis_mat    4    5  0.3974E-13
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.6602E-13
-diis_mat    5    2  0.5631E-13
-diis_mat    5    3  0.4749E-13
-diis_mat    5    4  0.3974E-13
-diis_mat    5    5  0.3307E-13
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.1039E+03  0.1864E-03
-sol_vec    2 -0.5593E+03 -0.9221E-03
-sol_vec    3  0.1124E+04  0.1680E-02
-sol_vec    4 -0.9998E+03 -0.1339E-02
-sol_vec    5  0.3321E+03  0.3951E-03
-sol_vec    6 -0.1313E-17  0.1786E-21
- CCD energy         (117.42186372534874,4.35097515110071201E-011)
-dener    0   24  0.10697022E-04
- CCD energy         (117.42186339386541,2.80873781466552277E-011)
-dener    0   25 -0.33148334E-06
- Total execution time CCD   2.0615554759860970     
+sol_vec    1  0.9948E+02 -0.4645E-04
+sol_vec    2 -0.5360E+03  0.2394E-03
+sol_vec    3  0.1079E+04 -0.4585E-03
+sol_vec    4 -0.9613E+03  0.3868E-03
+sol_vec    5  0.3201E+03 -0.1212E-03
+sol_vec    6  0.3248E-15 -0.1092E-20
+ CCD energy         (224.02709541228256,1.11396115577523126E-011)
+dener    0   18 -0.63615631E-04
+ CCD energy         (224.02709615625224,7.71237303719062346E-012)
+dener    0   19  0.74396967E-06
+ Total execution time CCD   1.5759186020586640     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.184087543922942     
+ Time to setup hppp block   13.353963021712843     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -2959,21 +2850,21 @@ dener    0   25 -0.33148334E-06
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7778219337342307     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15967           -0.16556
+ EXECUTION TIME FOR CCD(T)   3.7711090125376359     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.20189           -0.20553
+ LEC_c1_input= -0.58999999403953551     
  t2_file=4.txt                                                                                               end2
  channels_num           25
  wtf end 
- LEC_c1_input=  -1.6929407400319998     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
-  -1.6929407400319998     
+ -0.53999999701976775     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
-  -1.6929407400319998     
+ -0.53999999701976775     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -3024,83 +2915,83 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15967           
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1534053976647556E-002
+ Time to setup hhhh block   4.1579919343348593E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.7945479007903486E-002
+ Time to setup hhhp block   6.8177242996171117E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2666074675507843     
+ Time to setup hhpp block   1.2720581529429182     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2741826543351635     
+ Time to setup hphp block   1.2672673587221652     
  Setting up vnn for pppp block
- Time to setup pppp block   45.754132856382057     
+ Time to setup pppp block   46.433913193643093     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.5080092018470168E-004
+ Time to setup ph hpph block   2.5596650084480643E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value               (29.744751728021377,0.0000000000000000)
- 3NF vacuum expectation value               (6.0984104789572919,0.0000000000000000)
- Vacuum expectation value with 3nf               (8.2230356023873892,0.0000000000000000)
- Time for e0   5.6097062770277262E-004
- Time for f3nf   7.2094610659405589E-002
- e0 3nf               (85.377746741013468,0.0000000000000000)               (85.377746705402089,0.0000000000000000)
+ Vacuum expectation value               (187.48130338066088,0.0000000000000000)
+ 3NF vacuum expectation value               (5.6173449470920591,0.0000000000000000)
+ Vacuum expectation value with 3nf               (19.008866617139265,0.0000000000000000)
+ Time for e0   5.9068721020594239E-004
+ Time for f3nf   7.1625143813434988E-002
+ e0 3nf               (78.642829291320268,0.0000000000000000)               (78.642829259288831,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.1464653960429132E-003
+ Time to setup v3nf_2bNO hhhh block   9.0745781199075282E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1732035033055581     
+ Time to setup v3nf_2bNO hhpp block   1.1715544935432263     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.65197701565921307     
+ Time to setup v3nf_2bNO hphp block  0.63786055770469829     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3623573592631146     
+ Time to setup v3nf_2bNO pppp block   5.3493031903635710     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (74.530130525940152,-1.68307766770980481E-017)
+ CCD energy        (221.73877771564804,-1.80591323885547849E-017)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy        (78.274883446784344,-5.91883329356050336E-017)
-dener    0    1  0.37447529E+01
- CCD energy         (80.661975551550540,4.16359029622338070E-018)
-dener    0    2  0.23870921E+01
- CCD energy         (82.169985948775434,1.76969110849215427E-016)
-dener    0    3  0.15080104E+01
- CCD energy         (83.114855452350838,2.20687234419068381E-016)
-dener    0    4  0.94486950E+00
- CCD energy         (83.701780260049361,4.01816336237860573E-016)
-dener    0    5  0.58692481E+00
-diis_mat    1    1  0.1979E-02
-diis_mat    1    2  0.1275E-02
-diis_mat    1    3  0.8228E-03
-diis_mat    1    4  0.5333E-03
-diis_mat    1    5  0.3483E-03
+ CCD energy         (225.04450868572124,7.04607529373021119E-017)
+dener    0    1  0.33057310E+01
+ CCD energy        (227.16952559004142,-1.39351743716929440E-016)
+dener    0    2  0.21250169E+01
+ CCD energy        (228.51745699603924,-2.79536756096528092E-016)
+dener    0    3  0.13479314E+01
+ CCD energy        (229.35963202948545,-1.59043354709474070E-016)
+dener    0    4  0.84217503E+00
+ CCD energy         (229.87577375635368,1.08457909021554296E-016)
+dener    0    5  0.51614173E+00
+diis_mat    1    1  0.1643E-02
+diis_mat    1    2  0.1110E-02
+diis_mat    1    3  0.7555E-03
+diis_mat    1    4  0.5208E-03
+diis_mat    1    5  0.3649E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1275E-02
-diis_mat    2    2  0.8228E-03
-diis_mat    2    3  0.5319E-03
-diis_mat    2    4  0.3457E-03
-diis_mat    2    5  0.2266E-03
+diis_mat    2    1  0.1110E-02
+diis_mat    2    2  0.7544E-03
+diis_mat    2    3  0.5183E-03
+diis_mat    2    4  0.3612E-03
+diis_mat    2    5  0.2562E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.8228E-03
-diis_mat    3    2  0.5319E-03
-diis_mat    3    3  0.3448E-03
-diis_mat    3    4  0.2250E-03
-diis_mat    3    5  0.1483E-03
+diis_mat    3    1  0.7555E-03
+diis_mat    3    2  0.5183E-03
+diis_mat    3    3  0.3600E-03
+diis_mat    3    4  0.2542E-03
+diis_mat    3    5  0.1831E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5333E-03
-diis_mat    4    2  0.3457E-03
-diis_mat    4    3  0.2250E-03
-diis_mat    4    4  0.1476E-03
-diis_mat    4    5  0.9796E-04
+diis_mat    4    1  0.5208E-03
+diis_mat    4    2  0.3612E-03
+diis_mat    4    3  0.2542E-03
+diis_mat    4    4  0.1823E-03
+diis_mat    4    5  0.1336E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3483E-03
-diis_mat    5    2  0.2266E-03
-diis_mat    5    3  0.1483E-03
-diis_mat    5    4  0.9796E-04
-diis_mat    5    5  0.6563E-04
+diis_mat    5    1  0.3649E-03
+diis_mat    5    2  0.2562E-03
+diis_mat    5    3  0.1831E-03
+diis_mat    5    4  0.1336E-03
+diis_mat    5    5  0.9967E-04
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3109,53 +3000,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1 -0.6802E+01  0.2862E-08
-sol_vec    2  0.2644E+02 -0.1323E-07
-sol_vec    3 -0.2261E+02  0.2316E-07
-sol_vec    4 -0.1642E+02 -0.1833E-07
-sol_vec    5  0.2039E+02  0.5539E-08
-sol_vec    6  0.7124E-07  0.1187E-16
- CCD energy        (84.511945780299470,-2.61310259990026614E-011)
-dener    0    6  0.81016552E+00
- CCD energy        (84.495180259998975,-1.83004750481106762E-011)
-dener    0    7 -0.16765520E-01
- CCD energy        (84.486121615322503,-1.32011663734314643E-011)
-dener    0    8 -0.90586447E-02
- CCD energy        (84.482011531883231,-9.80249976396557598E-012)
-dener    0    9 -0.41100834E-02
- CCD energy        (84.480984620040275,-7.47458630473171448E-012)
-dener    0   10 -0.10269118E-02
- CCD energy        (84.481795510686311,-5.83210445839136998E-012)
-dener    0   11  0.81089065E-03
-diis_mat    1    1  0.1136E-06
-diis_mat    1    2  0.1116E-06
-diis_mat    1    3  0.1031E-06
-diis_mat    1    4  0.9176E-07
-diis_mat    1    5  0.7984E-07
+sol_vec    1 -0.3818E+02  0.3049E-05
+sol_vec    2  0.1806E+03 -0.1602E-04
+sol_vec    3 -0.3058E+03  0.3124E-04
+sol_vec    4  0.2145E+03 -0.2676E-04
+sol_vec    5 -0.5006E+02  0.8482E-05
+sol_vec    6 -0.5944E-07  0.1214E-14
+ CCD energy        (230.41236902822544,-6.57067057463592493E-009)
+dener    0    6  0.53659527E+00
+ CCD energy        (230.34908726683886,-3.45713107145547727E-009)
+dener    0    7 -0.63281761E-01
+ CCD energy        (230.31083775300340,-1.54729128917504667E-009)
+dener    0    8 -0.38249514E-01
+ CCD energy        (230.28847751291320,-4.05609906574157482E-010)
+dener    0    9 -0.22360240E-01
+ CCD energy         (230.27610319832345,2.49647349407213519E-010)
+dener    0   10 -0.12374315E-01
+ CCD energy         (230.26991576887565,6.00322104012213917E-010)
+dener    0   11 -0.61874294E-02
+diis_mat    1    1  0.1964E-06
+diis_mat    1    2  0.1117E-06
+diis_mat    1    3  0.6192E-07
+diis_mat    1    4  0.3355E-07
+diis_mat    1    5  0.1800E-07
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1116E-06
-diis_mat    2    2  0.1234E-06
-diis_mat    2    3  0.1225E-06
-diis_mat    2    4  0.1149E-06
-diis_mat    2    5  0.1040E-06
+diis_mat    2    1  0.1117E-06
+diis_mat    2    2  0.7220E-07
+diis_mat    2    3  0.4907E-07
+diis_mat    2    4  0.3563E-07
+diis_mat    2    5  0.2782E-07
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1031E-06
-diis_mat    3    2  0.1225E-06
-diis_mat    3    3  0.1264E-06
-diis_mat    3    4  0.1215E-06
-diis_mat    3    5  0.1120E-06
+diis_mat    3    1  0.6192E-07
+diis_mat    3    2  0.4907E-07
+diis_mat    3    3  0.4149E-07
+diis_mat    3    4  0.3672E-07
+diis_mat    3    5  0.3337E-07
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.9176E-07
-diis_mat    4    2  0.1149E-06
-diis_mat    4    3  0.1215E-06
-diis_mat    4    4  0.1185E-06
-diis_mat    4    5  0.1104E-06
+diis_mat    4    1  0.3355E-07
+diis_mat    4    2  0.3563E-07
+diis_mat    4    3  0.3672E-07
+diis_mat    4    4  0.3674E-07
+diis_mat    4    5  0.3584E-07
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.7984E-07
-diis_mat    5    2  0.1040E-06
-diis_mat    5    3  0.1120E-06
-diis_mat    5    4  0.1104E-06
-diis_mat    5    5  0.1036E-06
+diis_mat    5    1  0.1800E-07
+diis_mat    5    2  0.2782E-07
+diis_mat    5    3  0.3337E-07
+diis_mat    5    4  0.3584E-07
+diis_mat    5    5  0.3618E-07
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3164,53 +3055,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.7412E+02  0.9004E-06
-sol_vec    2 -0.4046E+03 -0.4686E-05
-sol_vec    3  0.8259E+03  0.9060E-05
-sol_vec    4 -0.7470E+03 -0.7709E-05
-sol_vec    5  0.2526E+03  0.2435E-05
-sol_vec    6  0.2381E-10 -0.6433E-17
- CCD energy        (84.507641003048491,-1.39620178242072688E-011)
-dener    0   12  0.25845492E-01
- CCD energy        (84.507705704778431,-7.09906954399728207E-012)
-dener    0   13  0.64701730E-04
- CCD energy        (84.507743368982574,-2.84236407926948339E-012)
-dener    0   14  0.37664204E-04
- CCD energy        (84.507765822666528,-2.79944909780348210E-013)
-dener    0   15  0.22453684E-04
- CCD energy         (84.507779810766507,1.19091879379177530E-012)
-dener    0   16  0.13988100E-04
- CCD energy         (84.507789121990839,1.96754801544835493E-012)
-dener    0   17  0.93112243E-05
-diis_mat    1    1  0.1370E-10
-diis_mat    1    2  0.1094E-10
-diis_mat    1    3  0.8819E-11
-diis_mat    1    4  0.7168E-11
-diis_mat    1    5  0.5867E-11
+sol_vec    1  0.1216E+03 -0.5736E-06
+sol_vec    2 -0.6503E+03  0.2906E-05
+sol_vec    3  0.1299E+04 -0.5480E-05
+sol_vec    4 -0.1148E+04  0.4561E-05
+sol_vec    5  0.3788E+03 -0.1413E-05
+sol_vec    6  0.5100E-11  0.8877E-18
+ CCD energy        (230.28889787766036,-3.75090451549135962E-011)
+dener    0   12  0.18982109E-01
+ CCD energy        (230.28860579606300,-2.92772794350004556E-011)
+dener    0   13 -0.29208160E-03
+ CCD energy        (230.28842462839617,-2.34604424261360113E-011)
+dener    0   14 -0.18116767E-03
+ CCD energy        (230.28831323871844,-1.91984867158873004E-011)
+dener    0   15 -0.11138968E-03
+ CCD energy        (230.28824553203765,-1.59625267230982855E-011)
+dener    0   16 -0.67706681E-04
+ CCD energy        (230.28820499796777,-1.34247780954649397E-011)
+dener    0   17 -0.40534070E-04
+diis_mat    1    1  0.5037E-11
+diis_mat    1    2  0.4812E-11
+diis_mat    1    3  0.4342E-11
+diis_mat    1    4  0.3782E-11
+diis_mat    1    5  0.3216E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1094E-10
-diis_mat    2    2  0.8982E-11
-diis_mat    2    3  0.7416E-11
-diis_mat    2    4  0.6152E-11
-diis_mat    2    5  0.5122E-11
+diis_mat    2    1  0.4812E-11
+diis_mat    2    2  0.4731E-11
+diis_mat    2    3  0.4342E-11
+diis_mat    2    4  0.3824E-11
+diis_mat    2    5  0.3279E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.8819E-11
-diis_mat    3    2  0.7416E-11
-diis_mat    3    3  0.6245E-11
-diis_mat    3    4  0.5263E-11
-diis_mat    3    5  0.4440E-11
+diis_mat    3    1  0.4342E-11
+diis_mat    3    2  0.4342E-11
+diis_mat    3    3  0.4023E-11
+diis_mat    3    4  0.3566E-11
+diis_mat    3    5  0.3072E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.7168E-11
-diis_mat    4    2  0.6152E-11
-diis_mat    4    3  0.5263E-11
-diis_mat    4    4  0.4493E-11
-diis_mat    4    5  0.3828E-11
+diis_mat    4    1  0.3782E-11
+diis_mat    4    2  0.3824E-11
+diis_mat    4    3  0.3566E-11
+diis_mat    4    4  0.3173E-11
+diis_mat    4    5  0.2742E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.5867E-11
-diis_mat    5    2  0.5122E-11
-diis_mat    5    3  0.4440E-11
-diis_mat    5    4  0.3828E-11
-diis_mat    5    5  0.3287E-11
+diis_mat    5    1  0.3216E-11
+diis_mat    5    2  0.3279E-11
+diis_mat    5    3  0.3072E-11
+diis_mat    5    4  0.2742E-11
+diis_mat    5    5  0.2375E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3219,32 +3110,26 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.3208E+03 -0.3948E-03
-sol_vec    2 -0.1700E+04  0.2078E-02
-sol_vec    3  0.3349E+04 -0.4051E-02
-sol_vec    4 -0.2904E+04  0.3469E-02
-sol_vec    5  0.9362E+03 -0.1100E-02
-sol_vec    6 -0.2826E-14  0.6532E-20
- CCD energy        (84.507848952912198,-2.79531077967834874E-011)
-dener    0   18  0.59830921E-04
- CCD energy        (84.507844789481283,-1.77704396203341082E-011)
-dener    0   19 -0.41634309E-05
- CCD energy        (84.507842191203565,-1.13289666866693601E-011)
-dener    0   20 -0.25982777E-05
- CCD energy        (84.507840557852333,-7.23689877567067514E-012)
-dener    0   21 -0.16333512E-05
- CCD energy        (84.507839521867226,-4.62602797696675102E-012)
-dener    0   22 -0.10359851E-05
- CCD energy        (84.507838857710581,-2.95307516500966498E-012)
-dener    0   23 -0.66415664E-06
- Total execution time CCD   1.7859207729343325     
+sol_vec    1  0.1027E+03 -0.1353E-04
+sol_vec    2 -0.5522E+03  0.7201E-04
+sol_vec    3  0.1109E+04 -0.1424E-03
+sol_vec    4 -0.9857E+03  0.1238E-03
+sol_vec    5  0.3275E+03 -0.3988E-04
+sol_vec    6  0.2600E-15  0.7017E-22
+ CCD energy         (230.28815211851668,3.00150626815915050E-014)
+dener    0   18 -0.52879451E-04
+ CCD energy         (230.28815314243627,3.40147282945665695E-013)
+dener    0   19  0.10239196E-05
+ CCD energy         (230.28815378903386,4.90381415249665672E-013)
+dener    0   20  0.64659761E-06
+ Total execution time CCD   1.5584330308483914     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.073519464815035     
+ Time to setup hppp block   13.023253920371644     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -3651,21 +3536,21 @@ dener    0   23 -0.66415664E-06
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7407445576391183     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15088           -0.15750
+ EXECUTION TIME FOR CCD(T)   3.7354177837842144     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.20507           -0.20858
+ LEC_c1_input= -0.53999999701976775     
  t2_file=5.txt                                                                                               end2
  channels_num           25
  wtf end 
- LEC_c1_input=  -1.9976700732377597     
  NN regulator Exponent:    3.0000000000000000     
  -----------
  NN ci's
-  -1.9976700732377597     
+ -0.48999999999999999     
  -0.48999999999999999     
  -0.65000000000000002     
   0.95999999999999996     
  3NF ci's
-  -1.9976700732377597     
+ -0.48999999999999999     
    0.0000000000000000     
  -0.65000000000000002     
   0.95999999999999996     
@@ -3716,83 +3601,83 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15088           
                 62368       62368          25
                 62368       62368         274
  Setting up vnn for hhhh block
- Time to setup hhhh block   4.1393732361029834E-002
+ Time to setup hhhh block   4.0971530834212899E-002
  Setting up vnn for hhhp block
- Time to setup hhhp block   6.8006603047251701E-002
+ Time to setup hhhp block   6.7479579534847289E-002
  Setting up vnn for hhpp block
- Time to setup hhpp block   1.2695984917809255     
+ Time to setup hhpp block   1.2583980037597939     
  Setting up vnn for hphp block
- Time to setup hphp block   1.2689235341385938     
+ Time to setup hphp block   1.2580549253034405     
  Setting up vnn for pppp block
- Time to setup pppp block   45.839325577893760     
+ Time to setup pppp block   45.923598449502606     
  Total memory for vnn storage   3.6497792000000008E-002 GByte
           -4           4          -4           4          -4           4
  Total memory for lookup ph configs   1.3216000000000033E-004 GByte
  Total memory for ph channels   1.3151999999999999E-005 GByte
                 62368       62368         274
  Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.8659979579970241E-004
+ Time to setup ph hpph block   2.5396834826096892E-004
  Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
  kinetic energy =               (498.06383234967711,0.0000000000000000)
  below_ef =          14
- Vacuum expectation value              (-11.945989533928810,0.0000000000000000)
- 3NF vacuum expectation value               (6.2255590593522987,0.0000000000000000)
- Vacuum expectation value with 3nf               (5.3722740926430976,0.0000000000000000)
- Time for e0   5.6041678180918097E-004
- Time for f3nf   7.2905207402072847E-002
- e0 3nf               (87.157826867489760,0.0000000000000000)               (87.157826830932180,0.0000000000000000)
+ Vacuum expectation value               (194.32192130516535,0.0000000000000000)
+ 3NF vacuum expectation value               (5.5964824046714226,0.0000000000000000)
+ Vacuum expectation value with 3nf               (19.476619640754659,0.0000000000000000)
+ Time for e0   5.5935210548341274E-004
+ Time for f3nf   7.1797157637774944E-002
+ e0 3nf               (78.350753697276090,0.0000000000000000)               (78.350753665399921,0.0000000000000000)
  Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.1959109413437545E-003
+ Time to setup v3nf_2bNO hhhh block   9.6712804515846074E-003
  Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1831260604667477     
+ Time to setup v3nf_2bNO hhpp block   1.2271246198797598     
  Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.66161226911935955     
+ Time to setup v3nf_2bNO hphp block  0.64377341343788430     
  Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3974883891060017     
+ Time to setup v3nf_2bNO pppp block   5.5706223507877439     
  Total memory for t2 storage   1.9957759999999999E-003 GByte
  here we go...
- CCD energy        (35.028160527826458,-3.67179633367995191E-017)
+ CCD energy        (228.04300618694904,-1.80375745205641196E-017)
  diis space       62368
  Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy        (38.950693785377382,-6.15692367045462606E-017)
-dener    0    1  0.39225333E+01
- CCD energy        (41.441188849338850,-1.39289909384256157E-016)
-dener    0    2  0.24904951E+01
- CCD energy        (43.008978321792412,-1.95950060682417091E-016)
-dener    0    3  0.15677895E+01
- CCD energy         (43.988739787659846,3.88707656369164724E-017)
-dener    0    4  0.97976147E+00
- CCD energy        (44.596634604410966,-2.31468689944162879E-017)
-dener    0    5  0.60789482E+00
-diis_mat    1    1  0.2156E-02
-diis_mat    1    2  0.1377E-02
-diis_mat    1    3  0.8795E-03
-diis_mat    1    4  0.5633E-03
-diis_mat    1    5  0.3629E-03
+ CCD energy        (231.33907222411494,-6.63586786689100281E-017)
+dener    0    1  0.32960660E+01
+ CCD energy        (233.45804338358616,-1.33378467369118204E-016)
+dener    0    2  0.21189712E+01
+ CCD energy        (234.80186345046857,-2.28648287178539369E-016)
+dener    0    3  0.13438201E+01
+ CCD energy        (235.64093052001192,-3.03931304565811699E-016)
+dener    0    4  0.83906707E+00
+ CCD energy        (236.15448503695129,-4.49645324964877322E-016)
+dener    0    5  0.51355452E+00
+diis_mat    1    1  0.1643E-02
+diis_mat    1    2  0.1112E-02
+diis_mat    1    3  0.7591E-03
+diis_mat    1    4  0.5249E-03
+diis_mat    1    5  0.3688E-03
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1377E-02
-diis_mat    2    2  0.8803E-03
-diis_mat    2    3  0.5629E-03
-diis_mat    2    4  0.3611E-03
-diis_mat    2    5  0.2332E-03
+diis_mat    2    1  0.1112E-02
+diis_mat    2    2  0.7580E-03
+diis_mat    2    3  0.5223E-03
+diis_mat    2    4  0.3652E-03
+diis_mat    2    5  0.2600E-03
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.8795E-03
-diis_mat    3    2  0.5629E-03
-diis_mat    3    3  0.3605E-03
-diis_mat    3    4  0.2319E-03
-diis_mat    3    5  0.1502E-03
+diis_mat    3    1  0.7591E-03
+diis_mat    3    2  0.5223E-03
+diis_mat    3    3  0.3640E-03
+diis_mat    3    4  0.2580E-03
+diis_mat    3    5  0.1865E-03
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5633E-03
-diis_mat    4    2  0.3611E-03
-diis_mat    4    3  0.2319E-03
-diis_mat    4    4  0.1497E-03
-diis_mat    4    5  0.9748E-04
+diis_mat    4    1  0.5249E-03
+diis_mat    4    2  0.3652E-03
+diis_mat    4    3  0.2580E-03
+diis_mat    4    4  0.1857E-03
+diis_mat    4    5  0.1366E-03
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3629E-03
-diis_mat    5    2  0.2332E-03
-diis_mat    5    3  0.1502E-03
-diis_mat    5    4  0.9748E-04
-diis_mat    5    5  0.6391E-04
+diis_mat    5    1  0.3688E-03
+diis_mat    5    2  0.2600E-03
+diis_mat    5    3  0.1865E-03
+diis_mat    5    4  0.1366E-03
+diis_mat    5    5  0.1024E-03
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3801,53 +3686,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.5919E+01  0.3262E-07
-sol_vec    2 -0.2795E+02 -0.1648E-06
-sol_vec    3  0.6566E+02  0.3126E-06
-sol_vec    4 -0.8257E+02 -0.2638E-06
-sol_vec    5  0.3994E+02  0.8335E-07
-sol_vec    6  0.2503E-06 -0.1497E-16
- CCD energy        (45.318069413186002,-2.02928871203689340E-010)
-dener    0    6  0.72143481E+00
- CCD energy        (45.349998917018567,-1.32850153069875711E-010)
-dener    0    7  0.31929504E-01
- CCD energy        (45.371660591816564,-8.84886126474453254E-011)
-dener    0    8  0.21661675E-01
- CCD energy        (45.387416903230360,-6.01342529533456009E-011)
-dener    0    9  0.15756311E-01
- CCD energy        (45.399642987030468,-4.17853368422583197E-011)
-dener    0   10  0.12226084E-01
- CCD energy        (45.409618420944454,-2.97280294380786877E-011)
-dener    0   11  0.99754339E-02
-diis_mat    1    1  0.3989E-06
-diis_mat    1    2  0.4112E-06
-diis_mat    1    3  0.3826E-06
-diis_mat    1    4  0.3363E-06
-diis_mat    1    5  0.2854E-06
+sol_vec    1 -0.3295E+02  0.3144E-05
+sol_vec    2  0.1525E+03 -0.1650E-04
+sol_vec    3 -0.2503E+03  0.3216E-04
+sol_vec    4  0.1664E+03 -0.2752E-04
+sol_vec    5 -0.3463E+02  0.8722E-05
+sol_vec    6 -0.5680E-07  0.1111E-14
+ CCD energy        (236.65865186949796,-6.78462923204563798E-009)
+dener    0    6  0.50416683E+00
+ CCD energy        (236.60035297356202,-3.58537140479874401E-009)
+dener    0    7 -0.58298896E-01
+ CCD energy        (236.56509444750606,-1.62043074513172465E-009)
+dener    0    8 -0.35258526E-01
+ CCD energy        (236.54446438423406,-4.43771768785588261E-010)
+dener    0    9 -0.20630063E-01
+ CCD energy         (236.53303026861909,2.33307084356820633E-010)
+dener    0   10 -0.11434116E-01
+ CCD energy         (236.52729544557934,5.97259424994032601E-010)
+dener    0   11 -0.57348230E-02
+diis_mat    1    1  0.1514E-06
+diis_mat    1    2  0.8246E-07
+diis_mat    1    3  0.4250E-07
+diis_mat    1    4  0.2015E-07
+diis_mat    1    5  0.8319E-08
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.4112E-06
-diis_mat    2    2  0.4797E-06
-diis_mat    2    3  0.4821E-06
-diis_mat    2    4  0.4503E-06
-diis_mat    2    5  0.4030E-06
+diis_mat    2    1  0.8246E-07
+diis_mat    2    2  0.5099E-07
+diis_mat    2    3  0.3296E-07
+diis_mat    2    4  0.2284E-07
+diis_mat    2    5  0.1728E-07
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.3826E-06
-diis_mat    3    2  0.4821E-06
-diis_mat    3    3  0.5041E-06
-diis_mat    3    4  0.4838E-06
-diis_mat    3    5  0.4425E-06
+diis_mat    3    1  0.4250E-07
+diis_mat    3    2  0.3296E-07
+diis_mat    3    3  0.2767E-07
+diis_mat    3    4  0.2460E-07
+diis_mat    3    5  0.2261E-07
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.3363E-06
-diis_mat    4    2  0.4503E-06
-diis_mat    4    3  0.4838E-06
-diis_mat    4    4  0.4723E-06
-diis_mat    4    5  0.4375E-06
+diis_mat    4    1  0.2015E-07
+diis_mat    4    2  0.2284E-07
+diis_mat    4    3  0.2460E-07
+diis_mat    4    4  0.2538E-07
+diis_mat    4    5  0.2532E-07
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2854E-06
-diis_mat    5    2  0.4030E-06
-diis_mat    5    3  0.4425E-06
-diis_mat    5    4  0.4375E-06
-diis_mat    5    5  0.4089E-06
+diis_mat    5    1  0.8319E-08
+diis_mat    5    2  0.1728E-07
+diis_mat    5    3  0.2261E-07
+diis_mat    5    4  0.2532E-07
+diis_mat    5    5  0.2618E-07
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3856,53 +3741,53 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1  0.5373E+02  0.2284E-06
-sol_vec    2 -0.3003E+03 -0.1133E-05
-sol_vec    3  0.6274E+03  0.2094E-05
-sol_vec    4 -0.5805E+03 -0.1706E-05
-sol_vec    5  0.2007E+03  0.5170E-06
-sol_vec    6  0.8570E-10 -0.2295E-16
- CCD energy        (45.467413837090561,-7.46083437546665427E-011)
-dener    0   12  0.57795416E-01
- CCD energy        (45.467609350490974,-5.08752663501866252E-011)
-dener    0   13  0.19551340E-03
- CCD energy        (45.467718792122170,-3.56533194126751836E-011)
-dener    0   14  0.10944163E-03
- CCD energy        (45.467778980041913,-2.56980817535037805E-011)
-dener    0   15  0.60187920E-04
- CCD energy        (45.467811448435796,-1.90329109980293307E-011)
-dener    0   16  0.32468394E-04
- CCD energy        (45.467828648849235,-1.44498143678726365E-011)
-dener    0   17  0.17200413E-04
-diis_mat    1    1  0.4729E-10
-diis_mat    1    2  0.3843E-10
-diis_mat    1    3  0.3124E-10
-diis_mat    1    4  0.2541E-10
-diis_mat    1    5  0.2069E-10
+sol_vec    1  0.1207E+03 -0.5979E-05
+sol_vec    2 -0.6456E+03  0.3033E-04
+sol_vec    3  0.1290E+04 -0.5729E-04
+sol_vec    4 -0.1140E+04  0.4775E-04
+sol_vec    5  0.3764E+03 -0.1481E-04
+sol_vec    6  0.5230E-11  0.7910E-17
+ CCD energy        (236.54447099845379,-1.58055397222036777E-010)
+dener    0   12  0.17175553E-01
+ CCD energy        (236.54421335900173,-1.31521835459029077E-010)
+dener    0   13 -0.25763945E-03
+ CCD energy        (236.54405370567125,-1.11027442847679751E-010)
+dener    0   14 -0.15965333E-03
+ CCD energy        (236.54395572884462,-9.46093369234711839E-011)
+dener    0   15 -0.97976827E-04
+ CCD energy        (236.54389637057992,-8.10769995874591593E-011)
+dener    0   16 -0.59358265E-04
+ CCD energy        (236.54386102831370,-6.96939251022004051E-011)
+dener    0   17 -0.35342266E-04
+diis_mat    1    1  0.4623E-11
+diis_mat    1    2  0.4284E-11
+diis_mat    1    3  0.3796E-11
+diis_mat    1    4  0.3267E-11
+diis_mat    1    5  0.2757E-11
 diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.3843E-10
-diis_mat    2    2  0.3235E-10
-diis_mat    2    3  0.2704E-10
-diis_mat    2    4  0.2251E-10
-diis_mat    2    5  0.1868E-10
+diis_mat    2    1  0.4284E-11
+diis_mat    2    2  0.4092E-11
+diis_mat    2    3  0.3694E-11
+diis_mat    2    4  0.3219E-11
+diis_mat    2    5  0.2741E-11
 diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.3124E-10
-diis_mat    3    2  0.2704E-10
-diis_mat    3    3  0.2310E-10
-diis_mat    3    4  0.1955E-10
-diis_mat    3    5  0.1645E-10
+diis_mat    3    1  0.3796E-11
+diis_mat    3    2  0.3694E-11
+diis_mat    3    3  0.3371E-11
+diis_mat    3    4  0.2959E-11
+diis_mat    3    5  0.2533E-11
 diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.2541E-10
-diis_mat    4    2  0.2251E-10
-diis_mat    4    3  0.1955E-10
-diis_mat    4    4  0.1676E-10
-diis_mat    4    5  0.1425E-10
+diis_mat    4    1  0.3267E-11
+diis_mat    4    2  0.3219E-11
+diis_mat    4    3  0.2959E-11
+diis_mat    4    4  0.2610E-11
+diis_mat    4    5  0.2242E-11
 diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2069E-10
-diis_mat    5    2  0.1868E-10
-diis_mat    5    3  0.1645E-10
-diis_mat    5    4  0.1425E-10
-diis_mat    5    5  0.1221E-10
+diis_mat    5    1  0.2757E-11
+diis_mat    5    2  0.2741E-11
+diis_mat    5    3  0.2533E-11
+diis_mat    5    4  0.2242E-11
+diis_mat    5    5  0.1931E-11
 diis_mat    5    6 -0.1000E+01
 diis_mat    6    1 -0.1000E+01
 diis_mat    6    2 -0.1000E+01
@@ -3911,79 +3796,26 @@ diis_mat    6    4 -0.1000E+01
 diis_mat    6    5 -0.1000E+01
 diis_mat    6    6  0.0000E+00
  csysv info           0
-sol_vec    1 -0.8363E+02  0.3176E-03
-sol_vec    2  0.4009E+03 -0.1633E-02
-sol_vec    3 -0.7022E+03  0.3117E-02
-sol_vec    4  0.5294E+03 -0.2619E-02
-sol_vec    5 -0.1434E+03  0.8171E-03
-sol_vec    6 -0.4372E-14  0.5368E-20
- CCD energy        (45.467900204810320,-4.72388929205311015E-011)
-dener    0   18  0.71555961E-04
- CCD energy        (45.467887658242034,-2.88093461563328116E-011)
-dener    0   19 -0.12546568E-04
- CCD energy        (45.467879787380426,-1.73230912448514507E-011)
-dener    0   20 -0.78708616E-05
- CCD energy        (45.467874854830370,-1.01991030961029633E-011)
-dener    0   21 -0.49325501E-05
- CCD energy        (45.467871769447981,-5.81279383305039324E-012)
-dener    0   22 -0.30853824E-05
- CCD energy        (45.467869845232883,-3.14063979876118245E-012)
-dener    0   23 -0.19242151E-05
-diis_mat    1    1 -0.3684E-14
-diis_mat    1    2 -0.2836E-14
-diis_mat    1    3 -0.2238E-14
-diis_mat    1    4 -0.1801E-14
-diis_mat    1    5 -0.1472E-14
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1 -0.2836E-14
-diis_mat    2    2 -0.1599E-14
-diis_mat    2    3 -0.8779E-15
-diis_mat    2    4 -0.4639E-15
-diis_mat    2    5 -0.2315E-15
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1 -0.2238E-14
-diis_mat    3    2 -0.8779E-15
-diis_mat    3    3 -0.1356E-15
-diis_mat    3    4  0.2439E-15
-diis_mat    3    5  0.4145E-15
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1 -0.1801E-14
-diis_mat    4    2 -0.4639E-15
-diis_mat    4    3  0.2439E-15
-diis_mat    4    4  0.5838E-15
-diis_mat    4    5  0.7140E-15
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1 -0.1472E-14
-diis_mat    5    2 -0.2315E-15
-diis_mat    5    3  0.4145E-15
-diis_mat    5    4  0.7140E-15
-diis_mat    5    5  0.8169E-15
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.7770E+02  0.3787E-03
-sol_vec    2 -0.4277E+03 -0.1978E-02
-sol_vec    3  0.8782E+03  0.3837E-02
-sol_vec    4 -0.7976E+03 -0.3273E-02
-sol_vec    5  0.2703E+03  0.1035E-02
-sol_vec    6  0.4840E-18 -0.2290E-22
- CCD energy         (45.467866694449668,4.83222511397154210E-012)
-dener    0   24 -0.31507832E-05
- CCD energy         (45.467866761787583,2.88567995501074254E-012)
-dener    0   25  0.67337911E-07
- Total execution time CCD   1.9722740868455730     
+sol_vec    1  0.1076E+03  0.6451E-04
+sol_vec    2 -0.5770E+03 -0.3309E-03
+sol_vec    3  0.1155E+04  0.6308E-03
+sol_vec    4 -0.1024E+04 -0.5296E-03
+sol_vec    5  0.3393E+03  0.1653E-03
+sol_vec    6  0.2225E-15  0.5949E-21
+ CCD energy        (236.54381711723082,-1.91653409836089337E-011)
+dener    0   18 -0.43911083E-04
+ CCD energy        (236.54381847228112,-1.25994127980235981E-011)
+dener    0   19  0.13550503E-05
+ CCD energy        (236.54381933854779,-8.32405980831116451E-012)
+dener    0   20  0.86626666E-06
+ Total execution time CCD   1.6462114269961603     
  preparing to do CCD(T): 
           -4           4          -4           4          -4           4
  Total memory for lookup configs   3.2633599999999961E-004 GByte
  Total memory for channels   3.3071999999999963E-004 GByte
                534336      534336         274
  Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.092943969240878     
+ Time to setup hppp block   13.464817440661136     
  Total memory for vnn storage   4.6054080000000018E-003 GByte
            6           6           6           3           3
  Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
@@ -4390,2696 +4222,10 @@ dener    0   25  0.67337911E-07
           55        5466           2
           56        5376           2
           57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7507733960519545     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.14291           -0.15043
+ EXECUTION TIME FOR CCD(T)   3.8220234329346567     
+Kf, Dens          1.67950           0.16000  CCSD(T)         -0.20832           -0.21172
+ LEC_c1_input= -0.48999999999999999     
  t2_file=6.txt                                                                                               end2
- channels_num           25
- wtf end 
- LEC_c1_input=  -2.3572506864205565     
- NN regulator Exponent:    3.0000000000000000     
- -----------
- NN ci's
-  -2.3572506864205565     
- -0.48999999999999999     
- -0.65000000000000002     
-  0.95999999999999996     
- 3NF ci's
-  -2.3572506864205565     
-   0.0000000000000000     
- -0.65000000000000002     
-  0.95999999999999996     
- -----------
- --------
- c1s0(-1) -0.33911100000000000     
- c1s0(0) -0.34011400000000003     
- c1s0(1) -0.33988699999999999     
- c3s1(-1) -0.25395000000000001     
- c3s1(0) -0.25395000000000001     
- c3s1(1) -0.25395000000000001     
- --------
- -----------
- NLO contacts PW
-   2.5266359999999999     
-  0.67190799999999995     
- -0.21949800000000000     
- -0.91539800000000004     
-  0.96499000000000001     
-  0.44574300000000000     
- -0.89540500000000001     
- ----------
-          C1            0.0897883404147507
-          C2            0.0722843355393368
-          C3           -0.0069736344882472
-          C4           -0.0462135902127521
-          C5           -0.0611681585390834
-          C6           -0.0029227302060357
-          C7           -0.1388002150681639
-          D1           -0.3771581126597507
-          D2           -0.9305750209334183
-          D3            2.1195254080520742
-          D4           -2.1246309930064329
-          D5           -0.0131882077354610
-          D6            0.6645429882213397
-          D7            0.7806033045976430
-          D8           -0.4752342494327860
-          D9            0.0920642557695526
-         D10           -0.0312443369241453
-         D11            0.0232036046033312
-         D12           -0.3040203100732521
-         D13           -0.2963726204319913
-         D14            1.4856672935233888
-         D15           -0.3992014237014200
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   1.5289599999999940E-004 GByte
- Total memory for channels   5.9679999999999994E-006 GByte
-                62368       62368          25
-                62368       62368         274
- Setting up vnn for hhhh block
- Time to setup hhhh block   4.2062187741976231E-002
- Setting up vnn for hhhp block
- Time to setup hhhp block   7.2963144921232015E-002
- Setting up vnn for hhpp block
- Time to setup hhpp block   1.2965042336145416     
- Setting up vnn for hphp block
- Time to setup hphp block   1.2854013637406752     
- Setting up vnn for pppp block
- Time to setup pppp block   45.946292209962849     
- Total memory for vnn storage   3.6497792000000008E-002 GByte
-          -4           4          -4           4          -4           4
- Total memory for lookup ph configs   1.3216000000000033E-004 GByte
- Total memory for ph channels   1.3151999999999999E-005 GByte
-                62368       62368         274
- Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.5007379008457065E-004
- Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
- kinetic energy =               (498.06383234967711,0.0000000000000000)
- below_ef =          14
- Vacuum expectation value              (-61.141064223031563,0.0000000000000000)
- 3NF vacuum expectation value               (6.3755943842184024,0.0000000000000000)
- Vacuum expectation value with 3nf               (2.0083755111447195,0.0000000000000000)
- Time for e0   5.8190827257931232E-004
- Time for f3nf   7.2094735689461231E-002
- e0 3nf               (89.258321416731732,0.0000000000000000)               (89.258321379057634,0.0000000000000000)
- Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.2001499142497778E-003
- Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1741454560542479     
- Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64421216148184612     
- Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3505245600244962     
- Total memory for t2 storage   1.9957759999999999E-003 GByte
- here we go...
- CCD energy        (-11.906344058480713,3.66719060703560974E-018)
- diis space       62368
- Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy        (-7.7456804110143693,3.76983661431408027E-017)
-dener    0    1  0.41606636E+01
- CCD energy        (-5.1182432822697095,3.97559151064611426E-017)
-dener    0    2  0.26274371E+01
- CCD energy        (-3.4729010208458249,1.84940326723927855E-016)
-dener    0    3  0.16453423E+01
- CCD energy        (-2.4494024348160970,2.77249130332812209E-016)
-dener    0    4  0.10234986E+01
- CCD energy        (-1.8165826218567815,6.89472114745058451E-017)
-dener    0    5  0.63281981E+00
-diis_mat    1    1  0.2404E-02
-diis_mat    1    2  0.1522E-02
-diis_mat    1    3  0.9624E-03
-diis_mat    1    4  0.6094E-03
-diis_mat    1    5  0.3874E-03
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1522E-02
-diis_mat    2    2  0.9643E-03
-diis_mat    2    3  0.6103E-03
-diis_mat    2    4  0.3870E-03
-diis_mat    2    5  0.2465E-03
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.9624E-03
-diis_mat    3    2  0.6103E-03
-diis_mat    3    3  0.3868E-03
-diis_mat    3    4  0.2457E-03
-diis_mat    3    5  0.1570E-03
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.6094E-03
-diis_mat    4    2  0.3870E-03
-diis_mat    4    3  0.2457E-03
-diis_mat    4    4  0.1566E-03
-diis_mat    4    5  0.1004E-03
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.3874E-03
-diis_mat    5    2  0.2465E-03
-diis_mat    5    3  0.1570E-03
-diis_mat    5    4  0.1004E-03
-diis_mat    5    5  0.6474E-04
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1 -0.2266E+02  0.4599E-06
-sol_vec    2  0.7457E+02 -0.2335E-05
-sol_vec    3 -0.6668E+02  0.4450E-05
-sol_vec    4 -0.4347E+01 -0.3770E-05
-sol_vec    5  0.2011E+02  0.1195E-05
-sol_vec    6 -0.4184E-06  0.3907E-15
- CCD energy      (-0.46891783272905130,-3.04557017808053425E-009)
-dener    0    6  0.13476648E+01
- CCD energy      (-0.61009512413840028,-1.94356465990501726E-009)
-dener    0    7 -0.14117729E+00
- CCD energy      (-0.69747642325812365,-1.25863848800672117E-009)
-dener    0    8 -0.87381299E-01
- CCD energy      (-0.75265373092204868,-8.29489077729234467E-010)
-dener    0    9 -0.55177308E-01
- CCD energy      (-0.78842079106534868,-5.57875501442244771E-010)
-dener    0   10 -0.35767060E-01
- CCD energy      (-0.81236192033698629,-3.83788331133851911E-010)
-dener    0   11 -0.23941129E-01
-diis_mat    1    1  0.1347E-05
-diis_mat    1    2  0.9269E-06
-diis_mat    1    3  0.6369E-06
-diis_mat    1    4  0.4345E-06
-diis_mat    1    5  0.2922E-06
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.9269E-06
-diis_mat    2    2  0.7879E-06
-diis_mat    2    3  0.6578E-06
-diis_mat    2    4  0.5415E-06
-diis_mat    2    5  0.4409E-06
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.6369E-06
-diis_mat    3    2  0.6578E-06
-diis_mat    3    3  0.6223E-06
-diis_mat    3    4  0.5604E-06
-diis_mat    3    5  0.4892E-06
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.4345E-06
-diis_mat    4    2  0.5415E-06
-diis_mat    4    3  0.5604E-06
-diis_mat    4    4  0.5325E-06
-diis_mat    4    5  0.4824E-06
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2922E-06
-diis_mat    5    2  0.4409E-06
-diis_mat    5    3  0.4892E-06
-diis_mat    5    4  0.4824E-06
-diis_mat    5    5  0.4473E-06
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.5195E+02 -0.5238E-06
-sol_vec    2 -0.2920E+03  0.2843E-05
-sol_vec    3  0.6128E+03 -0.5704E-05
-sol_vec    4 -0.5691E+03  0.5021E-05
-sol_vec    5  0.1973E+03 -0.1635E-05
-sol_vec    6  0.6299E-10 -0.6447E-16
- CCD energy       (-0.88783681454093610,2.32023157480624400E-010)
-dener    0   12 -0.75474894E-01
- CCD energy       (-0.88788201304305403,1.54159052707384009E-010)
-dener    0   13 -0.45198502E-04
- CCD energy       (-0.88790383590440314,1.05304547002191701E-010)
-dener    0   14 -0.21822861E-04
- CCD energy       (-0.88791209187730402,7.41228220238059468E-011)
-dener    0   15 -0.82559729E-05
- CCD energy       (-0.88791283382527908,5.37828822134294037E-011)
-dener    0   16 -0.74194798E-06
- Total execution time CCD   1.2427793329115957     
- preparing to do CCD(T): 
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   3.2633599999999961E-004 GByte
- Total memory for channels   3.3071999999999963E-004 GByte
-               534336      534336         274
- Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.089124145859387     
- Total memory for vnn storage   4.6054080000000018E-003 GByte
-           6           6           6           3           3
- Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
- 3NF with deltas: T
-              2230904     2230904          57
-
- proc number   0      % work  0.100000E+03
-
-          Channel #:     1
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     2
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     3
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:     4
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     5
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     6
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     7
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:     8
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:     9
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    10
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    11
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    12
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    13
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    14
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    15
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    16
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    17
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    18
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    19
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    20
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    21
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    22
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    23
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    24
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    25
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    26
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    27
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    28
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    29
-    Row index start:     1
-      Row index end:    24
- Column index start:     1
-   Column index end:  6376
-
-          Channel #:    30
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    31
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    32
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    33
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    34
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    35
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    36
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    37
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    38
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    39
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    40
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    41
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    42
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    43
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    44
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    45
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    46
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    47
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    48
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    49
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    50
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    51
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    52
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    53
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    54
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    55
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    56
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    57
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-           1        5376           2
-           2        5376           2
-           3        5466           2
-           4        5376           2
-           5        5376           2
-           6        5376           2
-           7        6152           8
-           8        6262           8
-           9        6152           8
-          10        5376           2
-          11        6262           8
-          12        6328          20
-          13        6262           8
-          14        5376           2
-          15        6152           8
-          16        6262           8
-          17        6152           8
-          18        5376           2
-          19        5376           2
-          20        5466           2
-          21        5376           2
-          22        5376           2
-          23        6262           8
-          24        6328          20
-          25        6262           8
-          26        5376           2
-          27        5466           2
-          28        6328          20
-          29        6376          24
-          30        6328          20
-          31        5466           2
-          32        5376           2
-          33        6262           8
-          34        6328          20
-          35        6262           8
-          36        5376           2
-          37        5376           2
-          38        5466           2
-          39        5376           2
-          40        5376           2
-          41        6152           8
-          42        6262           8
-          43        6152           8
-          44        5376           2
-          45        6262           8
-          46        6328          20
-          47        6262           8
-          48        5376           2
-          49        6152           8
-          50        6262           8
-          51        6152           8
-          52        5376           2
-          53        5376           2
-          54        5376           2
-          55        5466           2
-          56        5376           2
-          57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7534016582067125     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.13688           -0.14551
- t2_file=7.txt                                                                                               end2
- channels_num           25
- wtf end 
- LEC_c1_input=  -2.7815558099762563     
- NN regulator Exponent:    3.0000000000000000     
- -----------
- NN ci's
-  -2.7815558099762563     
- -0.48999999999999999     
- -0.65000000000000002     
-  0.95999999999999996     
- 3NF ci's
-  -2.7815558099762563     
-   0.0000000000000000     
- -0.65000000000000002     
-  0.95999999999999996     
- -----------
- --------
- c1s0(-1) -0.33911100000000000     
- c1s0(0) -0.34011400000000003     
- c1s0(1) -0.33988699999999999     
- c3s1(-1) -0.25395000000000001     
- c3s1(0) -0.25395000000000001     
- c3s1(1) -0.25395000000000001     
- --------
- -----------
- NLO contacts PW
-   2.5266359999999999     
-  0.67190799999999995     
- -0.21949800000000000     
- -0.91539800000000004     
-  0.96499000000000001     
-  0.44574300000000000     
- -0.89540500000000001     
- ----------
-          C1            0.0897883404147507
-          C2            0.0722843355393368
-          C3           -0.0069736344882472
-          C4           -0.0462135902127521
-          C5           -0.0611681585390834
-          C6           -0.0029227302060357
-          C7           -0.1388002150681639
-          D1           -0.3771581126597507
-          D2           -0.9305750209334183
-          D3            2.1195254080520742
-          D4           -2.1246309930064329
-          D5           -0.0131882077354610
-          D6            0.6645429882213397
-          D7            0.7806033045976430
-          D8           -0.4752342494327860
-          D9            0.0920642557695526
-         D10           -0.0312443369241453
-         D11            0.0232036046033312
-         D12           -0.3040203100732521
-         D13           -0.2963726204319913
-         D14            1.4856672935233888
-         D15           -0.3992014237014200
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   1.5289599999999940E-004 GByte
- Total memory for channels   5.9679999999999994E-006 GByte
-                62368       62368          25
-                62368       62368         274
- Setting up vnn for hhhh block
- Time to setup hhhh block   4.1331449756398797E-002
- Setting up vnn for hhhp block
- Time to setup hhhp block   6.8525547278113663E-002
- Setting up vnn for hhpp block
- Time to setup hhpp block   1.2804416872677393     
- Setting up vnn for hphp block
- Time to setup hphp block   1.2703532923478633     
- Setting up vnn for pppp block
- Time to setup pppp block   45.971682311617769     
- Total memory for vnn storage   3.6497792000000008E-002 GByte
-          -4           4          -4           4          -4           4
- Total memory for lookup ph configs   1.3216000000000033E-004 GByte
- Total memory for ph channels   1.3151999999999999E-005 GByte
-                62368       62368         274
- Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.6107300072908401E-004
- Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
- kinetic energy =               (498.06383234967711,0.0000000000000000)
- below_ef =          14
- Vacuum expectation value              (-119.19125235617170,0.0000000000000000)
- 3NF vacuum expectation value               (6.5526360675604076,0.0000000000000000)
- Vacuum expectation value with 3nf              (-1.9610248150232852,0.0000000000000000)
- Time for e0   5.8147317031398416E-004
- Time for f3nf   7.2053436073474586E-002
- e0 3nf               (91.736904984837295,0.0000000000000000)               (91.736904945845708,0.0000000000000000)
- Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.1037240345031023E-003
- Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1820361054269597     
- Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.65085564326727763     
- Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3720256070955656     
- Total memory for t2 storage   1.9957759999999999E-003 GByte
- here we go...
- CCD energy        (-67.740079658130583,1.96959524612786021E-017)
- diis space       62368
- Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy       (-63.262897715736628,-3.04040357796201139E-017)
-dener    0    1  0.44771819E+01
- CCD energy        (-60.455981622090484,4.95927198643107834E-017)
-dener    0    2  0.28069161E+01
- CCD energy       (-58.711480874566469,-1.49022741509993865E-017)
-dener    0    3  0.17445007E+01
- CCD energy       (-57.634329908223194,-3.51311158229925868E-017)
-dener    0    4  0.10771510E+01
- CCD energy        (-56.972930759523763,2.06170783169502516E-016)
-dener    0    5  0.66139915E+00
-diis_mat    1    1  0.2748E-02
-diis_mat    1    2  0.1725E-02
-diis_mat    1    3  0.1080E-02
-diis_mat    1    4  0.6764E-03
-diis_mat    1    5  0.4249E-03
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.1725E-02
-diis_mat    2    2  0.1084E-02
-diis_mat    2    3  0.6795E-03
-diis_mat    2    4  0.4265E-03
-diis_mat    2    5  0.2686E-03
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1080E-02
-diis_mat    3    2  0.6795E-03
-diis_mat    3    3  0.4270E-03
-diis_mat    3    4  0.2688E-03
-diis_mat    3    5  0.1700E-03
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.6764E-03
-diis_mat    4    2  0.4265E-03
-diis_mat    4    3  0.2688E-03
-diis_mat    4    4  0.1699E-03
-diis_mat    4    5  0.1080E-03
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.4249E-03
-diis_mat    5    2  0.2686E-03
-diis_mat    5    3  0.1700E-03
-diis_mat    5    4  0.1080E-03
-diis_mat    5    5  0.6911E-04
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1 -0.1646E+01 -0.1055E-06
-sol_vec    2 -0.1470E+02  0.5482E-06
-sol_vec    3  0.7804E+02 -0.1065E-05
-sol_vec    4 -0.1137E+03  0.9152E-06
-sol_vec    5  0.5304E+02 -0.2926E-06
-sol_vec    6 -0.8978E-07  0.1437E-15
- CCD energy        (-55.868248465168946,7.02145859531289132E-010)
-dener    0    6  0.11046823E+01
- CCD energy        (-55.919943659335054,4.37319014747864236E-010)
-dener    0    7 -0.51695194E-01
- CCD energy        (-55.951151935486408,2.74035272727184327E-010)
-dener    0    8 -0.31208276E-01
- CCD energy        (-55.970118122672616,1.72997671420005819E-010)
-dener    0    9 -0.18966187E-01
- CCD energy        (-55.981758563872276,1.10207994049771786E-010)
-dener    0   10 -0.11640441E-01
- CCD energy        (-55.989003451909156,7.09830014975963561E-011)
-dener    0   11 -0.72448880E-02
-diis_mat    1    1  0.1592E-06
-diis_mat    1    2  0.9465E-07
-diis_mat    1    3  0.5607E-07
-diis_mat    1    4  0.3302E-07
-diis_mat    1    5  0.1923E-07
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.9465E-07
-diis_mat    2    2  0.6116E-07
-diis_mat    2    3  0.4039E-07
-diis_mat    2    4  0.2732E-07
-diis_mat    2    5  0.1894E-07
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.5607E-07
-diis_mat    3    2  0.4039E-07
-diis_mat    3    3  0.2993E-07
-diis_mat    3    4  0.2273E-07
-diis_mat    3    5  0.1762E-07
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.3302E-07
-diis_mat    4    2  0.2732E-07
-diis_mat    4    3  0.2273E-07
-diis_mat    4    4  0.1896E-07
-diis_mat    4    5  0.1583E-07
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1923E-07
-diis_mat    5    2  0.1894E-07
-diis_mat    5    3  0.1762E-07
-diis_mat    5    4  0.1583E-07
-diis_mat    5    5  0.1391E-07
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.2504E+02 -0.3080E-06
-sol_vec    2 -0.1495E+03  0.1632E-05
-sol_vec    3  0.3330E+03 -0.3204E-05
-sol_vec    4 -0.3279E+03  0.2765E-05
-sol_vec    5  0.1204E+03 -0.8838E-06
-sol_vec    6  0.1049E-10 -0.4076E-19
- CCD energy        (-56.004475193896553,6.26563307090333873E-012)
-dener    0   12 -0.15471742E-01
- CCD energy        (-56.004576399408251,3.89610890159084302E-012)
-dener    0   13 -0.10120551E-03
- CCD energy        (-56.004635625389781,2.48377023235910376E-012)
-dener    0   14 -0.59225982E-04
- CCD energy        (-56.004669919415825,1.63527180375430258E-012)
-dener    0   15 -0.34294026E-04
- CCD energy        (-56.004689491720683,1.11828516768930476E-012)
-dener    0   16 -0.19572305E-04
- CCD energy        (-56.004700439068081,7.97197862673497553E-013)
-dener    0   17 -0.10947347E-04
-diis_mat    1    1  0.8144E-11
-diis_mat    1    2  0.7081E-11
-diis_mat    1    3  0.6104E-11
-diis_mat    1    4  0.5229E-11
-diis_mat    1    5  0.4458E-11
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.7081E-11
-diis_mat    2    2  0.6159E-11
-diis_mat    2    3  0.5308E-11
-diis_mat    2    4  0.4545E-11
-diis_mat    2    5  0.3872E-11
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.6104E-11
-diis_mat    3    2  0.5308E-11
-diis_mat    3    3  0.4573E-11
-diis_mat    3    4  0.3913E-11
-diis_mat    3    5  0.3331E-11
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.5229E-11
-diis_mat    4    2  0.4545E-11
-diis_mat    4    3  0.3913E-11
-diis_mat    4    4  0.3346E-11
-diis_mat    4    5  0.2848E-11
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.4458E-11
-diis_mat    5    2  0.3872E-11
-diis_mat    5    3  0.3331E-11
-diis_mat    5    4  0.2848E-11
-diis_mat    5    5  0.2423E-11
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.7569E+02  0.1094E-04
-sol_vec    2 -0.4182E+03 -0.5814E-04
-sol_vec    3  0.8617E+03  0.1143E-03
-sol_vec    4 -0.7846E+03 -0.9870E-04
-sol_vec    5  0.2665E+03  0.3155E-04
-sol_vec    6  0.6720E-16  0.2538E-21
- CCD energy       (-56.004711300668454,-1.59462756646945422E-012)
-dener    0   18 -0.10861600E-04
- CCD energy       (-56.004711489625620,-1.05062495012083042E-012)
-dener    0   19 -0.18895717E-06
- Total execution time CCD   1.4888748683151789     
- preparing to do CCD(T): 
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   3.2633599999999961E-004 GByte
- Total memory for channels   3.3071999999999963E-004 GByte
-               534336      534336         274
- Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.253185581008438     
- Total memory for vnn storage   4.6054080000000018E-003 GByte
-           6           6           6           3           3
- Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
- 3NF with deltas: T
-              2230904     2230904          57
-
- proc number   0      % work  0.100000E+03
-
-          Channel #:     1
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     2
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     3
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:     4
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     5
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     6
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     7
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:     8
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:     9
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    10
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    11
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    12
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    13
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    14
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    15
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    16
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    17
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    18
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    19
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    20
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    21
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    22
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    23
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    24
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    25
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    26
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    27
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    28
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    29
-    Row index start:     1
-      Row index end:    24
- Column index start:     1
-   Column index end:  6376
-
-          Channel #:    30
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    31
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    32
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    33
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    34
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    35
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    36
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    37
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    38
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    39
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    40
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    41
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    42
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    43
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    44
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    45
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    46
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    47
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    48
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    49
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    50
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    51
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    52
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    53
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    54
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    55
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    56
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    57
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-           1        5376           2
-           2        5376           2
-           3        5466           2
-           4        5376           2
-           5        5376           2
-           6        5376           2
-           7        6152           8
-           8        6262           8
-           9        6152           8
-          10        5376           2
-          11        6262           8
-          12        6328          20
-          13        6262           8
-          14        5376           2
-          15        6152           8
-          16        6262           8
-          17        6152           8
-          18        5376           2
-          19        5376           2
-          20        5466           2
-          21        5376           2
-          22        5376           2
-          23        6262           8
-          24        6328          20
-          25        6262           8
-          26        5376           2
-          27        5466           2
-          28        6328          20
-          29        6376          24
-          30        6328          20
-          31        5466           2
-          32        5376           2
-          33        6262           8
-          34        6328          20
-          35        6262           8
-          36        5376           2
-          37        5376           2
-          38        5466           2
-          39        5376           2
-          40        5376           2
-          41        6152           8
-          42        6262           8
-          43        6152           8
-          44        5376           2
-          45        6262           8
-          46        6328          20
-          47        6262           8
-          48        5376           2
-          49        6152           8
-          50        6262           8
-          51        6152           8
-          52        5376           2
-          53        5376           2
-          54        5376           2
-          55        5466           2
-          56        5376           2
-          57        5376           2
- EXECUTION TIME FOR CCD(T)   3.8013379520853050     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.13462           -0.14461
- t2_file=8.txt                                                                                               end2
- channels_num           25
- wtf end 
- LEC_c1_input=  -3.2822358557719822     
- NN regulator Exponent:    3.0000000000000000     
- -----------
- NN ci's
-  -3.2822358557719822     
- -0.48999999999999999     
- -0.65000000000000002     
-  0.95999999999999996     
- 3NF ci's
-  -3.2822358557719822     
-   0.0000000000000000     
- -0.65000000000000002     
-  0.95999999999999996     
- -----------
- --------
- c1s0(-1) -0.33911100000000000     
- c1s0(0) -0.34011400000000003     
- c1s0(1) -0.33988699999999999     
- c3s1(-1) -0.25395000000000001     
- c3s1(0) -0.25395000000000001     
- c3s1(1) -0.25395000000000001     
- --------
- -----------
- NLO contacts PW
-   2.5266359999999999     
-  0.67190799999999995     
- -0.21949800000000000     
- -0.91539800000000004     
-  0.96499000000000001     
-  0.44574300000000000     
- -0.89540500000000001     
- ----------
-          C1            0.0897883404147507
-          C2            0.0722843355393368
-          C3           -0.0069736344882472
-          C4           -0.0462135902127521
-          C5           -0.0611681585390834
-          C6           -0.0029227302060357
-          C7           -0.1388002150681639
-          D1           -0.3771581126597507
-          D2           -0.9305750209334183
-          D3            2.1195254080520742
-          D4           -2.1246309930064329
-          D5           -0.0131882077354610
-          D6            0.6645429882213397
-          D7            0.7806033045976430
-          D8           -0.4752342494327860
-          D9            0.0920642557695526
-         D10           -0.0312443369241453
-         D11            0.0232036046033312
-         D12           -0.3040203100732521
-         D13           -0.2963726204319913
-         D14            1.4856672935233888
-         D15           -0.3992014237014200
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   1.5289599999999940E-004 GByte
- Total memory for channels   5.9679999999999994E-006 GByte
-                62368       62368          25
-                62368       62368         274
- Setting up vnn for hhhh block
- Time to setup hhhh block   4.1216786543373019E-002
- Setting up vnn for hhhp block
- Time to setup hhhp block   6.9825757702346891E-002
- Setting up vnn for hhpp block
- Time to setup hhpp block   1.2768610815401189     
- Setting up vnn for hphp block
- Time to setup hphp block   1.2791823900188319     
- Setting up vnn for pppp block
- Time to setup pppp block   45.901468107942492     
- Total memory for vnn storage   3.6497792000000008E-002 GByte
-          -4           4          -4           4          -4           4
- Total memory for lookup ph configs   1.3216000000000033E-004 GByte
- Total memory for ph channels   1.3151999999999999E-005 GByte
-                62368       62368         274
- Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.5815964909270406E-004
- Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
- kinetic energy =               (498.06383234967711,0.0000000000000000)
- below_ef =          14
- Vacuum expectation value              (-187.69047435327721,0.0000000000000000)
- 3NF vacuum expectation value               (6.7615452539039707,0.0000000000000000)
- Vacuum expectation value with 3nf              (-6.6449171999015437,0.0000000000000000)
- Time for e0   5.5938621517270803E-004
- Time for f3nf   7.2086622531060129E-002
- e0 3nf               (94.661633595201806,0.0000000000000000)               (94.661633554655594,0.0000000000000000)
- Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.0922775561921299E-003
- Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1738998527871445     
- Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64322618127334863     
- Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3604232401703484     
- Total memory for t2 storage   1.9957759999999999E-003 GByte
- here we go...
- CCD energy       (-134.25591163254035,-3.52731975196416089E-017)
- diis space       62368
- Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy       (-129.36200386053051,-4.73290267770930922E-018)
-dener    0    1  0.48939078E+01
- CCD energy        (-126.32310456577963,7.34885785067586808E-017)
-dener    0    2  0.30388993E+01
- CCD energy       (-124.45454186168395,-4.28291626051730073E-017)
-dener    0    3  0.18685627E+01
- CCD energy        (-123.31396440652040,8.44081016599050160E-017)
-dener    0    4  0.11405775E+01
- CCD energy       (-122.62205983555700,-6.85262384892874248E-017)
-dener    0    5  0.69190457E+00
-diis_mat    1    1  0.3223E-02
-diis_mat    1    2  0.2006E-02
-diis_mat    1    3  0.1244E-02
-diis_mat    1    4  0.7717E-03
-diis_mat    1    5  0.4797E-03
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.2006E-02
-diis_mat    2    2  0.1251E-02
-diis_mat    2    3  0.7784E-03
-diis_mat    2    4  0.4848E-03
-diis_mat    2    5  0.3030E-03
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1244E-02
-diis_mat    3    2  0.7784E-03
-diis_mat    3    3  0.4864E-03
-diis_mat    3    4  0.3047E-03
-diis_mat    3    5  0.1918E-03
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.7717E-03
-diis_mat    4    2  0.4848E-03
-diis_mat    4    3  0.3047E-03
-diis_mat    4    4  0.1922E-03
-diis_mat    4    5  0.1222E-03
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.4797E-03
-diis_mat    5    2  0.3030E-03
-diis_mat    5    3  0.1918E-03
-diis_mat    5    4  0.1222E-03
-diis_mat    5    5  0.7870E-04
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.2671E+01  0.8391E-07
-sol_vec    2 -0.3644E+02 -0.4400E-06
-sol_vec    3  0.1202E+03  0.8616E-06
-sol_vec    4 -0.1509E+03 -0.7445E-06
-sol_vec    5  0.6551E+02  0.2391E-06
-sol_vec    6 -0.5537E-07 -0.1507E-15
- CCD energy       (-121.54123205590749,-6.53701610619141238E-010)
-dener    0    6  0.10808278E+01
- CCD energy       (-121.58599881881969,-4.03012446662535497E-010)
-dener    0    7 -0.44766763E-01
- CCD energy       (-121.61248221424950,-2.49769409559575195E-010)
-dener    0    8 -0.26483395E-01
- CCD energy       (-121.62816915401292,-1.55779869052580743E-010)
-dener    0    9 -0.15686940E-01
- CCD energy       (-121.63748544702887,-9.79077844569474318E-011)
-dener    0   10 -0.93162930E-02
- CCD energy       (-121.64304451111465,-6.21100194071985627E-011)
-dener    0   11 -0.55590641E-02
-diis_mat    1    1  0.1264E-06
-diis_mat    1    2  0.7498E-07
-diis_mat    1    3  0.4498E-07
-diis_mat    1    4  0.2744E-07
-diis_mat    1    5  0.1713E-07
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.7498E-07
-diis_mat    2    2  0.4602E-07
-diis_mat    2    3  0.2889E-07
-diis_mat    2    4  0.1867E-07
-diis_mat    2    5  0.1249E-07
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.4498E-07
-diis_mat    3    2  0.2889E-07
-diis_mat    3    3  0.1917E-07
-diis_mat    3    4  0.1319E-07
-diis_mat    3    5  0.9434E-08
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.2744E-07
-diis_mat    4    2  0.1867E-07
-diis_mat    4    3  0.1319E-07
-diis_mat    4    4  0.9674E-08
-diis_mat    4    5  0.7340E-08
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1713E-07
-diis_mat    5    2  0.1249E-07
-diis_mat    5    3  0.9434E-08
-diis_mat    5    4  0.7340E-08
-diis_mat    5    5  0.5850E-08
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.3240E+02  0.3674E-06
-sol_vec    2 -0.1908E+03 -0.1886E-05
-sol_vec    3  0.4189E+03  0.3584E-05
-sol_vec    4 -0.4059E+03 -0.2994E-05
-sol_vec    5  0.1465E+03  0.9286E-06
-sol_vec    6  0.8330E-12  0.1201E-18
- CCD energy       (-121.65258640223180,-7.53645821667580418E-012)
-dener    0   12 -0.95418911E-02
- CCD energy       (-121.65261366629397,-4.03547151104308375E-012)
-dener    0   13 -0.27264062E-04
- CCD energy       (-121.65262855375350,-2.13391772228077234E-012)
-dener    0   14 -0.14887460E-04
- CCD energy       (-121.65263658257712,-1.12067017257558695E-012)
-dener    0   15 -0.80288236E-05
- CCD energy       (-121.65264085781106,-5.92936599262998384E-013)
-dener    0   16 -0.42752339E-05
- CCD energy       (-121.65264310907402,-3.26492585729867047E-013)
-dener    0   17 -0.22512630E-05
-diis_mat    1    1  0.5825E-12
-diis_mat    1    2  0.4757E-12
-diis_mat    1    3  0.3880E-12
-diis_mat    1    4  0.3162E-12
-diis_mat    1    5  0.2577E-12
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.4757E-12
-diis_mat    2    2  0.3818E-12
-diis_mat    2    3  0.3069E-12
-diis_mat    2    4  0.2472E-12
-diis_mat    2    5  0.1994E-12
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.3880E-12
-diis_mat    3    2  0.3069E-12
-diis_mat    3    3  0.2438E-12
-diis_mat    3    4  0.1944E-12
-diis_mat    3    5  0.1556E-12
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.3162E-12
-diis_mat    4    2  0.2472E-12
-diis_mat    4    3  0.1944E-12
-diis_mat    4    4  0.1538E-12
-diis_mat    4    5  0.1222E-12
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.2577E-12
-diis_mat    5    2  0.1994E-12
-diis_mat    5    3  0.1556E-12
-diis_mat    5    4  0.1222E-12
-diis_mat    5    5  0.9665E-13
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.5484E+02 -0.3624E-04
-sol_vec    2 -0.3093E+03  0.1957E-03
-sol_vec    3  0.6504E+03 -0.3909E-03
-sol_vec    4 -0.6044E+03  0.3422E-03
-sol_vec    5  0.2095E+03 -0.1107E-03
-sol_vec    6  0.1263E-16  0.2884E-22
- CCD energy        (-121.65264614877003,5.08669799099304092E-013)
-dener    0   18 -0.30396960E-05
- CCD energy        (-121.65264620549797,2.23415336531303654E-013)
-dener    0   19 -0.56727952E-07
- Total execution time CCD   1.5077616309863515     
- preparing to do CCD(T): 
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   3.2633599999999961E-004 GByte
- Total memory for channels   3.3071999999999963E-004 GByte
-               534336      534336         274
- Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.156635502818972     
- Total memory for vnn storage   4.6054080000000018E-003 GByte
-           6           6           6           3           3
- Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
- 3NF with deltas: T
-              2230904     2230904          57
-
- proc number   0      % work  0.100000E+03
-
-          Channel #:     1
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     2
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     3
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:     4
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     5
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     6
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     7
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:     8
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:     9
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    10
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    11
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    12
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    13
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    14
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    15
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    16
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    17
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    18
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    19
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    20
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    21
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    22
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    23
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    24
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    25
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    26
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    27
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    28
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    29
-    Row index start:     1
-      Row index end:    24
- Column index start:     1
-   Column index end:  6376
-
-          Channel #:    30
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    31
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    32
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    33
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    34
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    35
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    36
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    37
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    38
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    39
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    40
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    41
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    42
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    43
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    44
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    45
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    46
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    47
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    48
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    49
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    50
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    51
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    52
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    53
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    54
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    55
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    56
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    57
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-           1        5376           2
-           2        5376           2
-           3        5466           2
-           4        5376           2
-           5        5376           2
-           6        5376           2
-           7        6152           8
-           8        6262           8
-           9        6152           8
-          10        5376           2
-          11        6262           8
-          12        6328          20
-          13        6262           8
-          14        5376           2
-          15        6152           8
-          16        6262           8
-          17        6152           8
-          18        5376           2
-          19        5376           2
-          20        5466           2
-          21        5376           2
-          22        5376           2
-          23        6262           8
-          24        6328          20
-          25        6262           8
-          26        5376           2
-          27        5466           2
-          28        6328          20
-          29        6376          24
-          30        6328          20
-          31        5466           2
-          32        5376           2
-          33        6262           8
-          34        6328          20
-          35        6262           8
-          36        5376           2
-          37        5376           2
-          38        5466           2
-          39        5376           2
-          40        5376           2
-          41        6152           8
-          42        6262           8
-          43        6152           8
-          44        5376           2
-          45        6262           8
-          46        6328          20
-          47        6262           8
-          48        5376           2
-          49        6152           8
-          50        6262           8
-          51        6152           8
-          52        5376           2
-          53        5376           2
-          54        5376           2
-          55        5466           2
-          56        5376           2
-          57        5376           2
- EXECUTION TIME FOR CCD(T)   3.7455057124607265     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.13933           -0.15103
- t2_file=9.txt                                                                                               end2
- channels_num           25
- wtf end 
- LEC_c1_input=  -3.8730383098109389     
- NN regulator Exponent:    3.0000000000000000     
- -----------
- NN ci's
-  -3.8730383098109389     
- -0.48999999999999999     
- -0.65000000000000002     
-  0.95999999999999996     
- 3NF ci's
-  -3.8730383098109389     
-   0.0000000000000000     
- -0.65000000000000002     
-  0.95999999999999996     
- -----------
- --------
- c1s0(-1) -0.33911100000000000     
- c1s0(0) -0.34011400000000003     
- c1s0(1) -0.33988699999999999     
- c3s1(-1) -0.25395000000000001     
- c3s1(0) -0.25395000000000001     
- c3s1(1) -0.25395000000000001     
- --------
- -----------
- NLO contacts PW
-   2.5266359999999999     
-  0.67190799999999995     
- -0.21949800000000000     
- -0.91539800000000004     
-  0.96499000000000001     
-  0.44574300000000000     
- -0.89540500000000001     
- ----------
-          C1            0.0897883404147507
-          C2            0.0722843355393368
-          C3           -0.0069736344882472
-          C4           -0.0462135902127521
-          C5           -0.0611681585390834
-          C6           -0.0029227302060357
-          C7           -0.1388002150681639
-          D1           -0.3771581126597507
-          D2           -0.9305750209334183
-          D3            2.1195254080520742
-          D4           -2.1246309930064329
-          D5           -0.0131882077354610
-          D6            0.6645429882213397
-          D7            0.7806033045976430
-          D8           -0.4752342494327860
-          D9            0.0920642557695526
-         D10           -0.0312443369241453
-         D11            0.0232036046033312
-         D12           -0.3040203100732521
-         D13           -0.2963726204319913
-         D14            1.4856672935233888
-         D15           -0.3992014237014200
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   1.5289599999999940E-004 GByte
- Total memory for channels   5.9679999999999994E-006 GByte
-                62368       62368          25
-                62368       62368         274
- Setting up vnn for hhhh block
- Time to setup hhhh block   4.1603618941735476E-002
- Setting up vnn for hhhp block
- Time to setup hhhp block   6.8912559188902378E-002
- Setting up vnn for hhpp block
- Time to setup hhpp block   1.2701283541973680     
- Setting up vnn for hphp block
- Time to setup hphp block   1.2690801275311969     
- Setting up vnn for pppp block
- Time to setup pppp block   45.876474340853747     
- Total memory for vnn storage   3.6497792000000008E-002 GByte
-          -4           4          -4           4          -4           4
- Total memory for lookup ph configs   1.3216000000000033E-004 GByte
- Total memory for ph channels   1.3151999999999999E-005 GByte
-                62368       62368         274
- Setting up vnn for ph hpph block
- Time to setup ph hpph block   2.5353056844323874E-004
- Total memory for vnn/t2 ph storage   1.9957760000000008E-003 GByte
- kinetic energy =               (498.06383234967711,0.0000000000000000)
- below_ef =          14
- Vacuum expectation value              (-268.51955630986168,0.0000000000000000)
- 3NF vacuum expectation value               (7.0080580937893853,0.0000000000000000)
- Vacuum expectation value with 3nf              (-12.171910214057878,0.0000000000000000)
- Time for e0   5.5983604397624731E-004
- Time for f3nf   7.2058805148117244E-002
- e0 3nf               (98.112813355431982,0.0000000000000000)               (98.112813313051390,0.0000000000000000)
- Setting up v3nf_2bNO for hhhh block
- Time to setup v3nf_2bNO hhhh block   9.0734093100763857E-003
- Setting up v3nf_2bNO for hhpp block
- Time to setup v3nf_2bNO hhpp block   1.1756408467190340     
- Setting up v3nf_2bNO for hphp block
- Time to setup v3nf_2bNO hphp block  0.64492186339339241     
- Setting up v3nf_NO for pppp block
- Time to setup v3nf_2bNO pppp block   5.3518931249273010     
- Total memory for t2 storage   1.9957759999999999E-003 GByte
- here we go...
- CCD energy       (-213.63133795548936,-1.48093736590871850E-017)
- diis space       62368
- Storage of diis vectors   6.9852159999999998E-003 Gb
- CCD energy       (-208.19501394000466,-8.20481630394575578E-017)
-dener    0    1  0.54363240E+01
- CCD energy       (-204.86172404620112,-1.66611591664550418E-016)
-dener    0    2  0.33332899E+01
- CCD energy       (-202.84295160604307,-1.79333798988546808E-017)
-dener    0    3  0.20187724E+01
- CCD energy        (-201.63221964208174,2.57905864826988051E-016)
-dener    0    4  0.12107320E+01
- CCD energy        (-200.91272669961697,1.43552604506299350E-016)
-dener    0    5  0.71949294E+00
-diis_mat    1    1  0.3890E-02
-diis_mat    1    2  0.2401E-02
-diis_mat    1    3  0.1477E-02
-diis_mat    1    4  0.9091E-03
-diis_mat    1    5  0.5609E-03
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.2401E-02
-diis_mat    2    2  0.1489E-02
-diis_mat    2    3  0.9218E-03
-diis_mat    2    4  0.5720E-03
-diis_mat    2    5  0.3569E-03
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.1477E-02
-diis_mat    3    2  0.9218E-03
-diis_mat    3    3  0.5755E-03
-diis_mat    3    4  0.3611E-03
-diis_mat    3    5  0.2286E-03
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.9091E-03
-diis_mat    4    2  0.5720E-03
-diis_mat    4    3  0.3611E-03
-diis_mat    4    4  0.2299E-03
-diis_mat    4    5  0.1483E-03
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.5609E-03
-diis_mat    5    2  0.3569E-03
-diis_mat    5    3  0.2286E-03
-diis_mat    5    4  0.1483E-03
-diis_mat    5    5  0.9780E-04
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.6010E+01 -0.1882E-06
-sol_vec    2 -0.5610E+02  0.1014E-05
-sol_vec    3  0.1632E+03 -0.2034E-05
-sol_vec    4 -0.1921E+03  0.1795E-05
-sol_vec    5  0.8001E+02 -0.5870E-06
-sol_vec    6 -0.6565E-07  0.5267E-15
- CCD energy        (-199.90323578240120,1.65812803167992199E-009)
-dener    0    6  0.10094909E+01
- CCD energy        (-199.95471624229853,1.02733819240162905E-009)
-dener    0    7 -0.51480460E-01
- CCD energy        (-199.98434774851128,6.41377950534621905E-010)
-dener    0    8 -0.29631506E-01
- CCD energy        (-200.00135071014952,4.04028000086792994E-010)
-dener    0    9 -0.17002962E-01
- CCD energy        (-200.01107695778714,2.57225957599115763E-010)
-dener    0   10 -0.97262476E-02
- CCD energy        (-200.01662544175090,1.65821251538217351E-010)
-dener    0   11 -0.55484840E-02
-diis_mat    1    1  0.1402E-06
-diis_mat    1    2  0.7990E-07
-diis_mat    1    3  0.4585E-07
-diis_mat    1    4  0.2665E-07
-diis_mat    1    5  0.1582E-07
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.7990E-07
-diis_mat    2    2  0.4638E-07
-diis_mat    2    3  0.2730E-07
-diis_mat    2    4  0.1641E-07
-diis_mat    2    5  0.1016E-07
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.4585E-07
-diis_mat    3    2  0.2730E-07
-diis_mat    3    3  0.1660E-07
-diis_mat    3    4  0.1039E-07
-diis_mat    3    5  0.6747E-08
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.2665E-07
-diis_mat    4    2  0.1641E-07
-diis_mat    4    3  0.1039E-07
-diis_mat    4    4  0.6818E-08
-diis_mat    4    5  0.4650E-08
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.1582E-07
-diis_mat    5    2  0.1016E-07
-diis_mat    5    3  0.6747E-08
-diis_mat    5    4  0.4650E-08
-diis_mat    5    5  0.3327E-08
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.4697E+02  0.4732E-06
-sol_vec    2 -0.2696E+03 -0.2630E-05
-sol_vec    3  0.5768E+03  0.5408E-05
-sol_vec    4 -0.5447E+03 -0.4866E-05
-sol_vec    5  0.1916E+03  0.1616E-05
-sol_vec    6  0.9239E-14 -0.4114E-18
- CCD energy        (-200.02451165290609,2.64045225651989111E-012)
-dener    0   12 -0.78862112E-02
- CCD energy       (-200.02450993590415,-2.00551963890404363E-014)
-dener    0   13  0.17170019E-05
- CCD energy       (-200.02450683753457,-1.21811621423732031E-012)
-dener    0   14  0.30983696E-05
- CCD energy       (-200.02450347749505,-1.65208342248648158E-012)
-dener    0   15  0.33600395E-05
- CCD energy       (-200.02450034883091,-1.70531608001756532E-012)
-dener    0   16  0.31286642E-05
- CCD energy       (-200.02449762831000,-1.58447854314301290E-012)
-dener    0   17  0.27205209E-05
-diis_mat    1    1  0.5072E-13
-diis_mat    1    2  0.5431E-13
-diis_mat    1    3  0.5276E-13
-diis_mat    1    4  0.4865E-13
-diis_mat    1    5  0.4347E-13
-diis_mat    1    6 -0.1000E+01
-diis_mat    2    1  0.5431E-13
-diis_mat    2    2  0.6146E-13
-diis_mat    2    3  0.6191E-13
-diis_mat    2    4  0.5870E-13
-diis_mat    2    5  0.5368E-13
-diis_mat    2    6 -0.1000E+01
-diis_mat    3    1  0.5276E-13
-diis_mat    3    2  0.6191E-13
-diis_mat    3    3  0.6373E-13
-diis_mat    3    4  0.6136E-13
-diis_mat    3    5  0.5678E-13
-diis_mat    3    6 -0.1000E+01
-diis_mat    4    1  0.4865E-13
-diis_mat    4    2  0.5870E-13
-diis_mat    4    3  0.6136E-13
-diis_mat    4    4  0.5970E-13
-diis_mat    4    5  0.5568E-13
-diis_mat    4    6 -0.1000E+01
-diis_mat    5    1  0.4347E-13
-diis_mat    5    2  0.5368E-13
-diis_mat    5    3  0.5678E-13
-diis_mat    5    4  0.5568E-13
-diis_mat    5    5  0.5225E-13
-diis_mat    5    6 -0.1000E+01
-diis_mat    6    1 -0.1000E+01
-diis_mat    6    2 -0.1000E+01
-diis_mat    6    3 -0.1000E+01
-diis_mat    6    4 -0.1000E+01
-diis_mat    6    5 -0.1000E+01
-diis_mat    6    6  0.0000E+00
- csysv info           0
-sol_vec    1  0.6448E+02  0.3585E-05
-sol_vec    2 -0.3607E+03  0.5562E-05
-sol_vec    3  0.7519E+03 -0.5060E-04
-sol_vec    4 -0.6923E+03  0.7271E-04
-sol_vec    5  0.2376E+03 -0.3126E-04
-sol_vec    6  0.1100E-16  0.3053E-21
- CCD energy        (-200.02448435525656,2.89902645709332860E-012)
-dener    0   18  0.13273053E-04
- CCD energy        (-200.02448427092378,6.80063483376164794E-013)
-dener    0   19  0.84332783E-07
- Total execution time CCD   1.4895066266180947     
- preparing to do CCD(T): 
-          -4           4          -4           4          -4           4
- Total memory for lookup configs   3.2633599999999961E-004 GByte
- Total memory for channels   3.3071999999999963E-004 GByte
-               534336      534336         274
- Setting up vnn (NN+3NF) for hppp block
- Time to setup hppp block   13.074911148287356     
- Total memory for vnn storage   4.6054080000000018E-003 GByte
-           6           6           6           3           3
- Total memory for lookup t3-confs   3.9706559999999986E-003 Gbyte
- 3NF with deltas: T
-              2230904     2230904          57
-
- proc number   0      % work  0.100000E+03
-
-          Channel #:     1
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     2
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     3
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:     4
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     5
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     6
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:     7
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:     8
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:     9
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    10
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    11
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    12
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    13
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    14
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    15
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    16
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    17
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    18
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    19
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    20
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    21
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    22
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    23
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    24
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    25
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    26
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    27
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    28
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    29
-    Row index start:     1
-      Row index end:    24
- Column index start:     1
-   Column index end:  6376
-
-          Channel #:    30
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    31
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    32
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    33
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    34
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    35
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    36
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    37
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    38
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    39
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    40
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    41
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    42
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    43
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    44
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    45
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    46
-    Row index start:     1
-      Row index end:    20
- Column index start:     1
-   Column index end:  6328
-
-          Channel #:    47
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    48
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    49
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    50
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6262
-
-          Channel #:    51
-    Row index start:     1
-      Row index end:     8
- Column index start:     1
-   Column index end:  6152
-
-          Channel #:    52
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    53
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    54
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    55
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5466
-
-          Channel #:    56
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-
-          Channel #:    57
-    Row index start:     1
-      Row index end:     2
- Column index start:     1
-   Column index end:  5376
-           1        5376           2
-           2        5376           2
-           3        5466           2
-           4        5376           2
-           5        5376           2
-           6        5376           2
-           7        6152           8
-           8        6262           8
-           9        6152           8
-          10        5376           2
-          11        6262           8
-          12        6328          20
-          13        6262           8
-          14        5376           2
-          15        6152           8
-          16        6262           8
-          17        6152           8
-          18        5376           2
-          19        5376           2
-          20        5466           2
-          21        5376           2
-          22        5376           2
-          23        6262           8
-          24        6328          20
-          25        6262           8
-          26        5376           2
-          27        5466           2
-          28        6328          20
-          29        6376          24
-          30        6328          20
-          31        5466           2
-          32        5376           2
-          33        6262           8
-          34        6328          20
-          35        6262           8
-          36        5376           2
-          37        5376           2
-          38        5466           2
-          39        5376           2
-          40        5376           2
-          41        6152           8
-          42        6262           8
-          43        6152           8
-          44        5376           2
-          45        6262           8
-          46        6328          20
-          47        6262           8
-          48        5376           2
-          49        6152           8
-          50        6262           8
-          51        6152           8
-          52        5376           2
-          53        5376           2
-          54        5376           2
-          55        5466           2
-          56        5376           2
-          57        5376           2
- EXECUTION TIME FOR CCD(T)   3.8027766224113293     
-Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15697           -0.17082
- t2_file=10.txt                                                                                              end2
  channels_num           25
  wtf end 
 
@@ -7087,14 +4233,14 @@ Kf, Dens          1.67950           0.16000  CCSD(T)         -0.15697           
  ---------------------------------------------------------------------
  Boxsize   4.4395200087130036      Nmax           2
  A, Density, Kf          14  0.16000000000000000        1.6795012352211809     
- Twist averaged E0/N              (-12.171910214057878,0.0000000000000000)
- Twist averaged mbpt2       (-15.259381282534955,-1.05781240422051321E-018)
- Twist averaged CCSD        (-14.287463162208841,4.85759630982974844E-014)
+ Twist averaged E0/N               (19.476619640754659,0.0000000000000000)
+ Twist averaged mbpt2        (16.288786156210644,-1.28839818004029423E-018)
+ Twist averaged CCSD        (16.895987095610558,-5.94575700593654579E-013)
  kinetic_TF   490.97117995884571     
-  0.16000000000000000                   (-12.171910214057878,0.0000000000000000)        (-200.02448427092378,6.80063483376164794E-013)
+  0.16000000000000000                    (19.476619640754659,0.0000000000000000)        (236.54381933854779,-8.32405980831116451E-012)
 
- E/N   1.67950118      0.159999996      -12.171910214057878       -15.259381282534955       -14.287463162208841       -14.458278345655000     
+ E/N   1.67950118      0.159999996       19.476619640754659        16.288786156210644        16.895987095610558        16.684268415017812     
 #Nmax, Nucleons, 3NFnexp, 3NFCutoff: 2  14 3 450
-    -0.18600    -0.45400     1.67950     0.16000   -12.17191   -15.25938   -14.28746   -14.45828
+    -0.18600    -0.45400     1.67950     0.16000    19.47662    16.28879    16.89599    16.68427
  ---------------------------------------------------------------------
- Total execution time for CCD code   748.76786071807146     
+ Total execution time for CCD code   448.91899435635423     

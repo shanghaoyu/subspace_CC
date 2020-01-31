@@ -13,7 +13,7 @@
 ! specify: pnm/snm, input type: density/kfermi 
 pnm, density
 ! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/solve_general_EV) 
-solve_general_EV 
+subspace_cal 
 ! dens/kf, ntwist,  nmax
 0.16, 1, 2
 ! specify cluster approximation: CCD, CCDT 

@@ -214,6 +214,34 @@ PROGRAM ccm_kspace
 
   case( 'subspace_cal' )  !calculate t_ij_ab for different LECs
 
+     LEC_num = 17 
+     LEC_range = 0.1
+     if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
+     if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
+     LEC_max = 0
+     LEC_min = 0 
+
+     LEC_max(1)    = LEC_c1_input 
+     LEC_max(2)    = LEC_c2_input 
+     LEC_max(3)    = LEC_c3_input 
+     LEC_max(4)    = LEC_c4_input 
+     LEC_max(5:7)  = c1s0_input
+     LEC_max(8)    = c3s1_input(-1)
+     LEC_max(9:15) = cnlo_pw_input
+     LEC_max(16)   = cD
+     LEC_max(17)   = cE
+     
+!     if ( iam == 0 ) write(6,*) 'LEC_max=', LEC_max
+
+     LEC_min = LEC_max
+     LEC_max = LEC_max * ( 1 + LEC_range )
+     LEC_min = LEC_min * ( 1 - LEC_range )
+
+     if ( iam == 0 ) write(6,*) 'LEC_max=', LEC_max
+     if ( iam == 0 ) write(6,*) 'LEC_max=', LEC_min
+
+
+
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 
      CALL setup_sp_data(1,1,1)
@@ -225,16 +253,21 @@ PROGRAM ccm_kspace
         call sigmaXsigma_dot_q_table
      end if 
      !call compute_v3nf_memory
-   
-     LEC_num = 17 
-     if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
-     if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
-
-
-     subspace_num = 10
+ 
+    subspace_num = 6
      do loop = 1, subspace_num
-       LEC_c1_input = LEC
-       !cE = 1
+       LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
+      ! LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(loop-1.D0) 
+      ! LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! LEC_c4_input  = LEC_min(4)+(LEC_max(4)-LEC_min(4))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! c1s0_input    = LEC_min(5:7)+(LEC_max(5:7)-LEC_min(5:7))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! c3s1_input    = LEC_min(8)+(LEC_max(8)-LEC_min(8))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! cnlo_pw_input = LEC_min(9:15)+(LEC_max(9:15)-LEC_min(9:15))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! cD            = LEC_min(16)+(LEC_max(16)-LEC_min(16))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! cE            = LEC_min(17)+(LEC_max(17)-LEC_min(17))/(subspace_num - 1.D0)*(loop-1.D0)
+
+
        call init_chp_constants
        !dens = 0.16*(1+loop*0.01)  
        call setup_channel_structures

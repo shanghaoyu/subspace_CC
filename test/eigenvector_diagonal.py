@@ -31,15 +31,16 @@ H = H_matrix + K_matrix
 print("H="+str(H))
 
 N = np.matrix(N_matrix)
-Ni = N.I
-print (Ni)
-#N_I = np.linalg.inv(N_matrix)
+#Ni = N.I
+print (N)
+Ni = np.linalg.inv(N)
 #
-#print (N_matrix*N_I)
+#print (np.dot(Ni,N_matrix))
+print (Ni*N_matrix)
 
 Ni_dot_H = np.dot(Ni,H)
 D,V = np.linalg.eig(Ni_dot_H)
-print (Ni_dot_H)
+#print (Ni_dot_H)
 print ("D="+str(D))
 #print ("V="+str(V))
 
