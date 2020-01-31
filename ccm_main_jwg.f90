@@ -210,8 +210,54 @@ PROGRAM ccm_kspace
 !     if ( iam == 0 ) write(6,*) 'all_orbit%kx:'
 !     do loop = 1, 14
 !        if ( iam == 0 ) write(6,*) all_orbit%kx(loop)  
-!     end do 
+!     end do
+ 
+  case( 'subspace_cal_dens' )  !calculate t_ij_ab for different LECs
 
+     
+     call allocate_sp_data 
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+     !call compute_v3nf_memory
+ 
+    subspace_num = 3
+     do loop = 1, subspace_num
+
+       call init_chp_constants
+       !dens = 0.16*(1+loop*0.01)  
+       call setup_channel_structures
+       if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+       call normal_ordered_hamiltonian
+       !call mbpt2_3nf
+       
+       call setup_t_amplitudes
+       if(cc_approx == 'mbpt2') then
+          call ccd_energy_save(ener1 ) 
+          mbpt2 = e0 + ener1
+       else
+       
+          write(6,*) 'here we go...'
+          CALL ccd_iter
+
+          CALL print_gs_amplitudes(loop)        
+
+       end if
+       !  call deallocate_structures
+
+     end do
+     
+     e0_av = e0
+     eccsd_av = eccsd
+     mbpt2_av = mbpt2 
+     eccsdt_av = eccsdt
   case( 'subspace_cal' )  !calculate t_ij_ab for different LECs
 
      LEC_num = 17 
@@ -254,10 +300,12 @@ PROGRAM ccm_kspace
      end if 
      !call compute_v3nf_memory
  
-    subspace_num = 6
+    subspace_num = 3
      do loop = 1, subspace_num
-       LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
-      ! LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(loop-1.D0)
+      ! LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
+       LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(loop-1.D0)
+        
+       if ( iam == 0 ) write(6,*) 'LEC_c1_input=', LEC_c1_input
       ! LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(loop-1.D0) 
       ! LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(loop-1.D0)
       ! LEC_c4_input  = LEC_min(4)+(LEC_max(4)-LEC_min(4))/(subspace_num - 1.D0)*(loop-1.D0)
@@ -885,9 +933,10 @@ SUBROUTINE allocate_sp_data
   szmin = -1 
   szmax =  1
   
-  allocate( twist_angle(3, ntwist))
+  if ( .not. allocated(twist_angle)) allocate( twist_angle(3, ntwist))
   twist_angle = 0.d0 
-  allocate( xx(ntwist), wxx(ntwist) ) 
+  if ( .not. allocated(xx)) allocate( xx(ntwist) ) 
+  if ( .not. allocated(wxx)) allocate(  wxx(ntwist) ) 
   xx = 0.d0; wxx = 0.d0 
   call gauss_legendre(0.d0,pi,xx,wxx,ntwist)
   
@@ -946,9 +995,9 @@ SUBROUTINE allocate_sp_data
   ! For now only neutrons 
   ! 
   
-  allocate( kz_mesh(nmax*2+1) ) 
-  allocate( ky_mesh(nmax*2+1) ) 
-  allocate( kx_mesh(nmax*2+1) ) 
+  if ( .not. allocated(kz_mesh)) allocate( kz_mesh(nmax*2+1) ) 
+  if ( .not. allocated(ky_mesh)) allocate( ky_mesh(nmax*2+1) ) 
+  if ( .not. allocated(kx_mesh)) allocate( kx_mesh(nmax*2+1) ) 
   kz_mesh = 0.d0
   ky_mesh = 0.d0
   kx_mesh = 0.d0
@@ -969,8 +1018,9 @@ SUBROUTINE allocate_sp_data
   tot_orbs = all_orbit%total_orbits
   if ( iam == 0 ) write(6,*) 'Total number of states', tot_orbs
   
-  allocate( erg( nkx*nky*nkz) ) 
-  allocate( indx_inv(nkx*nky*nkz) , indx(nkx*nky*nkz) ) 
+  if ( .not. allocated(erg)) allocate( erg( nkx*nky*nkz) ) 
+  if ( .not. allocated(indx_inv)) allocate( indx_inv(nkx*nky*nkz) ) 
+  if ( .not. allocated(indx)) allocate( indx(nkx*nky*nkz) ) 
   erg = 0.D0
   indx_inv = 0
   indx = 0 

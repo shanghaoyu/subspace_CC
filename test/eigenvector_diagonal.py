@@ -1,9 +1,9 @@
 import numpy as np
 import math
 import re
+import scipy.linalg as spla
 from scipy import interpolate
 from scipy import linalg
-
 
 
 def input_file(file_path,matrix):
@@ -32,31 +32,33 @@ print("H="+str(H))
 
 N = np.matrix(N_matrix)
 #Ni = N.I
-print (N)
-Ni = np.linalg.inv(N)
+#print (N)
+#Ni = np.linalg.inv(N)
 #
 #print (np.dot(Ni,N_matrix))
-print (Ni*N_matrix)
+#print (Ni*N_matrix)
 
-Ni_dot_H = np.dot(Ni,H)
-D,V = np.linalg.eig(Ni_dot_H)
+#Ni_dot_H = np.dot(Ni,H)
+#D,V = np.linalg.eig(Ni_dot_H)
 #print (Ni_dot_H)
-print ("D="+str(D))
+#print ("D="+str(D))
 #print ("V="+str(V))
+
+eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
 
 loop2 = 0
 for loop1 in range(subspace_dimension):
-    ev = D[loop1] 
+    ev = eigvals[loop1] 
     if ev.imag != 0:
         continue
 #    if ev.real < 0:
 #        continue
     loop2 = loop2+1
-ev_all = np.zeros(loop2)
 
+ev_all = np.zeros(loop2)
 loop2 = 0
 for loop1 in range(subspace_dimension):
-    ev = D[loop1] 
+    ev = eigvals[loop1] 
     if ev.imag != 0:
         continue
 #    if ev.real < 0:
@@ -66,9 +68,12 @@ for loop1 in range(subspace_dimension):
 
 
 ev_sorted = sorted(ev_all)
-print(ev_sorted[0])
+print('eigvals='+str (eigvals))
+print('eigvec_L='+str (eigvec_L))
+print('eigvec_0='+str (eigvec_0))
 
 
+print('eigvals_gs='+str (ev_sorted[0]))
 
 
 
