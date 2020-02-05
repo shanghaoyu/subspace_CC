@@ -160,7 +160,9 @@ CONTAINS
     chp_2PE_2loop_int_VTS_data_set = .FALSE.
     chp_2PE_2loop_int_WC_DR_data_set  = .FALSE.
     chp_2PE_2loop_int_WC_SFR_data_set  = .FALSE.
-    
+
+    cD = cD_input
+    cE = cE_input    
     LEC_c1 =  -6.85008592144712991D-01  !-1.399355229598470D0    
     LEC_c2 =   2.99405406565804988D+00   !1.736403902935290D0    
     LEC_c3 =  -4.11681871693645984D+00  !-4.608490948168820D0    

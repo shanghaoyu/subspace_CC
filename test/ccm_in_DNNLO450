@@ -3,17 +3,17 @@
 ! cE and cD 3nf parameters: 
 -0.186,  -0.454
 ! LEC ci
--7.4D-01,   -4.9D-01, -6.5D-01,  9.6D-01
+-0.74,   -0.49, -0.65,  0.96
 !c1s0 & c3s1
--3.39111D-01 , -3.40114D-01, -3.39887D-01 ,  -2.53950D-01, -2.53950D-01, -2.53950D-01
+-0.339111 , -0.340114, -0.339887 ,  -0.253950, -0.253950, -0.253950
 ! cnlo(7)
-2.526636D+00, 6.71908D-01, -2.19498D-01, -9.15398D-01, 9.64990D-01, 4.45743D-01, -8.95405D-01
+2.526636, 0.671908, -0.219498, -0.915398, 0.964990, 0.445743, -0.895405
 ! number of particles
 14
 ! specify: pnm/snm, input type: density/kfermi 
 pnm, density
-! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/solve_general_EV) 
-PBC 
+! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV) 
+solve_general_EV
 ! dens/kf, ntwist,  nmax
 0.16, 1, 2
 ! specify cluster approximation: CCD, CCDT 

@@ -21,6 +21,13 @@ PROGRAM ccm_kspace
   integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop
   integer :: spec_points(10,10,10)
   character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
+
+  integer ( kind = 4 ), parameter :: dim_num =  17
+  integer ( kind = 4 ), parameter :: point_num = 64
+  integer ( kind = 4 ) duplication
+  integer ( kind = 4 ) seed
+  integer ( kind = 4 ) xxx(dim_num,point_num)
+
   call mpi_init(ierror)
   
   call mpi_comm_size(mpi_comm_world,num_procs,ierror)
@@ -36,16 +43,14 @@ PROGRAM ccm_kspace
   !stop
   startwtime = MPI_WTIME()
   read(5,*);read(5,*) delta_chiral_order, lambda_delta
-  read(5,*);read(5,*)  cE, cD 
+  read(5,*);read(5,*)  cE_input, cD_input
   read(5,*);read(5,*)  LEC_c1_input, LEC_c2_input, LEC_c3_input, LEC_c4_input
   read(5,*);read(5,*)  c1s0_input(-1), c1s0_input(0), c1s0_input(1), c3s1_input(-1), c3s1_input(0), c3s1_input(1)
   read(5,*);read(5,*)  cnlo_pw_input(1), cnlo_pw_input(2), cnlo_pw_input(3), cnlo_pw_input(4), cnlo_pw_input(5), cnlo_pw_input(6), cnlo_pw_input(7)
 
-  if(iam == 0) write(6,*) 'LEC_c1_input!!!!=', LEC_c1_input 
-
   if(delta_chiral_order < NNLO) then 
      cE  = 0.d0
-     cD = 0.d0
+     cD  = 0.d0
   end if 
 
   CALL commons_to_angmom
@@ -258,10 +263,16 @@ PROGRAM ccm_kspace
      eccsd_av = eccsd
      mbpt2_av = mbpt2 
      eccsdt_av = eccsdt
+
   case( 'subspace_cal' )  !calculate t_ij_ab for different LECs
+!     duplication = 5
+!     seed = 17
+!     call ihs ( dim_num, point_num, duplication, seed, xxx )
+!     print *,xxx
+!     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
 
      LEC_num = 17 
-     LEC_range = 0.1
+     LEC_range = 0.2
      if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
      if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
      LEC_max = 0
@@ -274,8 +285,8 @@ PROGRAM ccm_kspace
      LEC_max(5:7)  = c1s0_input
      LEC_max(8)    = c3s1_input(-1)
      LEC_max(9:15) = cnlo_pw_input
-     LEC_max(16)   = cD
-     LEC_max(17)   = cE
+     LEC_max(16)   = cD_input
+     LEC_max(17)   = cE_input
      
 !     if ( iam == 0 ) write(6,*) 'LEC_max=', LEC_max
 
@@ -299,21 +310,36 @@ PROGRAM ccm_kspace
         call sigmaXsigma_dot_q_table
      end if 
      !call compute_v3nf_memory
- 
-    subspace_num = 3
+
+! use Improved Distributed Hypercube Sampling (IHS) to sample different subspace points
+     subspace_num = 64 
+     duplication = 5
+     seed = 17
+     call ihs ( dim_num, subspace_num, duplication, seed, xxx )
+!     print *,xxx
+     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
+
+
+
+
+ !    print *, subspace_num-point_num
+    ! if ((subspace_num-point_num) .ne. 0 ) 
+    !    print *, 'subspace_num .ne. point_num'
+    !    stop
+    ! end if  
+     subspace_num = 64 
      do loop = 1, subspace_num
-      ! LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
-       LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(loop-1.D0)
-        
-       if ( iam == 0 ) write(6,*) 'LEC_c1_input=', LEC_c1_input
-      ! LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(loop-1.D0) 
-      ! LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! LEC_c4_input  = LEC_min(4)+(LEC_max(4)-LEC_min(4))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! c1s0_input    = LEC_min(5:7)+(LEC_max(5:7)-LEC_min(5:7))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! c3s1_input    = LEC_min(8)+(LEC_max(8)-LEC_min(8))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! cnlo_pw_input = LEC_min(9:15)+(LEC_max(9:15)-LEC_min(9:15))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! cD            = LEC_min(16)+(LEC_max(16)-LEC_min(16))/(subspace_num - 1.D0)*(loop-1.D0)
-      ! cE            = LEC_min(17)+(LEC_max(17)-LEC_min(17))/(subspace_num - 1.D0)*(loop-1.D0)
+       !LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
+       LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(xxx(1,loop)-1.D0)
+       LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(xxx(2,loop)-1.D0) 
+       LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(xxx(3,loop)-1.D0)
+       LEC_c4_input  = LEC_min(4)+(LEC_max(4)-LEC_min(4))/(subspace_num - 1.D0)*(xxx(4,loop)-1.D0)
+       c1s0_input    = LEC_min(5:7)+(LEC_max(5:7)-LEC_min(5:7))/(subspace_num - 1.D0)*(xxx(5:7,loop)-1.D0)
+      !if ( iam == 0 ) write(6,*) 'c1s0_input=', c1s0_input
+       c3s1_input    = LEC_min(8)+(LEC_max(8)-LEC_min(8))/(subspace_num - 1.D0)*(xxx(8,loop)-1.D0)
+       cnlo_pw_input = LEC_min(9:15)+(LEC_max(9:15)-LEC_min(9:15))/(subspace_num - 1.D0)*(xxx(9:15,loop)-1.D0)
+       cD_input      = LEC_min(16)+(LEC_max(16)-LEC_min(16))/(subspace_num - 1.D0)*(xxx(16,loop)-1.D0)
+       cE_input      = LEC_min(17)+(LEC_max(17)-LEC_min(17))/(subspace_num - 1.D0)*(xxx(17,loop)-1.D0)
 
 
        call init_chp_constants
@@ -346,7 +372,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     subspace_num = 5
+     subspace_num = 64
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 

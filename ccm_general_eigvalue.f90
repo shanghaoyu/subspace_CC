@@ -91,7 +91,7 @@ SUBROUTINE read_subspace_matrix
 
   IMPLICIT NONE
   INTEGER :: channel_num, temp1, temp2, temp3, subspace_count
-  INTEGER :: channel, ij, ab, loop1
+  INTEGER :: channel, ij, ab, loop1, loop2
   character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2  
   REAL*8  :: real_temp, imag_temp
  
@@ -100,7 +100,8 @@ SUBROUTINE read_subspace_matrix
   if ( iam == 0 ) write(6,*) 'channels_num' , channels%number_hhpp_confs
 
   do loop1 = 1, subspace_num
-     write(str_temp,"(i3)") loop1
+     loop2 = loop1
+     write(str_temp,"(i3)") loop2
      str_temp = adjustl(str_temp)
      t2_file=trim(str_temp)//'.txt'
      if ( iam == 0 ) write(6,*) 'read_file' , t2_file
@@ -426,12 +427,14 @@ SUBROUTINE print_N_H_K_matrix
   INTEGER :: channel, bar,ket, loop1, ij, ab
   character(LEN=50) :: inputfile, output_file, str_temp, str_temp2  
  
-  output_file='H_matrix_1.txt'
+  output_file='H_matrix.txt'
   open (227,file= output_file)
      if ( iam == 0 ) write(227,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(227,*) REAL(H_matrix(bar,:))
+
+120  format (64(F30.15,2x))  
+     if ( iam == 0 ) write(227, 120) REAL(H_matrix(bar,:))
    !  end do
   end do
   close(227)
@@ -441,7 +444,7 @@ SUBROUTINE print_N_H_K_matrix
      if ( iam == 0 ) write(228,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(228,*) REAL(K_matrix(bar,:))
+        if ( iam == 0 ) write(228,120) REAL(K_matrix(bar,:))
    !  end do
   end do
   close(228)
@@ -451,7 +454,7 @@ SUBROUTINE print_N_H_K_matrix
      if ( iam == 0 ) write(229,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
-        if ( iam == 0 ) write(229,*) REAL(N_matrix(bar,:))
+        if ( iam == 0 ) write(229,120) REAL(N_matrix(bar,:))
    !  end do
   end do
   close(229)

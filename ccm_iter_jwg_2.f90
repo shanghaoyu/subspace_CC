@@ -2652,7 +2652,11 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
      end do
   end do
   
-  if ( iam == 0 ) write(223,*) 'ccd=',eccsd
+  if ( iam == 0 ) write(223,*) 'LEC=', LEC_c1_input, LEC_c2_input ,LEC_c3_input, LEC_c4_input 
+  if ( iam == 0 ) write(223,*) 'c1s0, c3s1 ', c1s0_input , c3s1_input
+  if ( iam == 0 ) write(223,*) 'cnlo_pw(1-7) ',cnlo_pw_input 
+  if ( iam == 0 ) write(223,*) 'cD,cE ',cD_input, cE_input
+  if ( iam == 0 ) write(223,*) 'ccd=', eccsd
   close(223)
 
 end SUBROUTINE print_gs_amplitudes
