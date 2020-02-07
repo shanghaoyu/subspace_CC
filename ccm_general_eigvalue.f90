@@ -208,7 +208,7 @@ SUBROUTINE vacuum_expectation_value_H_bar
 
 END SUBROUTINE vacuum_expectation_value_H_bar
 
-
+ 
 SUBROUTINE H_bar_ijab
   USE PARALLEL
   USE CONSTANTS
@@ -429,11 +429,10 @@ SUBROUTINE print_N_H_K_matrix
  
   output_file='H_matrix.txt'
   open (227,file= output_file)
-     if ( iam == 0 ) write(227,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
 
-120  format (64(F30.15,2x))  
+120  format (5(F30.15,2x))  
      if ( iam == 0 ) write(227, 120) REAL(H_matrix(bar,:))
    !  end do
   end do
@@ -441,7 +440,6 @@ SUBROUTINE print_N_H_K_matrix
 
   output_file='K_matrix.txt'
   open (228,file= output_file)
-     if ( iam == 0 ) write(228,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
         if ( iam == 0 ) write(228,120) REAL(K_matrix(bar,:))
@@ -451,7 +449,6 @@ SUBROUTINE print_N_H_K_matrix
 
   output_file='N_matrix.txt'
   open (229,file= output_file)
-     if ( iam == 0 ) write(229,*) subspace_num
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
         if ( iam == 0 ) write(229,120) REAL(N_matrix(bar,:))

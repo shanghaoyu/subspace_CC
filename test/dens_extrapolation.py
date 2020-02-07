@@ -64,7 +64,7 @@ def read_LEC(file_path):
 ### generate nuclear matter infile
 ######################################################
 ######################################################
-def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax):
+def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax,option):
     with open(file_path,'w') as f_1:
         f_1.write('!Chiral order for Deltas(LO = 0,NLO=2,NNLO=3,N3LO=4) and cutoff'+'\n')
         f_1.write('3, 450\n')
@@ -81,7 +81,7 @@ def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax
         f_1.write('! specify: pnm/snm, input type: density/kfermi'+'\n')
         f_1.write(matter_type+', density'+'\n')
         f_1.write('! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)'+'\n')
-        f_1.write('PBC'+'\n')
+        f_1.write('%-20s \n' % (option))
         f_1.write('! dens/kf, ntwist,  nmax'+'\n')
         f_1.write('%.12f, 1, %d\n' % (density, nmax))
         f_1.write('! specify cluster approximation: CCD, CCDT'+'\n')
@@ -122,10 +122,10 @@ def read_nucl_matt_out(file_path):  # converge: flag = 1    converge: flag =0
 ### call CCM_nuclear_matter
 ######################################################
 ######################################################
-def nuclear_matter(vec_input):
+def nuclear_matter(vec_input,dens):
     neutron_num  = 14
     particle_num = 28
-    density      = 0.16
+    density      = dens
     density_min  = 0.14
     density_max  = 0.22
     nmax         = 2
@@ -136,8 +136,8 @@ def nuclear_matter(vec_input):
 
     nucl_matt_in_dir   = './ccm_in_pnm_%.2f' % (density)
     nucl_matt_out_dir  = './pnm_rho_%.2f.out' % (density)
-
-    output_ccm_in_file(nucl_matt_in_dir,vec_input,neutron_num,'pnm',density,nmax)
+    option = 'PBC'
+    output_ccm_in_file(nucl_matt_in_dir,vec_input,neutron_num,'pnm',density,nmax,option)
     os.system('./'+nucl_matt_exe+' '+nucl_matt_in_dir+' > '+nucl_matt_out_dir) 
     ccd = read_nucl_matt_out(nucl_matt_out_dir)
     print ("ccd energy from real CC calculation: "+str(ccd))
@@ -149,22 +149,30 @@ def nuclear_matter(vec_input):
 ### Emulator!!!
 ######################################################
 ######################################################
-def emulator(LEC_target):
+def emulator(LEC_target,dens):
+    neutron_num  = 14
+    particle_num = 28
+    density      = dens
+    density_min  = 0.14
+    density_max  = 0.22
+    nmax         = 2
+    nucl_matt_in_dir   = './ccm_in_pnm_%.2f' % (dens)
+    nucl_matt_out_dir  = './pnm_rho_%.2f.out' % (dens)
+    option = 'solve_general_EV' 
+    output_ccm_in_file(nucl_matt_in_dir,LEC_target,neutron_num,'pnm',density,nmax,option)
+    os.system('./'+nucl_matt_exe+' '+nucl_matt_in_dir+' > '+nucl_matt_out_dir) 
+ 
     H = np.zeros((subspace_dimension,subspace_dimension))
     N = np.zeros((subspace_dimension,subspace_dimension))
-    C = np.zeros((subspace_dimension,subspace_dimension))
-    H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
-    in_dir = "./emulator/DNNLOgo450_20percent_64points/N_matrix.txt"
+    K = np.zeros((subspace_dimension,subspace_dimension))
+
+    in_dir = "./H_matrix.txt"
+    H = np.loadtxt(in_dir)
+    in_dir = "./N_matrix.txt"
     N = np.loadtxt(in_dir)
-    in_dir = "./emulator/DNNLOgo450_20percent_64points/C_matrix.txt"
-    C = np.loadtxt(in_dir)
-    for loop1 in range(LEC_num):
-        in_dir = "./emulator/DNNLOgo450_20percent_64points/LEC_"+str(loop1+1)+"_matrix"
-        H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
-    #H = LECs[0]*H_matrix + K_matrix
-    for loop1 in range(LEC_num):
-        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
-    H = H + C 
+    in_dir = "./K_matrix.txt"
+    K = np.loadtxt(in_dir)
+    H = H + K 
 
  #   print("H="+str(H))
  #   print("rank of N ="+str(np.linalg.matrix_rank(N)))
@@ -197,8 +205,8 @@ def emulator(LEC_target):
     #print('eigvec_0='+str (eigvec_0))
 
     #print('eigvals_gs='+str (ev_sorted[1]))
-    print ("ccd energy from emulator:"+str(ev_sorted[1]))
-    return ev_sorted[1], ev_sorted
+    print ("ccd energy from emulator:"+str(ev_sorted[0]))
+    return ev_sorted[0], ev_sorted
 
 
 
@@ -208,10 +216,10 @@ def emulator(LEC_target):
 
 ######################################################
 ######################################################
-#### MAIN
+#### MAIN density extrapolation (validation)
 ######################################################
 ######################################################
-subspace_dimension = 64
+subspace_dimension = 5
 LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
@@ -222,25 +230,30 @@ nucl_matt_exe = './prog_ccm.exe'
 #print ("ev_all="+str(ev_all))
 
 # start validation 
-validation_count = 10
-for loop1 in range(validation_count):
+
+dens_min = 0.02
+dens_max = 0.30
+dens_gap = 0.02
+dens_count = int((dens_max - dens_min) / dens_gap + 2)
+print (dens_count)
+for loop1 in range(dens_count):
+    dens = dens_min + ( dens_gap * loop1)
+    print("densty = "+str(dens))
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
-    LEC_random = generate_random_LEC(LEC, LEC_range)
-    print ("LEC="+str(LEC_random))
-    ccd_cal = nuclear_matter(LEC_random)
-    emulator_cal, ev_all = emulator(LEC_random)
-    file_path = "validation.txt"
+    ccd_cal = nuclear_matter(LEC,dens)
+    emulator_cal, ev_all = emulator(LEC,dens)
+    file_path = "density_extrapolation.txt"
     with open(file_path,'a') as f_1:
-        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
-    file_path = "validation_detail.txt"
+        f_1.write('dens=%.4f   ccd = %.12f     emulator = %.12f \n' % (dens,ccd_cal, emulator_cal))
+    file_path = "density_extrapolation_detail.txt"
     with open(file_path,'a') as f_2:
-        f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+        f_2.write('dens=$.4f   ccd = %.12f     emulator = %.12f   all =' % (dens, ccd_cal, emulator_cal))
         f_2.write(str(ev_all))
         f_2.write('\n')
 
 
- 
+
 
 
 

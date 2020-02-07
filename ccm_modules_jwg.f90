@@ -96,9 +96,11 @@ MODULE constants
   REAL(DP), PUBLIC, PARAMETER :: pi_2 = 1.570796370506287_dp
   REAL(DP), PUBLIC, PARAMETER :: pi_4 = 0.7853981852531433_dp
   LOGICAL :: switch_density, tnf_switch, chiral_delta_flag
-  CHARACTER(LEN=100) :: boundary_conditions, cc_approx
+  CHARACTER(LEN=100) :: boundary_conditions, cc_approx,calc_type, input_type
   INTEGER :: tnf_approx, nexp_3nf_nonlocal, delta_chiral_order
-  
+  INTEGER :: ntwist
+  REAL*8 :: input_dens
+ 
 END MODULE constants
 
 MODULE deltafull_parameters

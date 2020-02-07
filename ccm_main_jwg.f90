@@ -47,6 +47,22 @@ PROGRAM ccm_kspace
   read(5,*);read(5,*)  LEC_c1_input, LEC_c2_input, LEC_c3_input, LEC_c4_input
   read(5,*);read(5,*)  c1s0_input(-1), c1s0_input(0), c1s0_input(1), c3s1_input(-1), c3s1_input(0), c3s1_input(1)
   read(5,*);read(5,*)  cnlo_pw_input(1), cnlo_pw_input(2), cnlo_pw_input(3), cnlo_pw_input(4), cnlo_pw_input(5), cnlo_pw_input(6), cnlo_pw_input(7)
+  !     Read number of particles 
+  read(5,*);read(5,*) below_ef
+  !read(5,*);read(5,*) Lx, Ly, Lz, nmax
+  read(5,*);read(5,*) calc_type, input_type 
+  read(5,*);read(5,*) boundary_conditions 
+  read(5,*);read(5,*) input_dens, ntwist, nmax
+  read(5,*);read(5,*) cc_approx
+  read(5,*);read(5,*) tnf_switch, tnf_approx
+  read(5,*);read(5,*) cutoff_3nf_reg, nexp_3nf_nonlocal
+  if ( iam == 0 ) write(6,'(2(a,1x))') 'Boundary Conditions', boundary_conditions 
+  if ( iam == 0 ) write(6,'(2(a,1x))') 'CC approx', cc_approx
+  if ( iam == 0 ) write(6,*) 'TNF:', tnf_switch, 'TNF-approx:', tnf_approx
+  if ( iam == 0 ) write(6,*) '3NF Cutoff:',cutoff_3nf_reg,'Nexp_3NF:',nexp_3nf_nonlocal
+
+
+
 
   if(delta_chiral_order < NNLO) then 
      cE  = 0.d0
@@ -219,25 +235,25 @@ PROGRAM ccm_kspace
  
   case( 'subspace_cal_dens' )  !calculate t_ij_ab for different LECs
 
-     
-     call allocate_sp_data 
-     call setup_N3LO_int_mesh(10)
-     twist_angle = 0.d0 
-     CALL setup_sp_data(1,1,1)
-     call precalc_chp_functions
-     
-     if(.not. chiral_delta_flag)then    
-!        print*,"error"
-        call ring_functions_table
-        call sigmaXsigma_dot_q_table
-     end if 
-     !call compute_v3nf_memory
+
+       
  
-    subspace_num = 3
+    subspace_num = 5 
      do loop = 1, subspace_num
+       input_dens = 0.16 + (loop-1)*0.01  
+       call allocate_sp_data 
+       call setup_N3LO_int_mesh(10)
+       twist_angle = 0.d0 
+       CALL setup_sp_data(1,1,1)
+       call precalc_chp_functions
+       
+       if(.not. chiral_delta_flag)then    
+          !print*,"error"
+          call ring_functions_table
+          call sigmaXsigma_dot_q_table
+       end if 
 
        call init_chp_constants
-       !dens = 0.16*(1+loop*0.01)  
        call setup_channel_structures
        if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
        call normal_ordered_hamiltonian
@@ -372,7 +388,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     subspace_num = 64
+     subspace_num = 5
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 
@@ -938,23 +954,9 @@ SUBROUTINE allocate_sp_data
     
   IMPLICIT NONE
   INTEGER :: i,j,k, ii, jj, a, nn, b, c,d, ndim, i1,j1, n
-  INTEGER :: nx,ny,nz,sz,tzp, ntwist,  nkx, nky, nkz, p, q, r, s
-  REAL*8 ::  sum1, vmom_yukawa_rel, input, vrspace_yukawa, vrspace_minnesota, kx,ky,kz,rr
-  CHARACTER(len=100) :: calc_type, input_type 
+  INTEGER :: nx,ny,nz,sz,tzp, nkx, nky, nkz, p, q, r, s
+  REAL*8 ::  sum1, vmom_yukawa_rel, vrspace_yukawa, vrspace_minnesota, kx,ky,kz,rr
   
-  !     Read number of particles 
-  read(5,*);read(5,*) below_ef
-  !read(5,*);read(5,*) Lx, Ly, Lz, nmax
-  read(5,*);read(5,*) calc_type, input_type 
-  read(5,*);read(5,*) boundary_conditions 
-  read(5,*);read(5,*) input, ntwist, nmax
-  read(5,*);read(5,*) cc_approx
-  read(5,*);read(5,*) tnf_switch, tnf_approx
-  read(5,*);read(5,*) cutoff_3nf_reg, nexp_3nf_nonlocal
-  if ( iam == 0 ) write(6,'(2(a,1x))') 'Boundary Conditions', boundary_conditions 
-  if ( iam == 0 ) write(6,'(2(a,1x))') 'CC approx', cc_approx
-  if ( iam == 0 ) write(6,*) 'TNF:', tnf_switch, 'TNF-approx:', tnf_approx
-  if ( iam == 0 ) write(6,*) '3NF Cutoff:',cutoff_3nf_reg,'Nexp_3NF:',nexp_3nf_nonlocal
 
   szmin = -1 
   szmax =  1
@@ -981,10 +983,10 @@ SUBROUTINE allocate_sp_data
      tzmin = 1 
      tzmax = 1
      if ( input_type == 'density' ) THEN
-        dens = input 
+        dens = input_dens 
         kf = (3.d0*pi**2*dens)**(1.d0/3.d0)
      ELSEIF ( input_type == 'kfermi' ) THEN 
-        kf = input 
+        kf = input_dens 
         dens = kf**3/3.d0/pi**2
      end if
   case('snm') 
@@ -992,10 +994,10 @@ SUBROUTINE allocate_sp_data
      tzmax =  1
      if ( input_type == 'density' ) THEN
         ! for nuclear matter 
-        dens = input 
+        dens = input_dens 
         kf = (3.d0*pi**2*dens/2.d0)**(1.d0/3.d0)
      ELSEIF ( input_type == 'kfermi' ) then 
-        kf = input 
+        kf = input_dens 
         dens = 2.d0*kf**3/3.d0/pi**2
      end if
   end select
@@ -1220,7 +1222,7 @@ SUBROUTINE setup_sp_data(itwistx, itwisty, itwistz)
   
   nkxmax = maxval( all_orbit%nx ) ; nkymax = maxval( all_orbit%ny ); nkzmax = maxval( all_orbit%nz )
   if(iam == 0) write(6,*) nkxmax,nkymax,nkzmax,szmin,szmax,tzmin ,tzmax
-  allocate( orbitof(-nkxmax:nkxmax, -nkymax:nkymax, -nkzmax:nkzmax, szmin:szmax, tzmin:tzmax) )
+  if ( .not. allocated(orbitof) )allocate( orbitof(-nkxmax:nkxmax, -nkymax:nkymax, -nkzmax:nkzmax, szmin:szmax, tzmin:tzmax) )
   orbitof = 0 
 
   if ( iam == 0 ) write(6,*) 'nkmin, nkmax', nkxmax, nkymax, nkzmax 
@@ -1265,24 +1267,24 @@ subroutine ring_functions_table
   real*8 :: startwtime, endwtime
   
   
-  allocate(R1_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R2_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R3_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R4_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R5_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R6_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R7_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R8_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R9_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R10_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(R11_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S1_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S2_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S3_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S4_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S5_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S6_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
-  allocate(S7_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R1_tab) )allocate(R1_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R2_tab))allocate(R2_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R3_tab))allocate(R3_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R4_tab))allocate(R4_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R5_tab))allocate(R5_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R6_tab))allocate(R6_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R7_tab))allocate(R7_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R8_tab))allocate(R8_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R9_tab))allocate(R9_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R10_tab))allocate(R10_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(R11_tab))allocate(R11_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S1_tab))allocate(S1_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S2_tab))allocate(S2_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S3_tab))allocate(S3_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S4_tab))allocate(S4_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S5_tab))allocate(S5_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S6_tab))allocate(S6_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
+  if ( .not. allocated(S7_tab))allocate(S7_tab(-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax))
   
   if(iam .eq. 0)  print*, "starting calculation of ring fuctions"
 
@@ -1445,10 +1447,10 @@ SUBROUTINE precalc_chp_functions
   integer :: p,q, ndim, m1,m2, t1,t2, nx1,ny1,nz1,nx2,ny2,nz2,i1,i2,m3,m4,m5,m6
   integer :: nx3,ny3,nz3,nxmin, nxmax
   
-  allocate( sigma_dot_q_tab(-1:1,-1:1,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax) )
+  if ( .not. allocated(sigma_dot_q_tab) ) allocate( sigma_dot_q_tab(-1:1,-1:1,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax) )
   
   sigma_dot_q_tab = 0.d0 
-  allocate( sigma_dot_q_ope_tab(-1:1,-1:1,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax) )
+  if ( .not. allocated(sigma_dot_q_ope_tab) )allocate( sigma_dot_q_ope_tab(-1:1,-1:1,-2*nmax:2*nmax, -2*nmax:2*nmax, -2*nmax:2*nmax) )
   sigma_dot_q_ope_tab = 0.d0 
   
   nxmin =  1 
@@ -1502,7 +1504,7 @@ SUBROUTINE precalc_chp_functions
 
   !if ( iam == 0 ) 
   !write(6,*) 'Nxmax, Nxmin', nxmin, nxmax 
-  allocate( sigma_dot_qxq_tab(-1:1,-1:1, nxmin:nxmax,   nxmin:nxmax,   nxmin:nxmax) )
+  if ( .not. allocated(sigma_dot_qxq_tab) )allocate( sigma_dot_qxq_tab(-1:1,-1:1, nxmin:nxmax,   nxmin:nxmax,   nxmin:nxmax) )
   sigma_dot_qxq_tab = 0.d0 
   
   do p = 1, all_orbit%total_orbits
