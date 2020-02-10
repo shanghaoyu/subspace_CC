@@ -231,8 +231,8 @@ nucl_matt_exe = './prog_ccm.exe'
 
 # start validation 
 
-dens_min = 0.02
-dens_max = 0.30
+dens_min = 0.17
+dens_max = 0.19
 dens_gap = 0.02
 dens_count = int((dens_max - dens_min) / dens_gap + 2)
 print (dens_count)
@@ -248,7 +248,7 @@ for loop1 in range(dens_count):
         f_1.write('dens=%.4f   ccd = %.12f     emulator = %.12f \n' % (dens,ccd_cal, emulator_cal))
     file_path = "density_extrapolation_detail.txt"
     with open(file_path,'a') as f_2:
-        f_2.write('dens=$.4f   ccd = %.12f     emulator = %.12f   all =' % (dens, ccd_cal, emulator_cal))
+        f_2.write('dens=%.4f   ccd = %.12f     emulator = %.12f   all =' % (dens, ccd_cal, emulator_cal))
         f_2.write(str(ev_all))
         f_2.write('\n')
 
