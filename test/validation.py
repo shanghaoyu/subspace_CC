@@ -123,12 +123,12 @@ def read_nucl_matt_out(file_path):  # converge: flag = 1    converge: flag =0
 ######################################################
 ######################################################
 def nuclear_matter(vec_input):
-    neutron_num  = 14
+    neutron_num  = 2
     particle_num = 28
     density      = 0.16
     density_min  = 0.14
     density_max  = 0.22
-    nmax         = 2
+    nmax         = 1
     #snm_dens    = np.zeros(5)
     #snm_energy_per_nucleon = np.zeros(5)
     #snm_dens_new = np.zeros(interpolation_count)
@@ -154,12 +154,12 @@ def emulator(LEC_target):
     N = np.zeros((subspace_dimension,subspace_dimension))
     C = np.zeros((subspace_dimension,subspace_dimension))
     H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
-    in_dir = "./emulator/DNNLOgo450_20percent_64points/N_matrix.txt"
+    in_dir = "./emulator/N_matrix.txt"
     N = np.loadtxt(in_dir)
-    in_dir = "./emulator/DNNLOgo450_20percent_64points/C_matrix.txt"
+    in_dir = "./emulator/C_matrix.txt"
     C = np.loadtxt(in_dir)
     for loop1 in range(LEC_num):
-        in_dir = "./emulator/DNNLOgo450_20percent_64points/LEC_"+str(loop1+1)+"_matrix"
+        in_dir = "./emulator/LEC_"+str(loop1+1)+"_matrix"
         H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
     #H = LECs[0]*H_matrix + K_matrix
     for loop1 in range(LEC_num):
@@ -222,12 +222,13 @@ nucl_matt_exe = './prog_ccm.exe'
 #print ("ev_all="+str(ev_all))
 
 # start validation 
-validation_count = 10
+validation_count = 3
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
     LEC_random = generate_random_LEC(LEC, LEC_range)
     print ("LEC="+str(LEC_random))
+    LEC_random = LEC
     ccd_cal = nuclear_matter(LEC_random)
     emulator_cal, ev_all = emulator(LEC_random)
     file_path = "validation.txt"

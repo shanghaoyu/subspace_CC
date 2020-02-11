@@ -18,7 +18,7 @@ def input_file(file_path,matrix):
 #            print(loop1)
 #            print(matrix[loop1,:])
 #LECs = [200,-91.85]
-magic_no = 14
+magic_no = 2
 
 
 ######################################################
@@ -61,12 +61,12 @@ def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nm
 ######################################################
 ######################################################
 def call_solve_general_EV(vec_input,in_dir,out_dir):
-    neutron_num  = 14
+    neutron_num  = 2  #test
     particle_num = 28
     density      = 0.16
     density_min  = 0.14
     density_max  = 0.22
-    nmax         = 2
+    nmax         = 1 #test
 
     generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
@@ -102,25 +102,25 @@ def generate_emulator_matrix(subspace_dimension):
 
     LEC     = np.zeros(LEC_number)
     call_solve_general_EV(LEC,"ccm_in_test","a.out")
-    input_file("N_matrix.txt",N_matrix)
-    input_file("H_matrix.txt",H_matrix)
-    input_file("K_matrix.txt",K_matrix)
-    out_dir = "./emulator/DNNLOgo450_20percent_64points/N_matrix.txt"
+    N_matrix = np.loadtxt("N_matrix.txt")
+    H_matrix = np.loadtxt("H_matrix.txt")
+    K_matrix = np.loadtxt("K_matrix.txt")
+    out_dir = "./emulator/N_matrix.txt"
     np.savetxt(out_dir,N_matrix)
  
     C_matrix = H_matrix + K_matrix
-    out_dir = "./emulator/DNNLOgo450_20percent_64points/C_matrix.txt"
+    out_dir = "./emulator/C_matrix.txt"
     np.savetxt(out_dir,C_matrix)
 
-#    for loop1 in range(LEC_number):
-#        LEC = np.zeros(LEC_number)
-#        LEC[loop1] = 1 
-#        call_solve_general_EV(LEC,"ccm_in_test","a.out")
-#        input_file("H_matrix.txt",H_matrix)
-#        input_file("K_matrix.txt",K_matrix)
-#        LEC_all_matrix[loop1,:,:] = H_matrix + K_matrix - C_matrix
-#        out_dir = "./emulator/DNNLOgo450_20percent_64points/LEC_"+str(loop1+1)+"_matrix"
-#        np.savetxt(out_dir,LEC_all_matrix[loop1,:,:])
+    for loop1 in range(LEC_number):
+        LEC = np.zeros(LEC_number)
+        LEC[loop1] = 1 
+        call_solve_general_EV(LEC,"ccm_in_test","a.out")
+        H_matrix = np.loadtxt("H_matrix.txt")
+        K_matrix = np.loadtxt("K_matrix.txt")
+        LEC_all_matrix[loop1,:,:] = H_matrix + K_matrix - C_matrix
+        out_dir = "./emulator/LEC_"+str(loop1+1)+"_matrix"
+        np.savetxt(out_dir,LEC_all_matrix[loop1,:,:])
 
 
 
@@ -134,8 +134,8 @@ def emulator(LEC_target):
     N = np.zeros((subspace_dimension,subspace_dimension))
     C = np.zeros((subspace_dimension,subspace_dimension))
     H_matrix = np.zeros((LEC_number,subspace_dimension,subspace_dimension))
-    input_file("N_matrix.txt",N )
-    input_file("C_matrix.txt",C )
+    N = np.loadtxt("H_matrix.txt")
+    C = np.loadtxt("C_matrix.txt")
     for loop1 in range(LEC_number):
         input_file("H_matrix.txt",H_matrix[loop1,:,:])
     
@@ -214,6 +214,8 @@ LEC_number = 17
 nucl_matt_exe = './prog_ccm.exe'
 
 generate_emulator_matrix(subspace_dimension)
+
+
 
 
 

@@ -9,13 +9,13 @@
 ! cnlo(7) 
 2.526636000000, 0.671908000000, -0.219498000000, -0.915398000000, 0.964990000000, 0.445743000000, -0.895405000000 
 ! number of particles
-14
+2
 ! specify: pnm/snm, input type: density/kfermi
 pnm, density
 ! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)
-solve_general_EV     
+PBC
 ! dens/kf, ntwist,  nmax
-0.160000000000, 1, 2
+0.160000000000, 1, 1
 ! specify cluster approximation: CCD, CCDT
 CCD(T)
 ! tnf switch (T/F) and specify 3nf approximation: 0=tnf0b, 1=tnf1b, 2=tnf2b

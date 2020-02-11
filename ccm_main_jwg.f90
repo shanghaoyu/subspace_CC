@@ -288,7 +288,7 @@ PROGRAM ccm_kspace
 !     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
 
      LEC_num = 17 
-     LEC_range = 0.2
+     LEC_range = 0.5
      if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
      if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
      LEC_max = 0
@@ -343,7 +343,6 @@ PROGRAM ccm_kspace
     !    print *, 'subspace_num .ne. point_num'
     !    stop
     ! end if  
-     subspace_num = 64 
      do loop = 1, subspace_num
        !LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
        LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(xxx(1,loop)-1.D0)
@@ -388,7 +387,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     subspace_num = 5
+     subspace_num = 64
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 

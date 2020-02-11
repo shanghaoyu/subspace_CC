@@ -432,7 +432,7 @@ SUBROUTINE print_N_H_K_matrix
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
 
-120  format (5(F30.15,2x))  
+120  format (64(F30.15,2x))  
      if ( iam == 0 ) write(227, 120) REAL(H_matrix(bar,:))
    !  end do
   end do
