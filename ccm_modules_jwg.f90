@@ -1283,11 +1283,8 @@ MODULE subspace
      !complex*16, DIMENSION(:,:,:), ALLOCATABLE :: val3
   END TYPE block_storage_2
 
-
   INTEGER, PUBLIC   ::  subspace_num
   complex*16, public  :: Ek, external_field_energy
-
-
   complex*16, public, allocatable :: vacuum_H_bar(:)
   complex*16, public, allocatable :: N_matrix(:,:), H_matrix(:,:) , K_matrix(:,:)
   complex*16, public, allocatable, dimension(:,:) :: fock_mtx_all, fock_mtx_1, fock_mtx_2
@@ -1297,9 +1294,23 @@ MODULE subspace
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: l2_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: H_bar_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: kinetic_bar_subspace(:,:)
- 
-  
-
-  
 END MODULE subspace
+
+
+
+
+MODULE shell_model
+  INTEGER, PUBLIC :: sm_config_num, subspace_num_sm
+  complex*16, public, allocatable :: H_sm(:,:)
+  INTEGER, PUBLIC, ALLOCATABLE :: lookup_config_sm(:,:)
+  REAL *8, PUBLIC :: sm_evalue
+  REAL *8, PUBLIC, ALLOCATABLE :: sm_evector(:) , sm_evector_subspace(:,:), temp_vector(:)
+
+  REAL *8, public, allocatable :: H_matrix_sm(:,:), N_matrix_sm(:,:)
+
+
+
+END MODULE shell_model
+
+
 

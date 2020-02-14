@@ -4,20 +4,21 @@ import math
 import re
 import scipy.linalg as spla
 from scipy import interpolate
+from scipy import linalg
 
 
-######################################################
-######################################################
-### generate random LECs set
-######################################################
-######################################################
-def generate_random_LEC(LEC,LEC_range):
-    LEC_max = LEC * ( 1 + LEC_range)
-    LEC_min = LEC * ( 1 - LEC_range)
-    LEC_random = np.zeros(LEC_num)
-    for loop1 in range (LEC_num):
-        LEC_random[loop1] = LEC_min[loop1] + np.random.rand(1) * (LEC_max[loop1] - LEC_min[loop1])
-    return LEC_random
+def input_file(file_path,matrix):
+    with open(file_path, 'r') as f_1:
+        data = f_1.readlines()
+        temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[0])
+        subspace_dimension = int(temp_1[0])
+        for loop1 in range (0, subspace_dimension):
+            temp_2 = re.findall(r"[-+]?\d+\.?\d*",data[1+loop1])
+            matrix[loop1,:] = temp_2[:]
+#            print(loop1)
+#            print(matrix[loop1,:])
+#LECs = [200,-91.85]
+magic_no = 2
 
 
 ######################################################
@@ -59,12 +60,13 @@ def read_LEC(file_path):
                 LEC[16] = float(temp_1[6])
     return LEC
 
+
 ######################################################
 ######################################################
-### generate nuclear matter infile
+### generate infile for solve_general_EV
 ######################################################
 ######################################################
-def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax):
+def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax):
     with open(file_path,'w') as f_1:
         f_1.write('!Chiral order for Deltas(LO = 0,NLO=2,NNLO=3,N3LO=4) and cutoff'+'\n')
         f_1.write('3, 450\n')
@@ -81,7 +83,7 @@ def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax
         f_1.write('! specify: pnm/snm, input type: density/kfermi'+'\n')
         f_1.write(matter_type+', density'+'\n')
         f_1.write('! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)'+'\n')
-        f_1.write('PBC'+'\n')
+        f_1.write('solve_general_EV_sm'+'\n')
         f_1.write('! dens/kf, ntwist,  nmax'+'\n')
         f_1.write('%.12f, 1, %d\n' % (density, nmax))
         f_1.write('! specify cluster approximation: CCD, CCDT'+'\n')
@@ -95,53 +97,69 @@ def output_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax
 
 ######################################################
 ######################################################
-### read ccm_nuclear_matter output
+### call solve_general_EV 
 ######################################################
 ######################################################
-def read_nucl_matt_out(file_path):  # converge: flag = 1    converge: flag =0
-    with open(file_path,'r') as f_1:
-        converge_flag = int (1)
-        count = len(open(file_path,'rU').readlines())
-        #if ( count > 1500 ):
-        #    converge_flag =int (0)
-        data =  f_1.readlines()
-        wtf = re.match('#', 'abc',flags=0)
-        ccd = 0
-        for loop1 in range(0,count):
-            if ( re.search('CCD energy', data[loop1],flags=0) != wtf):
-                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
-                ccd = float(temp_1[0])
-        return ccd   #,converge_flag
-        #print ('No "E/A" found in the file:'+file_path)
-        #return float('nan')
-
-
-
-######################################################
-######################################################
-### call CCM_nuclear_matter
-######################################################
-######################################################
-def nuclear_matter(vec_input):
-    neutron_num  = 2
+def call_solve_general_EV(vec_input,in_dir,out_dir):
+    neutron_num  = 2  #test
     particle_num = 28
     density      = 0.16
     density_min  = 0.14
     density_max  = 0.22
-    nmax         = 1
-    #snm_dens    = np.zeros(5)
-    #snm_energy_per_nucleon = np.zeros(5)
-    #snm_dens_new = np.zeros(interpolation_count)
-    #snm_energy_per_nucleon_new = np.zeros(interpolation_count)
+    nmax         = 1 #test
 
-    nucl_matt_in_dir   = './ccm_in_pnm_%.2f' % (density)
-    nucl_matt_out_dir  = './pnm_rho_%.2f.out' % (density)
+    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
+    os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
 
-    output_ccm_in_file(nucl_matt_in_dir,vec_input,neutron_num,'pnm',density,nmax)
-    os.system('./'+nucl_matt_exe+' '+nucl_matt_in_dir+' > '+nucl_matt_out_dir) 
-    ccd = read_nucl_matt_out(nucl_matt_out_dir)
-    print ("ccd energy from real CC calculation: "+str(ccd))
-    return ccd
+
+
+######################################################
+######################################################
+### print H matrix for individual LEC
+######################################################
+######################################################
+def print_LEC_matrix(out_dir,subspace_dimension,matrix):
+    with open(out_dir,'w')  as f_1:
+        f_1.write(matrix)
+       # for loop1 in range (subspace_dimension):
+       #     f_1.write(matrix[loop1,:]+'\n')
+
+
+
+
+
+######################################################
+######################################################
+### generate emulator_matrix
+######################################################
+######################################################
+def generate_emulator_matrix(subspace_dimension):
+    C_matrix = np.zeros((subspace_dimension,subspace_dimension))
+    N_matrix = np.zeros((subspace_dimension,subspace_dimension))
+    H_matrix = np.zeros((subspace_dimension,subspace_dimension))
+    LEC_all_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
+
+    LEC     = np.zeros(LEC_num)
+    call_solve_general_EV(LEC,"ccm_in_test","a.out")
+    N_matrix = np.loadtxt("N_matrix_sm.txt")
+    H_matrix = np.loadtxt("H_matrix_sm.txt")
+    out_dir = "./N_matrix_sm.txt"
+    np.savetxt(out_dir,N_matrix)
+ 
+    C_matrix = H_matrix
+    out_dir = "./C_matrix_sm.txt"
+    np.savetxt(out_dir,C_matrix)
+
+    for loop1 in range(LEC_num):
+        LEC = np.zeros(LEC_num)
+        LEC[loop1] = 1 
+        call_solve_general_EV(LEC,"ccm_in_test","a.out")
+        H_matrix = np.loadtxt("H_matrix_sm.txt")
+        #K_matrix = np.loadtxt("K_matrix_sm.txt")
+        LEC_all_matrix[loop1,:,:] = H_matrix + - C_matrix
+        out_dir = "./emulator/LEC_"+str(loop1+1)+"_matrix_sm"
+        np.savetxt(out_dir,LEC_all_matrix[loop1,:,:])
+
 
 
 ######################################################
@@ -149,64 +167,70 @@ def nuclear_matter(vec_input):
 ### Emulator!!!
 ######################################################
 ######################################################
-def emulator(LEC_target):
+def emulator_sm(LEC_target):
     H = np.zeros((subspace_dimension,subspace_dimension))
     N = np.zeros((subspace_dimension,subspace_dimension))
-    C = np.zeros((subspace_dimension,subspace_dimension))
+ #   C = np.zeros((subspace_dimension,subspace_dimension))
     H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
-    in_dir = database_dir+"N_matrix.txt"
-    N = np.loadtxt(in_dir)
-    in_dir = database_dir+"C_matrix.txt"
-    C = np.loadtxt(in_dir)
-    for loop1 in range(LEC_num):
-        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
-        H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
-    #H = LECs[0]*H_matrix + K_matrix
-    for loop1 in range(LEC_num):
-        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
-    H = H + C 
+    N = np.loadtxt("N_matrix_sm.txt")
+    H = np.loadtxt("H_matrix_sm.txt")
 
- #   print("H="+str(H))
+    print("H="+str(H))
     print("rank of N ="+str(np.linalg.matrix_rank(N)))
-
-    #H = H[0:,0:8] 
-    #N = N[0:8,0:8] 
-         
+    #Ni = N.I
+    #print (N)
+    #Ni = np.linalg.inv(N)
+    #
+    #print (np.dot(Ni,N_matrix))
+    #print (Ni*N_matrix)
+    
+    #Ni_dot_H = np.dot(Ni,H)
+    #D,V = np.linalg.eig(Ni_dot_H)
+    #print (Ni_dot_H)
+    #print ("D="+str(D))
+    #print ("V="+str(V))
+    
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-
+    
     loop2 = 0
-    #for loop1 in range(subspace_dimension):
-    for loop1 in range(np.size(H,1)):
-        ev = eigvals[loop1]
-        if ev.imag > 0.01:
+    for loop1 in range(subspace_dimension):
+        ev = eigvals[loop1] 
+        if ev.imag != 0:
             continue
     #    if ev.real < 0:
     #        continue
         loop2 = loop2+1
-
+    
     ev_all = np.zeros(loop2)
     loop2 = 0
-    for loop1 in range(np.size(H,1)):
-        ev = eigvals[loop1]
-        if ev.imag >0.01 :
+    for loop1 in range(subspace_dimension):
+        ev = eigvals[loop1] 
+        if ev.imag != 0:
             continue
     #    if ev.real < 0:
     #        continue
         ev_all[loop2] = ev.real
         loop2 = loop2+1
-
+    
+    
     ev_sorted = sorted(ev_all)
     print('eigvals='+str (ev_sorted))
     #print('eigvec_L='+str (eigvec_L))
     #print('eigvec_0='+str (eigvec_0))
-
-    #print('eigvals_gs='+str (ev_sorted[1]))
-    print ("ccd energy from emulator:"+str(ev_sorted[1]))
-    return ev_sorted[1], ev_sorted
-
-
-
-
+    
+    
+    print('eigvals_gs='+str (ev_sorted[1]))
+    
+    
+    
+    #D,V = np.linalg.eig(H_matrix)
+    #print ("D="+str(D))
+    #print(np.linalg.matrix_rank(N_matrix))
+    #print(np.linalg.matrix_rank(H_matrix))
+    
+    
+    #print(N_matrix)
+    #print(H_matrix)   
 
 
 
@@ -217,37 +241,19 @@ def emulator(LEC_target):
 ######################################################
 subspace_dimension = 64
 LEC_num = 17
-LEC_range = 0.2
-LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
-database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
 
 
-#print ("ev_all="+str(ev_all))
 
-# start validation 
-validation_count = 1
-for loop1 in range(validation_count):
-    file_path = "ccm_in_DNNLO450"
-    LEC = read_LEC(file_path)
-    LEC_random = generate_random_LEC(LEC, LEC_range)
-    print ("LEC="+str(LEC_random))
-    LEC_random = LEC
-    ccd_cal = nuclear_matter(LEC_random)
-   # ccd_cal = 0
-    emulator_cal, ev_all = emulator(LEC_random)
-    file_path = "validation_different_subspace.txt"
-    with open(file_path,'a') as f_1:
-        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
-    file_path = "validation_detail_test_different_subspace.txt"
-    with open(file_path,'a') as f_2:
-        f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
-        f_2.write(str(ev_all))
-        f_2.write('\n')
+file_path = "ccm_in_DNNLO450"
+LEC = read_LEC(file_path)
+
+emulator_sm(LEC)
+#generate_emulator_matrix(subspace_dimension)
 
 
- 
+
+
 
 
 

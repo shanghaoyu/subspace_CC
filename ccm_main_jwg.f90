@@ -14,6 +14,7 @@ PROGRAM ccm_kspace
   use deltafull_parameters  
   use subspace
   use minnesota_potentials 
+  use shell_model
  
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
@@ -415,7 +416,104 @@ PROGRAM ccm_kspace
      call get_H_matrix
      call print_N_H_K_matrix
 
+  case('sm')
+
+     LEC_num = 17 
+     LEC_range = 0.5
+     if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
+     if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
+     LEC_max = 0
+     LEC_min = 0 
+
+     LEC_max(1)    = LEC_c1_input 
+     LEC_max(2)    = LEC_c2_input 
+     LEC_max(3)    = LEC_c3_input 
+     LEC_max(4)    = LEC_c4_input 
+     LEC_max(5:7)  = c1s0_input
+     LEC_max(8)    = c3s1_input(-1)
+     LEC_max(9:15) = cnlo_pw_input
+     LEC_max(16)   = cD_input
+     LEC_max(17)   = cE_input
+     
+!     if ( iam == 0 ) write(6,*) 'LEC_max=', LEC_max
+
+     LEC_min = LEC_max
+     LEC_max = LEC_max * ( 1 + LEC_range )
+     LEC_min = LEC_min * ( 1 - LEC_range )
+
+
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+
+     subspace_num = 64
+     duplication = 5
+     seed = 17
+     call ihs ( dim_num, subspace_num, duplication, seed, xxx )
+     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
+
+
+
+     do loop = 1, subspace_num
+       !LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
+       LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(xxx(1,loop)-1.D0)
+       LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(xxx(2,loop)-1.D0) 
+       LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(xxx(3,loop)-1.D0)
+       LEC_c4_input  = LEC_min(4)+(LEC_max(4)-LEC_min(4))/(subspace_num - 1.D0)*(xxx(4,loop)-1.D0)
+       c1s0_input    = LEC_min(5:7)+(LEC_max(5:7)-LEC_min(5:7))/(subspace_num - 1.D0)*(xxx(5:7,loop)-1.D0)
+      !if ( iam == 0 ) write(6,*) 'c1s0_input=', c1s0_input
+       c3s1_input    = LEC_min(8)+(LEC_max(8)-LEC_min(8))/(subspace_num - 1.D0)*(xxx(8,loop)-1.D0)
+       cnlo_pw_input = LEC_min(9:15)+(LEC_max(9:15)-LEC_min(9:15))/(subspace_num - 1.D0)*(xxx(9:15,loop)-1.D0)
+       cD_input      = LEC_min(16)+(LEC_max(16)-LEC_min(16))/(subspace_num - 1.D0)*(xxx(16,loop)-1.D0)
+       cE_input      = LEC_min(17)+(LEC_max(17)-LEC_min(17))/(subspace_num - 1.D0)*(xxx(17,loop)-1.D0)
+
+
+       call init_chp_constants
+       call setup_channel_structures
+    
+       if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+       call normal_ordered_hamiltonian
+       call sm_calculation    
+       call print_sm_wf(loop)
+     end do
  
+ 
+  case( 'solve_general_EV_sm' ) !solve the general eigenvalue problem for sm
+     subspace_num_sm = 64
+
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+
+     call init_chp_constants
+     call setup_channel_structures
+    
+     if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+!     call normal_ordered_hamiltonian
+
+
+     call setup_subspace_allocation_sm
+     call read_subspace_wf_sm
+ 
+     call get_N_matrix_sm
+     call sm_calculation
+     call get_H_matrix_sm
+     call print_N_H_matrix_sm
+
   end select
  
  

@@ -154,12 +154,12 @@ def emulator(LEC_target):
     N = np.zeros((subspace_dimension,subspace_dimension))
     C = np.zeros((subspace_dimension,subspace_dimension))
     H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
-    in_dir = database_dir+"N_matrix.txt"
+    in_dir = database_dir+"N_matrix_sm.txt"
     N = np.loadtxt(in_dir)
-    in_dir = database_dir+"C_matrix.txt"
+    in_dir = database_dir+"C_matrix_sm.txt"
     C = np.loadtxt(in_dir)
     for loop1 in range(LEC_num):
-        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix_sm"
         H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
     #H = LECs[0]*H_matrix + K_matrix
     for loop1 in range(LEC_num):
@@ -167,7 +167,7 @@ def emulator(LEC_target):
     H = H + C 
 
  #   print("H="+str(H))
-    print("rank of N ="+str(np.linalg.matrix_rank(N)))
+ #   print("rank of N ="+str(np.linalg.matrix_rank(N)))
 
     #H = H[0:,0:8] 
     #N = N[0:8,0:8] 
@@ -196,12 +196,12 @@ def emulator(LEC_target):
         loop2 = loop2+1
 
     ev_sorted = sorted(ev_all)
-    print('eigvals='+str (ev_sorted))
+    #print('eigvals='+str (ev_sorted))
     #print('eigvec_L='+str (eigvec_L))
     #print('eigvec_0='+str (eigvec_0))
 
     #print('eigvals_gs='+str (ev_sorted[1]))
-    print ("ccd energy from emulator:"+str(ev_sorted[1]))
+    print ("sm energy from emulator:"+str(ev_sorted[0]))
     return ev_sorted[1], ev_sorted
 
 
@@ -220,7 +220,6 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
 database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
 
 
@@ -234,15 +233,15 @@ for loop1 in range(validation_count):
     LEC_random = generate_random_LEC(LEC, LEC_range)
     print ("LEC="+str(LEC_random))
     LEC_random = LEC
-    ccd_cal = nuclear_matter(LEC_random)
-   # ccd_cal = 0
+   # ccd_cal = nuclear_matter(LEC_random)
+    sm_cal = 0
     emulator_cal, ev_all = emulator(LEC_random)
-    file_path = "validation_different_subspace.txt"
+    file_path = "validation_different_subspace_sm.txt"
     with open(file_path,'a') as f_1:
-        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
-    file_path = "validation_detail_test_different_subspace.txt"
+        f_1.write('sm = %.12f     emulator = %.12f \n' % (sm_cal, emulator_cal))
+    file_path = "validation_detail_test_different_subspace_sm.txt"
     with open(file_path,'a') as f_2:
-        f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+        f_2.write('sm = %.12f     emulator = %.12f   all =' % (sm_cal, emulator_cal))
         f_2.write(str(ev_all))
         f_2.write('\n')
 
