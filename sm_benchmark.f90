@@ -1,3 +1,15 @@
+
+!SUBROUTINE generate_sm_configuration
+!  use shell_model
+!
+!  IMPLICIT NONE
+!
+!  print *,'wtf!!!', all_orbit%total_orbits
+!
+!
+!END SUBROUTINE generate_sm_configuration
+
+
 SUBROUTINE sm_calculation
   USE PARALLEL
   USE subspace
@@ -108,6 +120,10 @@ SUBROUTINE sm_calculation
 !  print *, 'EValue=', WR, '+i',WI
 !  print *, 'EVector=', VR
   print *, 'INFO=', INFO
+
+  open (223,file="sm_result.txt")
+  if ( iam == 0 ) write(223,*) 'sm_cal=', sm_evalue
+  close(223)
 
 END SUBROUTINE sm_calculation
 

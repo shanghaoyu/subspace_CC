@@ -1,11 +1,13 @@
 import os
 import numpy as np
+import matplotlib
+matplotlib.use('PS')
+import matplotlib.pyplot as plt
 import math
 import re
 import scipy.linalg as spla
 from scipy import interpolate
 from scipy import linalg
-
 
 def input_file(file_path,matrix):
     with open(file_path, 'r') as f_1:
@@ -66,7 +68,7 @@ def read_LEC(file_path):
 ### generate infile for solve_general_EV
 ######################################################
 ######################################################
-def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax):
+def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nmax,cal_type):
     with open(file_path,'w') as f_1:
         f_1.write('!Chiral order for Deltas(LO = 0,NLO=2,NNLO=3,N3LO=4) and cutoff'+'\n')
         f_1.write('3, 450\n')
@@ -83,7 +85,7 @@ def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nm
         f_1.write('! specify: pnm/snm, input type: density/kfermi'+'\n')
         f_1.write(matter_type+', density'+'\n')
         f_1.write('! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)'+'\n')
-        f_1.write('solve_general_EV_sm'+'\n')
+        f_1.write('%s\n' %(cal_type) )
         f_1.write('! dens/kf, ntwist,  nmax'+'\n')
         f_1.write('%.12f, 1, %d\n' % (density, nmax))
         f_1.write('! specify cluster approximation: CCD, CCDT'+'\n')
@@ -108,7 +110,7 @@ def call_solve_general_EV(vec_input,in_dir,out_dir):
     density_max  = 0.22
     nmax         = 1 #test
 
-    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
+    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax,'solve_general_EV_sm')
     os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
 
 
@@ -125,7 +127,27 @@ def print_LEC_matrix(out_dir,subspace_dimension,matrix):
        #     f_1.write(matrix[loop1,:]+'\n')
 
 
+######################################################
+######################################################
+### sm calculation with different LECs
+######################################################
+######################################################
+def sm_calculation(vec_input,in_dir,out_dir):
+    neutron_num  = 2  #test
+    particle_num = 28
+    density      = 0.16
+    density_min  = 0.14
+    density_max  = 0.22
+    nmax         = 1 #test
+    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax,'sm')
+    os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
 
+    with open('sm_result.txt','r') as f_1:
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[0])
+        sm_cal = float(temp_1[0])
+    return sm_cal
 
 
 ######################################################
@@ -164,19 +186,69 @@ def generate_emulator_matrix(subspace_dimension):
 
 ######################################################
 ######################################################
-### Emulator!!!
+### solve_general_EV_sm!!!
 ######################################################
 ######################################################
-def emulator_sm(LEC_target):
+def solve_general_EV_sm(LEC_target,database_dir):
     H = np.zeros((subspace_dimension,subspace_dimension))
     N = np.zeros((subspace_dimension,subspace_dimension))
  #   C = np.zeros((subspace_dimension,subspace_dimension))
     H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
-    N = np.loadtxt("N_matrix_sm.txt")
-    H = np.loadtxt("H_matrix_sm.txt")
+    N = np.loadtxt(database_dir+"N_matrix_sm.txt")
+    H = np.loadtxt(database_dir+"H_matrix_sm.txt")
 
-    print("H="+str(H))
-    print("rank of N ="+str(np.linalg.matrix_rank(N)))
+   #subtract = [4,30, 56 ]
+    subtract = [33]
+    H = np.delete(H,subtract,axis = 0)
+    H = np.delete(H,subtract,axis = 1)  
+    N = np.delete(N,subtract,axis = 0)
+    N = np.delete(N,subtract,axis = 1)  
+
+    eigvals,eigvec = spla.eig(N)
+    print ("N eigvals = "+str(sorted(eigvals)))
+    
+    #np.set_printoptions(suppress=True)
+    #np.set_printoptions(precision=6) 
+   # np.savetxt('H.test',H,fmt='%.01f')
+#    np.savetxt('H.test',H)
+
+    # test 
+#    N_new = np.zeros((subspace_dimension-2,subspace_dimension-2))
+#    H_new = np.zeros((subspace_dimension-2,subspace_dimension-2))
+#
+#    for loop1 in range(subspace_dimension-2):
+#        for loop2 in range(subspace_dimension-2):
+#            loop3 = loop1
+#            loop4 = loop2
+#            if (loop3 >= 13):
+#                loop3 = loop1+1
+#            if (loop4 >= 13):
+#                loop4 = loop2+1
+#            if (loop3 >= 33):
+#                loop3 = loop1+1
+#            if (loop4 >= 33):
+#                loop4 = loop2+1
+#            N_new[loop1,loop2] = N[loop3,loop4]
+#
+#    for loop1 in range(subspace_dimension-2):
+#        for loop2 in range(subspace_dimension-2):
+#            loop3 = loop1
+#            loop4 = loop2
+#            if (loop3 >= 13):
+#                loop3 = loop1+1
+#            if (loop4 >= 13):
+#                loop4 = loop2+1
+#            if (loop3 >= 33):
+#                loop3 = loop1+1
+#            if (loop4 >= 33):
+#                loop4 = loop2+1
+#            H_new[loop1,loop2] = H[loop3,loop4]
+##
+##
+#    np.savetxt("./N_new.txt",N)
+#    np.savetxt("./H_new.txt",H)
+#    print("H="+str(H))
+#    print("rank of N ="+str(np.linalg.matrix_rank(N)))
     #Ni = N.I
     #print (N)
     #Ni = np.linalg.inv(N)
@@ -189,11 +261,11 @@ def emulator_sm(LEC_target):
     #print (Ni_dot_H)
     #print ("D="+str(D))
     #print ("V="+str(V))
-    
+    print('H',np.size(H,1)) 
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-    
+    print('eigvalsize,', eigvals.shape) 
     loop2 = 0
-    for loop1 in range(subspace_dimension):
+    for loop1 in range(np.size(H,1)):
         ev = eigvals[loop1] 
         if ev.imag != 0:
             continue
@@ -203,7 +275,7 @@ def emulator_sm(LEC_target):
     
     ev_all = np.zeros(loop2)
     loop2 = 0
-    for loop1 in range(subspace_dimension):
+    for loop1 in range(np.size(H,1)):
         ev = eigvals[loop1] 
         if ev.imag != 0:
             continue
@@ -244,17 +316,71 @@ LEC_num = 17
 nucl_matt_exe = './prog_ccm.exe'
 
 
-
+#database_dir= "/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_test_sm_vs_ccd_nmax1_n_2/"
+database_dir= "./"
 file_path = "ccm_in_DNNLO450"
 LEC = read_LEC(file_path)
 
-emulator_sm(LEC)
 #generate_emulator_matrix(subspace_dimension)
+#solve_general_EV_sm(LEC,database_dir)
 
 
+LEC_new = np.zeros(LEC_num)
+#sm_cal_new = np.zeros(LEC_num)
+
+LEC_new = LEC.copy()
+sm_count   = 10
+sm_cal_new = np.zeros(sm_count)
+LEC_new_shift = np.zeros(sm_count)
+
+count = 0
+which_LEC = 10
+for loop1 in np.arange(0,1,1./sm_count):
+    LEC_range = 10
+    LEC_max = LEC * ( 1 + LEC_range)
+    LEC_min = LEC * ( 1 - LEC_range)
+    LEC_new[which_LEC] = LEC_min[which_LEC] + loop1 * (LEC_max[which_LEC] - LEC_min[which_LEC])
+#    print(LEC_new[which_LEC])
+    LEC_new_shift[count] = LEC_new[which_LEC]
+    sm_cal_new[count]    = sm_calculation(LEC_new,"ccm_in_test","a.out")
+    count  = count + 1
+
+print(sm_cal_new)
+
+fig1 = plt.figure('fig1')
+
+matplotlib.rcParams['xtick.direction'] = 'in'
+matplotlib.rcParams['ytick.direction'] = 'in'
+ax1 = plt.subplot(111)
+plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+ax1.spines['bottom'].set_linewidth(2)
+ax1.spines['top'].set_linewidth(2)
+ax1.spines['left'].set_linewidth(2)
+ax1.spines['right'].set_linewidth(2)
 
 
+# sm calculation
+y_list_1 =  sm_cal_new
+x_list_1 =  LEC_new_shift
 
+
+#l0 = plt.scatter (x_list_0,y_list_0,color = 'k', marker = 's',s = 200 ,zorder = 4, label=r'$\Delta$NNLO$_{\rm{go}}$(450)')
+l1 = plt.scatter (x_list_1, y_list_1,color = 'cornflowerblue', edgecolor = 'k', marker = 'o',s = 120 ,zorder=2,label = 'sm_cal')
+#l2 = plt.plot([-10, 40], [-10, 40], ls="-",color = 'k', lw = 3, zorder = 3)
+
+#plt.xlim((-10,40))
+#plt.ylim((-10,40))
+#plt.xticks(np.arange(-10,41,10),fontsize = 15)
+#plt.yticks(np.arange(-10,41,10),fontsize = 15)
+
+
+plt.legend(loc='upper left',fontsize = 15)
+plt.xlabel(r"$\rm{CCSD} \ [\rm{MeV}]$",fontsize=20)
+plt.ylabel(r"$\rm{SP-CC} \ [\rm{MeV}]$",fontsize=20)
+
+plot_path = 'sm_test.pdf'
+plt.savefig(plot_path,bbox_inches='tight')
+plt.close('all')
 
 
 

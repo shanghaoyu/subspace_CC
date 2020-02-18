@@ -21,7 +21,7 @@ SUBROUTINE setup_subspace_allocation
 
   if ( .not. allocated(t2_subspace)) allocate( t2_subspace(subspace_num,channel_num) )
   if ( .not. allocated(l2_subspace)) allocate( l2_subspace(subspace_num,channel_num) )
-  if ( .not. allocated(H_bar_subspace)) allocate( H_bar_subspace(subspace_num,channel_num) )
+  if ( .not. allocated(h_bar_subspace)) allocate( h_bar_subspace(subspace_num,channel_num) )
   if ( .not. allocated(kinetic_bar_subspace)) allocate( kinetic_bar_subspace(subspace_num,channel_num) )
 
   do loop1 = 1, subspace_num

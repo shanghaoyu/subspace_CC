@@ -417,6 +417,26 @@ PROGRAM ccm_kspace
      call print_N_H_K_matrix
 
   case('sm')
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+   
+       call init_chp_constants
+       call setup_channel_structures
+    
+       if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+       call normal_ordered_hamiltonian
+       call sm_calculation    
+
+
+  case('subspace_cal_sm')
 
      LEC_num = 17 
      LEC_range = 0.5
