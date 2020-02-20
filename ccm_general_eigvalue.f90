@@ -6,7 +6,7 @@ SUBROUTINE setup_subspace_allocation
   use configurations
   USE KSPACE
   use CHIRAL_POTENTIALS
-  use subspace
+  use subspace_cc
 
 
   IMPLICIT NONE
@@ -86,7 +86,7 @@ END SUBROUTINE setup_subspace_allocation
 SUBROUTINE read_subspace_matrix
   USE PARALLEL
   USE t2_storage
-  USE subspace
+  USE subspace_cc
   USE configurations
 
   IMPLICIT NONE
@@ -157,7 +157,7 @@ END SUBROUTINE read_subspace_matrix
 
 SUBROUTINE vacuum_expectation_value_H_bar
   USE PARALLEL
-  USE subspace
+  USE subspace_cc
   USE single_particle_orbits
   USE one_body_operators
   USE constants
@@ -214,7 +214,7 @@ SUBROUTINE H_bar_ijab
   USE CONSTANTS
   USE one_body_operators
   USE t2_storage
-  USE subspace
+  USE subspace_cc
   USE configurations
   USE diis_mod
 
@@ -342,7 +342,7 @@ END SUBROUTINE H_bar_ijab
 
 SUBROUTINE get_N_matrix  ! overlap of the subspace basis
   USE PARALLEL
-  USE subspace
+  USE subspace_cc
   USE t2_storage
   USE configurations
 
@@ -378,7 +378,7 @@ END SUBROUTINE get_N_matrix
 
 SUBROUTINE get_H_matrix
   USE PARALLEL
-  USE subspace
+  USE subspace_cc
   USE t2_storage
   USE configurations
 
@@ -420,7 +420,7 @@ END SUBROUTINE get_H_matrix
 
 
 SUBROUTINE print_N_H_K_matrix
-  USE subspace
+  USE subspace_cc
   USE PARALLEL 
 
   IMPLICIT NONE
@@ -432,7 +432,7 @@ SUBROUTINE print_N_H_K_matrix
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
 
-120  format (64(F30.15,2x))  
+120  format (1(F30.15,2x))  
      if ( iam == 0 ) write(227, 120) REAL(H_matrix(bar,:))
    !  end do
   end do

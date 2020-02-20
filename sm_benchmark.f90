@@ -12,7 +12,7 @@
 
 SUBROUTINE sm_calculation
   USE PARALLEL
-  USE subspace
+  USE subspace_cc
   USE single_particle_orbits
   USE one_body_operators
   USE t2_storage
@@ -26,6 +26,7 @@ SUBROUTINE sm_calculation
   INTEGER :: p,q,r,s,temp_config, bar, ket, INFO, loop1
   INTEGER, allocatable ::  min_ev_index(:)
   real*8,allocatable  :: WR(:),WI(:), VL(:,:), VR(:,:), WORK(:), min_ev
+  character(LEN=50) :: output_file
 
   ! generate all configuration 
   print *,'wtf!!!', all_orbit%total_orbits
@@ -82,6 +83,7 @@ SUBROUTINE sm_calculation
         !print *, p,q,r,s
 
         H_sm(bar,ket) =  ( chiral_NN_with_delta(p,q,r,s) - chiral_NN_with_delta(p,q,s,r) )
+        print *, H_sm(bar,ket)
      end do
   end do
 !  print *, H_sm
@@ -120,11 +122,31 @@ SUBROUTINE sm_calculation
 !  print *, 'EValue=', WR, '+i',WI
 !  print *, 'EVector=', VR
   print *, 'INFO=', INFO
-
+  if ( iam == 0 ) print *, 'sm_cal=', sm_evalue
   open (223,file="sm_result.txt")
   if ( iam == 0 ) write(223,*) 'sm_cal=', sm_evalue
   close(223)
 
+! print temp H matrix
+  output_file='H_temp_real.txt'
+  open (240,file= output_file)
+
+!  print *,'sm_config_num=', sm_config_num 
+150  format (53(F30.15,2x))  
+  do bar = 1 , sm_config_num
+     write(240, 150) REAL(H_sm(bar,:))
+  end do
+  close(240)
+
+  output_file='H_temp_imag.txt'
+  open (250,file= output_file)
+
+!  print *,'sm_config_num=', sm_config_num 
+  print *,'H=', H_sm
+  do bar = 1 , sm_config_num
+     write(250, 150) AIMAG(H_sm(bar,:))
+  end do
+  close(250)
 END SUBROUTINE sm_calculation
 
 SUBROUTINE print_sm_wf(subspace_count)
@@ -208,7 +230,8 @@ SUBROUTINE read_subspace_wf_sm
      write(str_temp,"(i3)") loop2
      str_temp = adjustl(str_temp)
      sm_file=trim(str_temp)//'_sm.txt'
-     if ( iam == 0 ) write(6,*) 'read_file' , sm_file
+     if ( iam == 0 ) write(6,*) 'read_file  ' , sm_file
+     if ( iam == 0 ) write(6,*) 'sm_config_num  ' , sm_config_num
 
 130  format (F20.15)
      open (223,file=sm_file, access="SEQUENTIAL")
@@ -241,7 +264,7 @@ END SUBROUTINE get_N_matrix_sm
 
 SUBROUTINE get_H_matrix_sm
   USE PARALLEL
-  USE subspace
+  USE subspace_cc
   USE single_particle_orbits
   USE one_body_operators
   USE constants

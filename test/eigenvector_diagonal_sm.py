@@ -62,6 +62,50 @@ def read_LEC(file_path):
                 LEC[16] = float(temp_1[6])
     return LEC
 
+def read_LEC_2(file_path):
+    LEC = np.zeros(LEC_num)
+    with open(file_path,'r') as f_1:
+        count = len(open(file_path,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            if ( re.search('cD,cE', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[0] = float(temp_1[0])
+                LEC[1] = float(temp_1[1])
+            if ( re.search('LEC=', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[2] = float(temp_1[0])
+                LEC[3] = float(temp_1[1])
+                LEC[4] = float(temp_1[2])
+                LEC[5] = float(temp_1[3])
+            if ( re.search('c1s0, c3s1', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[6] = float(temp_1[4])
+                LEC[7] = float(temp_1[5])
+                LEC[8] = float(temp_1[6])
+                LEC[9] = float(temp_1[7])
+            if ( re.search('cnlo_pw', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[10] = float(temp_1[2])
+                LEC[11] = float(temp_1[3])
+                LEC[12] = float(temp_1[4])
+                LEC[13] = float(temp_1[5])
+                LEC[14] = float(temp_1[6])
+                LEC[15] = float(temp_1[7])
+                LEC[16] = float(temp_1[8])
+    return LEC
+
+def read_sm_vec(vec_num,vec_dimension,sm_vec,database_dir):
+    for loop1 in range(vec_num):
+        file_path = database_dir + str(loop1+1)+"_sm.txt"
+        with open(file_path,'r') as f_1:
+           count = len(open(file_path,'rU').readlines())
+           data = f_1.readlines()
+           wtf = re.match('#', 'abc',flags=0)
+           for loop2 in range(0,vec_dimension):
+               temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop2])
+               sm_vec[loop1][loop2] = float(temp_1[0])
 
 ######################################################
 ######################################################
@@ -165,8 +209,8 @@ def generate_emulator_matrix(subspace_dimension):
     call_solve_general_EV(LEC,"ccm_in_test","a.out")
     N_matrix = np.loadtxt("N_matrix_sm.txt")
     H_matrix = np.loadtxt("H_matrix_sm.txt")
-    out_dir = "./N_matrix_sm.txt"
-    np.savetxt(out_dir,N_matrix)
+    #out_dir = "./N_matrix_sm.txt"
+    #np.savetxt(out_dir,N_matrix)
  
     C_matrix = H_matrix
     out_dir = "./C_matrix_sm.txt"
@@ -198,7 +242,7 @@ def solve_general_EV_sm(LEC_target,database_dir):
     H = np.loadtxt(database_dir+"H_matrix_sm.txt")
 
    #subtract = [4,30, 56 ]
-    subtract = [33]
+    subtract = []
     H = np.delete(H,subtract,axis = 0)
     H = np.delete(H,subtract,axis = 1)  
     N = np.delete(N,subtract,axis = 0)
@@ -289,9 +333,9 @@ def solve_general_EV_sm(LEC_target,database_dir):
     print('eigvals='+str (ev_sorted))
     #print('eigvec_L='+str (eigvec_L))
     #print('eigvec_0='+str (eigvec_0))
+    print(eigvec_L[np.where(eigvals==ev_sorted[0])]) 
     
-    
-    print('eigvals_gs='+str (ev_sorted[1]))
+    print('eigvals_gs='+str (ev_sorted[0]))
     
     
     
@@ -304,6 +348,92 @@ def solve_general_EV_sm(LEC_target,database_dir):
     #print(N_matrix)
     #print(H_matrix)   
 
+def test_1():
+    vec_num =64
+    vec_dimension = 53
+    sm_vec = np.zeros((vec_num,vec_dimension))
+    LEC = read_LEC("ccm_in_DNNLO450")
+    #LEC_14th = read_LEC_2("/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_test_sm_vs_ccd_nmax1_n_2/14_sm.txt") 
+    #print("LEC_14th"+str(LEC_14th))
+    sm_calculation(LEC,"ccm_in_test","a.out")
+    H_1   = np.loadtxt("H_temp_real.txt")
+    
+    print ("H= "+str(H_1.shape))
+    vec_num = 64
+    read_sm_vec(vec_num,vec_dimension,sm_vec,"/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_test_sm_vs_ccd_nmax1_n_2/")
+
+    #eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
+    eigvals, eigvec = spla.eig(H_1)
+
+    loop2 = 0
+    for loop1 in range(np.size(H_1,1)):
+        ev = eigvals[loop1]
+        if ev.imag != 0:
+            continue
+        loop2 = loop2+1
+    
+    ev_all = np.zeros(loop2)
+    loop2 = 0
+    for loop1 in range(np.size(H_1,1)):
+        ev = eigvals[loop1] 
+        if ev.imag != 0:
+            continue
+    #    if ev.real < 0:
+    #        continue
+        ev_all[loop2] = ev.real
+        loop2 = loop2+1
+    ev_sorted = sorted(ev_all)
+#    print ("H eigvals = "+str(ev_sorted))
+#    print("sm_vec="+str( sm_vec.shape))
+    H_temp = np.dot(sm_vec,H_1)
+    H = np.dot(H_temp,sm_vec.T)
+    N = np.dot(sm_vec,sm_vec.T)
+    print("H="+str( H.shape))
+#    print("N="+str( N))
+    np.savetxt("H_matrix_sm_test.txt",H,fmt='%.15f')
+    np.savetxt("N_matrix_sm_test.txt",N,fmt='%.15f')
+
+    H = np.loadtxt("./H_matrix_sm_test.txt")
+    N = np.loadtxt("./N_matrix_sm_test.txt")
+    
+
+    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
+    print('eigvalsize,', eigvals.shape) 
+    loop2 = 0
+    for loop1 in range(np.size(H,1)):
+        ev = eigvals[loop1] 
+        if ev.imag != 0:
+            continue
+    #    if ev.real < 0:
+    #        continue
+        loop2 = loop2+1
+    
+    ev_all = np.zeros(loop2)
+    loop2 = 0
+    for loop1 in range(np.size(H,1)):
+        ev = eigvals[loop1] 
+        if ev.imag != 0:
+            continue
+    #    if ev.real < 0:
+    #        continue
+        ev_all[loop2] = ev.real
+        loop2 = loop2+1
+    
+    
+    ev_sorted = sorted(ev_all)
+    print('eigvals='+str (ev_sorted))
+    #print('eigvec_L='+str (eigvec_L))
+    #print('eigvec_0='+str (eigvec_0))
+    
+    print('eigvals_gs='+str (ev_sorted[1]))
+ 
+ 
+
+    H_2   = np.loadtxt("H_matrix_sm.txt")
+    N_2   = np.loadtxt("N_matrix_sm.txt")
+
+    np.savetxt("H-H_2.txt",H-H_2)
+    np.savetxt("N-N_2.txt",N-N_2)
 
 
 ######################################################
@@ -320,67 +450,74 @@ nucl_matt_exe = './prog_ccm.exe'
 database_dir= "./"
 file_path = "ccm_in_DNNLO450"
 LEC = read_LEC(file_path)
-
 #generate_emulator_matrix(subspace_dimension)
-#solve_general_EV_sm(LEC,database_dir)
+solve_general_EV_sm(LEC,database_dir)
 
 
-LEC_new = np.zeros(LEC_num)
-#sm_cal_new = np.zeros(LEC_num)
-
-LEC_new = LEC.copy()
-sm_count   = 10
-sm_cal_new = np.zeros(sm_count)
-LEC_new_shift = np.zeros(sm_count)
-
-count = 0
-which_LEC = 10
-for loop1 in np.arange(0,1,1./sm_count):
-    LEC_range = 10
-    LEC_max = LEC * ( 1 + LEC_range)
-    LEC_min = LEC * ( 1 - LEC_range)
-    LEC_new[which_LEC] = LEC_min[which_LEC] + loop1 * (LEC_max[which_LEC] - LEC_min[which_LEC])
-#    print(LEC_new[which_LEC])
-    LEC_new_shift[count] = LEC_new[which_LEC]
-    sm_cal_new[count]    = sm_calculation(LEC_new,"ccm_in_test","a.out")
-    count  = count + 1
-
-print(sm_cal_new)
-
-fig1 = plt.figure('fig1')
-
-matplotlib.rcParams['xtick.direction'] = 'in'
-matplotlib.rcParams['ytick.direction'] = 'in'
-ax1 = plt.subplot(111)
-plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
-ax1.spines['bottom'].set_linewidth(2)
-ax1.spines['top'].set_linewidth(2)
-ax1.spines['left'].set_linewidth(2)
-ax1.spines['right'].set_linewidth(2)
+#test_1()
 
 
-# sm calculation
-y_list_1 =  sm_cal_new
-x_list_1 =  LEC_new_shift
 
 
-#l0 = plt.scatter (x_list_0,y_list_0,color = 'k', marker = 's',s = 200 ,zorder = 4, label=r'$\Delta$NNLO$_{\rm{go}}$(450)')
-l1 = plt.scatter (x_list_1, y_list_1,color = 'cornflowerblue', edgecolor = 'k', marker = 'o',s = 120 ,zorder=2,label = 'sm_cal')
-#l2 = plt.plot([-10, 40], [-10, 40], ls="-",color = 'k', lw = 3, zorder = 3)
-
-#plt.xlim((-10,40))
-#plt.ylim((-10,40))
-#plt.xticks(np.arange(-10,41,10),fontsize = 15)
-#plt.yticks(np.arange(-10,41,10),fontsize = 15)
 
 
-plt.legend(loc='upper left',fontsize = 15)
-plt.xlabel(r"$\rm{CCSD} \ [\rm{MeV}]$",fontsize=20)
-plt.ylabel(r"$\rm{SP-CC} \ [\rm{MeV}]$",fontsize=20)
 
-plot_path = 'sm_test.pdf'
-plt.savefig(plot_path,bbox_inches='tight')
-plt.close('all')
-
-
+###LEC_new = np.zeros(LEC_num)
+####sm_cal_new = np.zeros(LEC_num)
+###
+###LEC_new = LEC.copy()
+###sm_count   = 10
+###sm_cal_new = np.zeros(sm_count)
+###LEC_new_shift = np.zeros(sm_count)
+###
+###count = 0
+###which_LEC = 10
+###for loop1 in np.arange(0,1,1./sm_count):
+###    LEC_range = 10
+###    LEC_max = LEC * ( 1 + LEC_range)
+###    LEC_min = LEC * ( 1 - LEC_range)
+###    LEC_new[which_LEC] = LEC_min[which_LEC] + loop1 * (LEC_max[which_LEC] - LEC_min[which_LEC])
+####    print(LEC_new[which_LEC])
+###    LEC_new_shift[count] = LEC_new[which_LEC]
+###    sm_cal_new[count]    = sm_calculation(LEC_new,"ccm_in_test","a.out")
+###    count  = count + 1
+###
+###print(sm_cal_new)
+###
+###fig1 = plt.figure('fig1')
+###
+###matplotlib.rcParams['xtick.direction'] = 'in'
+###matplotlib.rcParams['ytick.direction'] = 'in'
+###ax1 = plt.subplot(111)
+###plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+###ax1.spines['bottom'].set_linewidth(2)
+###ax1.spines['top'].set_linewidth(2)
+###ax1.spines['left'].set_linewidth(2)
+###ax1.spines['right'].set_linewidth(2)
+###
+###
+#### sm calculation
+###y_list_1 =  sm_cal_new
+###x_list_1 =  LEC_new_shift
+###
+###
+####l0 = plt.scatter (x_list_0,y_list_0,color = 'k', marker = 's',s = 200 ,zorder = 4, label=r'$\Delta$NNLO$_{\rm{go}}$(450)')
+###l1 = plt.scatter (x_list_1, y_list_1,color = 'cornflowerblue', edgecolor = 'k', marker = 'o',s = 120 ,zorder=2,label = 'sm_cal')
+####l2 = plt.plot([-10, 40], [-10, 40], ls="-",color = 'k', lw = 3, zorder = 3)
+###
+####plt.xlim((-10,40))
+####plt.ylim((-10,40))
+####plt.xticks(np.arange(-10,41,10),fontsize = 15)
+####plt.yticks(np.arange(-10,41,10),fontsize = 15)
+###
+###
+###plt.legend(loc='upper left',fontsize = 15)
+###plt.xlabel(r"$\rm{CCSD} \ [\rm{MeV}]$",fontsize=20)
+###plt.ylabel(r"$\rm{SP-CC} \ [\rm{MeV}]$",fontsize=20)
+###
+###plot_path = 'sm_test.pdf'
+###plt.savefig(plot_path,bbox_inches='tight')
+###plt.close('all')
+###
+###
 

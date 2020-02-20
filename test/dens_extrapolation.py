@@ -173,40 +173,39 @@ def emulator(LEC_target,dens):
     in_dir = "./K_matrix.txt"
     K = np.loadtxt(in_dir)
     H = H + K 
-
  #   print("H="+str(H))
  #   print("rank of N ="+str(np.linalg.matrix_rank(N)))
         
-    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-
-    loop2 = 0
-    for loop1 in range(subspace_dimension):
-        ev = eigvals[loop1]
-        if ev.imag > 0.01:
-            continue
-    #    if ev.real < 0:
-    #        continue
-        loop2 = loop2+1
-
-    ev_all = np.zeros(loop2)
-    loop2 = 0
-    for loop1 in range(subspace_dimension):
-        ev = eigvals[loop1]
-        if ev.imag >0.01 :
-            continue
-    #    if ev.real < 0:
-    #        continue
-        ev_all[loop2] = ev.real
-        loop2 = loop2+1
-
-    ev_sorted = sorted(ev_all)
+#    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
+    eigvals = H
+#    loop2 = 0
+#    for loop1 in range(subspace_dimension):
+#        ev = eigvals[loop1]
+#        if ev.imag > 0.01:
+#            continue
+#    #    if ev.real < 0:
+#    #        continue
+#        loop2 = loop2+1
+#
+#    ev_all = np.zeros(loop2)
+#    loop2 = 0
+#    for loop1 in range(subspace_dimension):
+#        ev = eigvals[loop1]
+#        if ev.imag >0.01 :
+#            continue
+#    #    if ev.real < 0:
+#    #        continue
+#        ev_all[loop2] = ev.real
+#        loop2 = loop2+1
+#
+#    ev_sorted = sorted(ev_all)
     #print('eigvals='+str (ev_sorted))
     #print('eigvec_L='+str (eigvec_L))
     #print('eigvec_0='+str (eigvec_0))
 
     #print('eigvals_gs='+str (ev_sorted[1]))
-    print ("ccd energy from emulator:"+str(ev_sorted[0]))
-    return ev_sorted[0], ev_sorted
+#    print ("ccd energy from emulator:"+str(ev_sorted[0]))
+    return eigvals,eigvals
 
 
 
@@ -219,38 +218,93 @@ def emulator(LEC_target,dens):
 #### MAIN density extrapolation (validation)
 ######################################################
 ######################################################
-subspace_dimension = 5
+subspace_dimension = 1 
 LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-
+database_dir  = '/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_dens_5points' 
 
 
 #print ("ev_all="+str(ev_all))
 
 # start validation 
 
-dens_min = 0.17
-dens_max = 0.19
+dens_min = 0.14
+dens_max = 0.30
 dens_gap = 0.02
 dens_count = int((dens_max - dens_min) / dens_gap + 2)
 print (dens_count)
+dens        = np.zeros(dens_count)
+ccd_cal      = np.zeros(dens_count) 
+emulator_cal = np.zeros(dens_count) 
+
 for loop1 in range(dens_count):
-    dens = dens_min + ( dens_gap * loop1)
+    dens[loop1] = dens_min + ( dens_gap * loop1)
     print("densty = "+str(dens))
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
-    ccd_cal = nuclear_matter(LEC,dens)
-    emulator_cal, ev_all = emulator(LEC,dens)
+    #ccd_cal[loop1] = nuclear_matter(LEC,dens[loop1])
+    ccd_cal[loop1] = 0
+    emulator_cal[loop1], ev_all = emulator(LEC,dens[loop1])
     file_path = "density_extrapolation.txt"
     with open(file_path,'a') as f_1:
-        f_1.write('dens=%.4f   ccd = %.12f     emulator = %.12f \n' % (dens,ccd_cal, emulator_cal))
+        f_1.write('dens=%.4f   ccd = %.12f     emulator = %.12f \n' % (dens[loop1],ccd_cal[loop1], emulator_cal[loop1]))
     file_path = "density_extrapolation_detail.txt"
     with open(file_path,'a') as f_2:
-        f_2.write('dens=%.4f   ccd = %.12f     emulator = %.12f   all =' % (dens, ccd_cal, emulator_cal))
+        f_2.write('dens=%.4f   ccd = %.12f     emulator = %.12f   all =' % (dens[loop1], ccd_cal[loop1], emulator_cal[loop1]))
         f_2.write(str(ev_all))
         f_2.write('\n')
+
+
+# plot
+x_list_1 = dens  # dens
+y_list_1 = ccd_cal  # ccd
+y_list_2 = emulator_cal  # extrapolation
+
+print(x_list_1)
+print(y_list_1)
+
+
+file_path = "subspace_sample_5point.txt"
+data_num = input_raw_data_count(file_path)
+raw_data_2 = np.zeros((data_num,2),dtype = np.float)
+input_file_2(file_path,raw_data_2)
+
+x_list_3 = raw_data_2[:,0] # subspace data
+y_list_3 = raw_data_2[:,1] #
+
+print(x_list_3)
+print(y_list_3)
+
+interpol_count = 100 
+
+dens = x_list_1
+spl_pnm = interpolate.UnivariateSpline(dens,y_list_2,k = 5)
+spldens = np.linspace(dens[0],dens[len(dens)-1],num=interpol_count)
+
+interp_pnm = spl_pnm(spldens)
+
+x_list_2_new = spldens
+y_list_2_new = interp_pnm 
+
+# start plotting
+fig1 = plt.figure('fig1')
+l1 = plt.scatter(x_list_1,y_list_1,color = 'r', marker = 'd',zorder=1,label="CCD calculation")
+l2 = plt.plot(x_list_2_new,y_list_2_new,color = 'k',linestyle=':',linewidth=1.5,alpha=0.9,  label="SP-CC(5)",zorder=1)
+l3 = plt.plot(x_list_3,y_list_3,color = 'k', marker = 'o',markersize = 10,markerfacecolor='none',linestyle='',zorder=3, label="subspace samples")
+
+#plt.yticks(np.arange(8,24,2),fontsize = 13) 
+#plt.xticks(np.arange(0.12,0.205,0.01),fontsize = 13) 
+plt.legend(loc='lower right',fontsize = 13)
+
+plt.ylabel('$E/A$ [MeV]',fontsize=18)
+plt.xlabel(r"$\rho$ [fm$^{-3}$]",fontsize=18)
+
+plot_path = 'density_extrapolation.pdf'
+plt.savefig(plot_path,bbox_inches='tight')
+
+
 
 
 

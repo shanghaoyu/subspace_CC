@@ -12,7 +12,7 @@ PROGRAM ccm_kspace
   use single_particle_orbits
   USE constants
   use deltafull_parameters  
-  use subspace
+  use subspace_cc
   use minnesota_potentials 
   use shell_model
  
@@ -236,9 +236,6 @@ PROGRAM ccm_kspace
  
   case( 'subspace_cal_dens' )  !calculate t_ij_ab for different LECs
 
-
-       
- 
     subspace_num = 5 
      do loop = 1, subspace_num
        input_dens = 0.16 + (loop-1)*0.01  
@@ -289,7 +286,7 @@ PROGRAM ccm_kspace
 !     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
 
      LEC_num = 17 
-     LEC_range = 0.5
+     LEC_range = 0.2
      if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
      if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
      LEC_max = 0
@@ -333,19 +330,9 @@ PROGRAM ccm_kspace
      duplication = 5
      seed = 17
      call ihs ( dim_num, subspace_num, duplication, seed, xxx )
-!     print *,xxx
      call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
 
-
-
-
- !    print *, subspace_num-point_num
-    ! if ((subspace_num-point_num) .ne. 0 ) 
-    !    print *, 'subspace_num .ne. point_num'
-    !    stop
-    ! end if  
      do loop = 1, subspace_num
-       !LEC_c1_input  = -0.74d0 + (loop - 1) * 0.05
        LEC_c1_input  = LEC_min(1)+(LEC_max(1)-LEC_min(1))/(subspace_num - 1.D0)*(xxx(1,loop)-1.D0)
        LEC_c2_input  = LEC_min(2)+(LEC_max(2)-LEC_min(2))/(subspace_num - 1.D0)*(xxx(2,loop)-1.D0) 
        LEC_c3_input  = LEC_min(3)+(LEC_max(3)-LEC_min(3))/(subspace_num - 1.D0)*(xxx(3,loop)-1.D0)
@@ -359,11 +346,9 @@ PROGRAM ccm_kspace
 
 
        call init_chp_constants
-       !dens = 0.16*(1+loop*0.01)  
        call setup_channel_structures
        if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
        call normal_ordered_hamiltonian
-       !call mbpt2_3nf
        
        call setup_t_amplitudes
        if(cc_approx == 'mbpt2') then
@@ -388,7 +373,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     subspace_num = 64
+     subspace_num = 1
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 
@@ -1703,7 +1688,7 @@ SUBROUTINE normal_ordered_hamiltonian
   use chiral_potentials
   use t2_storage
   use ang_mom_functions
-  use subspace 
+  use subspace_cc 
  
   IMPLICIT NONE 
   INTEGER :: i,j,k,l,p,q,r, ia,ic,h, nx2,ny2,nz2,tz2,sz2,channel,bra,ket, ndim2, i1

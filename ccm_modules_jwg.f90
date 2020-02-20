@@ -1276,14 +1276,14 @@ END MODULE t2_storage
 
 
 
-MODULE subspace
+MODULE subspace_cc
   TYPE, PUBLIC :: block_storage_2
      !complex*16, DIMENSION(:), ALLOCATABLE :: val1
      complex*16, DIMENSION(:,:), ALLOCATABLE :: val
      !complex*16, DIMENSION(:,:,:), ALLOCATABLE :: val3
   END TYPE block_storage_2
 
-  INTEGER, PUBLIC   ::  subspace_num
+  INTEGER, PUBLIC   ::  subspace_num, converge_flag !converge_flag=0 converge /// =1 not converge
   complex*16, public  :: Ek, external_field_energy
   complex*16, public, allocatable :: vacuum_H_bar(:)
   complex*16, public, allocatable :: N_matrix(:,:), H_matrix(:,:) , K_matrix(:,:)
@@ -1294,7 +1294,8 @@ MODULE subspace
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: l2_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: H_bar_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: kinetic_bar_subspace(:,:)
-END MODULE subspace
+
+END MODULE subspace_cc
 
 
 

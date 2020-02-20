@@ -5,6 +5,7 @@ SUBROUTINE ccd_iter
   USE one_body_operators
   USE t2_storage
   USE configurations
+  USE subspace_cc
   
   IMPLICIT NONE
   INTEGER :: count, itimes, ntimes, channel, bra, ket, i, ij, ab
@@ -72,6 +73,7 @@ SUBROUTINE ccd_iter
   ener2 = 0.d0
   ntimes =  100
   dener=4.0
+  converge_flag = 0
   do itimes=1, ntimes
      if(abs(dener) > 1.0e-6 )then
         
@@ -96,6 +98,11 @@ SUBROUTINE ccd_iter
         if(iam ==0)write(6,'(a,2i5,2e16.8)')'dener',iam,itimes,real(dener) 
      end if
   end do
+
+  if(abs(dener) > 1.0e-6 )then
+     converge_flag = 1
+     print *, "CCD calculation did not converge"
+  end if
 
 !call t2_intermediate(0)
 !!!! jwg start
@@ -2625,6 +2632,7 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
   USE t2_storage
   use configurations 
   use deltafull_parameters 
+  use subspace_cc
 
   IMPLICIT NONE 
   INTEGER :: channel, bra, ket, subspace_count
@@ -2652,6 +2660,7 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
      end do
   end do
   
+  if ( iam == 0 ) write(223,*) 'converge_flag=', converge_flag
   if ( iam == 0 ) write(223,*) 'dens=', dens
   if ( iam == 0 ) write(223,*) 'LEC=', LEC_c1_input, LEC_c2_input ,LEC_c3_input, LEC_c4_input 
   if ( iam == 0 ) write(223,*) 'c1s0, c3s1 ', c1s0_input , c3s1_input
