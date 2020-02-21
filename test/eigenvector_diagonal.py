@@ -61,12 +61,12 @@ def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nm
 ######################################################
 ######################################################
 def call_solve_general_EV(vec_input,in_dir,out_dir):
-    neutron_num  = 2  #test
+    neutron_num  = 14  #test
     particle_num = 28
     density      = 0.16
     density_min  = 0.14
     density_max  = 0.22
-    nmax         = 1 #test
+    nmax         = 2 #test
 
     generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
@@ -214,11 +214,5 @@ LEC_number = 17
 nucl_matt_exe = './prog_ccm.exe'
 
 generate_emulator_matrix(subspace_dimension)
-
-
-
-
-
-
 
 

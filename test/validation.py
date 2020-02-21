@@ -8,7 +8,6 @@ import re
 import scipy.linalg as spla
 from scipy import interpolate
 
-
 ######################################################
 ######################################################
 ### generate random LECs set
@@ -17,6 +16,7 @@ from scipy import interpolate
 def generate_random_LEC(LEC,LEC_range):
     LEC_max = LEC * ( 1 + LEC_range)
     LEC_min = LEC * ( 1 - LEC_range)
+    #np.random.seed(seed)
     LEC_random = np.zeros(LEC_num)
     for loop1 in range (LEC_num):
         LEC_random[loop1] = LEC_min[loop1] + np.random.rand(1) * (LEC_max[loop1] - LEC_min[loop1])
@@ -191,23 +191,21 @@ def emulator(LEC_target,subtract):
 #    print ("N eigvals = "+str(sorted(eigvals)))
 
     print("rank of N ="+str(np.linalg.matrix_rank(N)))
-    print("N= "+str(N))
-    #scipy.stats.pearsonr(x, y)
-    H = np.delete(H,subtract,axis = 0)
-    H = np.delete(H,subtract,axis = 1) 
-    N = np.delete(N,subtract,axis = 0)
-    N = np.delete(N,subtract,axis = 1) 
+    #print("N= "+str(N))
 
+##### without subtract 
+    subtract_1 = []
+    H = np.delete(H,subtract_1,axis = 0)
+    H = np.delete(H,subtract_1,axis = 1) 
+    N = np.delete(N,subtract_1,axis = 0)
+    N = np.delete(N,subtract_1,axis = 1) 
 
     #np.savetxt('H.test',H,fmt='%.10f')
     #np.savetxt('N.test',N,fmt='%.10f')
-
     #H = np.loadtxt('H.test')
     #N = np.loadtxt('N.test')
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-
     loop2 = 0
-    #for loop1 in range(subspace_dimension):
     for loop1 in range(np.size(H,1)):
         ev = eigvals[loop1]
         if ev.imag > 0.01:
@@ -227,14 +225,57 @@ def emulator(LEC_target,subtract):
         ev_all[loop2] = ev.real
         loop2 = loop2+1
 
-    ev_sorted = sorted(ev_all)
-    print('eigvals='+str (ev_sorted))
-    #print('eigvec_L='+str (eigvec_L))
-    #print('eigvec_0='+str (eigvec_0))
+    ev_sorted_1 = sorted(ev_all)
+ 
+##### with subtract
+    H = np.delete(H,subtract,axis = 0)
+    H = np.delete(H,subtract,axis = 1) 
+    N = np.delete(N,subtract,axis = 0)
+    N = np.delete(N,subtract,axis = 1) 
 
-    #print('eigvals_gs='+str (ev_sorted[1]))
-    print ("ccd energy from emulator:"+str(ev_sorted[0]))
-    return ev_sorted[0], ev_sorted
+    #np.savetxt('H.test',H,fmt='%.10f')
+    #np.savetxt('N.test',N,fmt='%.10f')
+    #H = np.loadtxt('H.test')
+    #N = np.loadtxt('N.test')
+    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
+
+    loop2 = 0
+    for loop1 in range(np.size(H,1)):
+        ev = eigvals[loop1]
+        if ev.imag > 0.01:
+            continue
+    #    if ev.real < 0:
+    #        continue
+        loop2 = loop2+1
+
+    ev_all = np.zeros(loop2)
+    loop2 = 0
+    for loop1 in range(np.size(H,1)):
+        ev = eigvals[loop1]
+        if ev.imag >0.01 :
+            continue
+    #    if ev.real < 0:
+    #        continue
+        ev_all[loop2] = ev.real
+        loop2 = loop2+1
+
+    ev_sorted_2 = sorted(ev_all)
+    #print('eigvals='+str (ev_sorted))
+    #print ("ccd energy from emulator:"+str(ev_sorted[0]))
+  
+    ev_ultra = 0
+    for loop1 in range(len(ev_sorted_2)):
+        if ev_ultra != 0:
+            break
+        for loop2 in range(len(ev_sorted_1)):
+            if ( np.abs(ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1] < 0.01 ):
+                ev_ultra = ev_sorted_2[loop2]
+                break
+    #print(ev_ultra)
+    #print(ev_sorted_1)
+    #print(ev_sorted_2)
+
+    return ev_ultra, ev_sorted_1, ev_sorted_2
 
 
 
@@ -267,23 +308,27 @@ print("converge_flag"+str(converge_flag))
 print(converge_flag.nonzero())
 
 # start validation 
-validation_count = 1
+
+
+#seed = 6
+validation_count = 10
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
     LEC_random = generate_random_LEC(LEC, LEC_range)
     print ("LEC="+str(LEC_random))
-    LEC_random = LEC
-    #ccd_cal = nuclear_matter(LEC_random)
-    ccd_cal = 0
-    emulator_cal, ev_all = emulator(LEC_random,subtract)
+    #LEC_random = LEC
+    ccd_cal = nuclear_matter(LEC_random)
+    #ccd_cal = 0
+    emulator_cal, ev_all_1, ev_all_2 = emulator(LEC_random,subtract)
     file_path = "validation_different_subspace.txt"
     with open(file_path,'a') as f_1:
         f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
     file_path = "validation_detail_test_different_subspace.txt"
     with open(file_path,'a') as f_2:
         f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
-        f_2.write(str(ev_all))
+        f_2.write(str(ev_all_1))
+        f_2.write(str(ev_all_2))
         f_2.write('\n')
 
 

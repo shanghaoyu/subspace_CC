@@ -373,7 +373,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     subspace_num = 1
+     subspace_num = 64
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 

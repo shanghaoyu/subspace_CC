@@ -419,6 +419,28 @@ SUBROUTINE get_H_matrix
 END SUBROUTINE get_H_matrix
 
 
+SUBROUTINE perturbative_triple
+  USE subspace_cc
+  USE diis_mod 
+  USE PARALLEL 
+  USE CONSTANTS 
+  USE one_body_operators 
+  USE t2_storage 
+  USE configurations 
+  USE subspace_cc 
+     
+  IMPLICIT NONE
+
+
+  call setup_vnn_hppp_block
+  call setup_t3_channel_structures
+  call pert_triples2
+ 
+
+
+END SUBROUTINE perturbative_triple
+
+
 SUBROUTINE print_N_H_K_matrix
   USE subspace_cc
   USE PARALLEL 
@@ -432,7 +454,7 @@ SUBROUTINE print_N_H_K_matrix
   do bar = 1, subspace_num
    !  do ket = 1, subspace_num
 
-120  format (1(F30.15,2x))  
+120  format (64(F30.15,2x))  
      if ( iam == 0 ) write(227, 120) REAL(H_matrix(bar,:))
    !  end do
   end do
@@ -458,5 +480,7 @@ SUBROUTINE print_N_H_K_matrix
 
 
 END SUBROUTINE print_N_H_K_matrix
+
+
 
 
