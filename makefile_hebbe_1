@@ -1,0 +1,38 @@
+FC = mpif90 -I${MKLROOT}/include  -fopenmp -ffree-line-length-1024
+LIBS      =-L${MKLROOT}/lib/intel64/hdf5_fortran  ${MKLROOT}/lib/intel64/libmkl_scalapack_lp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_cdft_core.a ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a -Wl,--end-group -liomp5 -lpthread -lm -ldl
+INCS       = -I${MKLROOT}/include
+
+#FC=mpif90 -mkl=parallel -heap-arrays 1024 -fltconsistency -openmp
+#FCD = mpif90 -mkl=parallel -check all -g -traceback -heap-arrays 1024 -fltconsistency
+#FCV = mpif90 -mkl=parallel -g -heap-arrays 1024 -fltconsistency
+
+XLF= ${FC} -O3
+
+#LOCAL_LIBS = -lopenblas
+#HDF5 = /usr/local/hdf5
+#FORTRANLIB=-I$(HDF5)/include $(HDF5)/lib/libhdf5_fortran.a
+
+#COMP = mpifort-openmpi-mp -fopenmp -fdiagnostics-color=always
+#FC=${COMP} -O3
+#FCD=${COMP} -Og -g -Wall -Wextra -fbounds-check -ftrapv -pedantic-errors# -Wuse-without-only
+FCD=${COMP} -Og -g -fbounds-check
+
+#LIBS= ${LOCAL_LIBS}
+
+#XLF = ${FC}
+
+all_objects = ccm_modules_jwg.o chiral_module_andreas_with_delta.o minnesota_module.o ccm_library.o ccm_main_jwg.o ccm_iter_jwg_2.o ccm_energy.o ccm_t2_eqn.o ccm_diis.o ccm_mapping_jwg.o ccm_t3_channels.o ccm_triples_jwg.o ccm_t3_eqn.o ccm_t3full_channels_jwg.o ccm_v3nf_channels.o ccm_general_eigvalue.o IHS_sampling.o sm_benchmark.o
+
+
+porg_ccm.exe : ${all_objects}
+	${XLF} -o prog_ccm.exe ${all_objects} -L/usr/local/opt/openblas/lib  -I/usr/local/opt/openblas/include ${LIBS}
+	cp prog_ccm.exe test/prog_ccm.exe
+
+%.o: %.f90
+	${XLF} -c $<
+
+%.o: %.f
+	${XLF} -c $<
+
+clean:
+	rm *.mod *.o
