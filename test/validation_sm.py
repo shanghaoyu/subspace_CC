@@ -59,6 +59,42 @@ def read_LEC(file_path):
                 LEC[16] = float(temp_1[6])
     return LEC
 
+def read_LEC_2(file_path):
+    LEC = np.zeros(LEC_num)
+    with open(file_path,'r') as f_1:
+        count = len(open(file_path,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            if ( re.search('cD,cE', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[0] = float(temp_1[0])
+                LEC[1] = float(temp_1[1])
+            if ( re.search('LEC=', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[2] = float(temp_1[0])
+                LEC[3] = float(temp_1[1])
+                LEC[4] = float(temp_1[2])
+                LEC[5] = float(temp_1[3])
+            if ( re.search('c1s0, c3s1', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[6] = float(temp_1[4])
+                LEC[7] = float(temp_1[5])
+                LEC[8] = float(temp_1[6])
+                LEC[9] = float(temp_1[7])
+            if ( re.search('cnlo_pw', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[10] = float(temp_1[2])
+                LEC[11] = float(temp_1[3])
+                LEC[12] = float(temp_1[4])
+                LEC[13] = float(temp_1[5])
+                LEC[14] = float(temp_1[6])
+                LEC[15] = float(temp_1[7])
+                LEC[16] = float(temp_1[8])
+    return LEC 
+
+
+
 ######################################################
 ######################################################
 ### generate nuclear matter infile
@@ -171,6 +207,18 @@ def emulator(LEC_target):
 
     #H = H[0:,0:8] 
     #N = N[0:8,0:8] 
+    subtract = []
+    H = np.delete(H,subtract,axis = 0)
+    H = np.delete(H,subtract,axis = 1)
+    N = np.delete(N,subtract,axis = 0)
+    N = np.delete(N,subtract,axis = 1)
+
+    np.savetxt('H.test',H,fmt='%.13f')
+    np.savetxt('N.test',N,fmt='%.13f')
+    H = np.loadtxt('H.test')
+    N = np.loadtxt('N.test')
+
+
          
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
 
@@ -229,10 +277,11 @@ database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/t
 validation_count = 1
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
-    LEC = read_LEC(file_path)
-    LEC_random = generate_random_LEC(LEC, LEC_range)
-    print ("LEC="+str(LEC_random))
+    #LEC = read_LEC(file_path)
+    LEC = read_LEC_2("1_sm.txt")
+    #LEC_random = generate_random_LEC(LEC, LEC_range)
     LEC_random = LEC
+    print ("LEC="+str(LEC_random))
    # ccd_cal = nuclear_matter(LEC_random)
     sm_cal = 0
     emulator_cal, ev_all = emulator(LEC_random)

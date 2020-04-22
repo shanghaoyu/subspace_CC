@@ -450,9 +450,9 @@ nucl_matt_exe = './prog_ccm.exe'
 database_dir= "./"
 file_path = "ccm_in_DNNLO450"
 LEC = read_LEC(file_path)
-#generate_emulator_matrix(subspace_dimension)
-solve_general_EV_sm(LEC,database_dir)
+#solve_general_EV_sm(LEC,database_dir)
 
+generate_emulator_matrix(subspace_dimension)
 
 #test_1()
 

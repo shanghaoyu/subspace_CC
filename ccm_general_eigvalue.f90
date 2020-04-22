@@ -92,7 +92,7 @@ SUBROUTINE read_subspace_matrix
   IMPLICIT NONE
   INTEGER :: channel_num, temp1, temp2, temp3, subspace_count
   INTEGER :: channel, ij, ab, loop1, loop2
-  character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2  
+  character(LEN=200) :: inputfile, t2_file, str_temp, str_temp2  
   REAL*8  :: real_temp, imag_temp
  
   if ( iam == 0 ) write(6,*) 'read_subspace_matrix' 
@@ -102,8 +102,11 @@ SUBROUTINE read_subspace_matrix
   do loop1 = 1, subspace_num
      loop2 = loop1
      write(str_temp,"(i3)") loop2
-     str_temp = adjustl(str_temp)
-     t2_file=trim(str_temp)//'.txt'
+     str_temp  = adjustl(str_temp)
+     str_temp2 = adjustl(wf_dir)
+     t2_file=trim(str_temp2)//trim(str_temp)//'.txt'
+     print *,t2_file
+
      if ( iam == 0 ) write(6,*) 'read_file' , t2_file
  
      open (223,file=t2_file, access="SEQUENTIAL")

@@ -47,7 +47,7 @@ def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nm
         f_1.write('! dens/kf, ntwist,  nmax'+'\n')
         f_1.write('%.12f, 1, %d\n' % (density, nmax))
         f_1.write('! specify cluster approximation: CCD, CCDT'+'\n')
-        f_1.write('CCD(T)'+'\n')
+        f_1.write('CCD'+'\n')
         f_1.write('! tnf switch (T/F) and specify 3nf approximation: 0=tnf0b, 1=tnf1b, 2=tnf2b'+'\n')
         f_1.write('T, 3'+'\n')
         f_1.write('! 3nf cutoff(MeV),non-local reg. exp'+'\n')
@@ -61,14 +61,12 @@ def generate_ccm_in_file(file_path,vec_input,particle_num,matter_type,density,nm
 ######################################################
 ######################################################
 def call_solve_general_EV(vec_input,in_dir,out_dir):
-    neutron_num  = 14  #test
+    neutron_num  = 2  #test
     particle_num = 28
     density      = 0.16
-    density_min  = 0.14
-    density_max  = 0.22
     nmax         = 2 #test
 
-    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
+    generate_ccm_in_file(in_dir,vec_input,particle_num,'snm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
 
 
@@ -123,84 +121,6 @@ def generate_emulator_matrix(subspace_dimension):
         np.savetxt(out_dir,LEC_all_matrix[loop1,:,:])
 
 
-
-######################################################
-######################################################
-### Emulator!!!
-######################################################
-######################################################
-def emulator(LEC_target):
-    H = np.zeros((subspace_dimension,subspace_dimension))
-    N = np.zeros((subspace_dimension,subspace_dimension))
-    C = np.zeros((subspace_dimension,subspace_dimension))
-    H_matrix = np.zeros((LEC_number,subspace_dimension,subspace_dimension))
-    N = np.loadtxt("H_matrix.txt")
-    C = np.loadtxt("C_matrix.txt")
-    for loop1 in range(LEC_number):
-        input_file("H_matrix.txt",H_matrix[loop1,:,:])
-    
-    #H = LECs[0]*H_matrix + K_matrix
-    for loop1 in range(LEC_number):
-        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
-    H = H + C
-
-    print("H="+str(H))
-    print("rank of N ="+str(np.linalg.matrix_rank(N_matrix)))
-    N = np.matrix(N_matrix)
-    #Ni = N.I
-    #print (N)
-    #Ni = np.linalg.inv(N)
-    #
-    #print (np.dot(Ni,N_matrix))
-    #print (Ni*N_matrix)
-    
-    #Ni_dot_H = np.dot(Ni,H)
-    #D,V = np.linalg.eig(Ni_dot_H)
-    #print (Ni_dot_H)
-    #print ("D="+str(D))
-    #print ("V="+str(V))
-    
-    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-    
-    loop2 = 0
-    for loop1 in range(subspace_dimension):
-        ev = eigvals[loop1] 
-        if ev.imag != 0:
-            continue
-    #    if ev.real < 0:
-    #        continue
-        loop2 = loop2+1
-    
-    ev_all = np.zeros(loop2)
-    loop2 = 0
-    for loop1 in range(subspace_dimension):
-        ev = eigvals[loop1] 
-        if ev.imag != 0:
-            continue
-    #    if ev.real < 0:
-    #        continue
-        ev_all[loop2] = ev.real
-        loop2 = loop2+1
-    
-    
-    ev_sorted = sorted(ev_all)
-    print('eigvals='+str (ev_sorted))
-    #print('eigvec_L='+str (eigvec_L))
-    #print('eigvec_0='+str (eigvec_0))
-    
-    
-    print('eigvals_gs='+str (ev_sorted[1]))
-    
-    
-    
-    #D,V = np.linalg.eig(H_matrix)
-    #print ("D="+str(D))
-    #print(np.linalg.matrix_rank(N_matrix))
-    #print(np.linalg.matrix_rank(H_matrix))
-    
-    
-    #print(N_matrix)
-    #print(H_matrix)   
 
 
 

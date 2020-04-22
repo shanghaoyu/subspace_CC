@@ -41,7 +41,7 @@ def input_raw_data_count(file_path):
 
 
 
-file_path = "density_extrapolation.txt"
+file_path = "/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_dens_5points/density_extrapolation.txt"
 data_num = input_raw_data_count(file_path)
 raw_data_1 = np.zeros((data_num,3),dtype = np.float)
 input_file_2(file_path,raw_data_1)
@@ -54,7 +54,7 @@ print(x_list_1)
 print(y_list_1)
 
 
-file_path = "subspace_sample_5point.txt"
+file_path = "/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_dens_5points/subspace_sample_5point.txt"
 data_num = input_raw_data_count(file_path)
 raw_data_2 = np.zeros((data_num,2),dtype = np.float)
 input_file_2(file_path,raw_data_2)

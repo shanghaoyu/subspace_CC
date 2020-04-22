@@ -62,6 +62,43 @@ def read_LEC(file_path):
                 LEC[16] = float(temp_1[6])
     return LEC
 
+def read_LEC_2(file_path):
+    LEC = np.zeros(LEC_num)
+    with open(file_path,'r') as f_1:
+        count = len(open(file_path,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            if ( re.search('cD,cE', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[0] = float(temp_1[0])
+                LEC[1] = float(temp_1[1])
+            if ( re.search('LEC=', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[2] = float(temp_1[0])
+                LEC[3] = float(temp_1[1])
+                LEC[4] = float(temp_1[2])
+                LEC[5] = float(temp_1[3])
+            if ( re.search('c1s0, c3s1', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[6] = float(temp_1[4])
+                LEC[7] = float(temp_1[5])
+                LEC[8] = float(temp_1[6])
+                LEC[9] = float(temp_1[7])
+            if ( re.search('cnlo_pw', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[10] = float(temp_1[2])
+                LEC[11] = float(temp_1[3])
+                LEC[12] = float(temp_1[4])
+                LEC[13] = float(temp_1[5])
+                LEC[14] = float(temp_1[6])
+                LEC[15] = float(temp_1[7])
+                LEC[16] = float(temp_1[8])
+    return LEC 
+
+
+
+
 ######################################################
 ######################################################
 ### generate nuclear matter infile
@@ -140,7 +177,7 @@ def nuclear_matter(vec_input):
     nucl_matt_in_dir   = './ccm_in_pnm_%.2f' % (density)
     nucl_matt_out_dir  = './pnm_rho_%.2f.out' % (density)
 
-    output_ccm_in_file(nucl_matt_in_dir,vec_input,neutron_num,'pnm',density,nmax)
+    output_ccm_in_file(nucl_matt_in_dir,vec_input,particle_num,'snm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+nucl_matt_in_dir+' > '+nucl_matt_out_dir) 
     ccd = read_nucl_matt_out(nucl_matt_out_dir)
     print ("ccd energy from real CC calculation: "+str(ccd))
@@ -228,15 +265,16 @@ def emulator(LEC_target,subtract):
     ev_sorted_1 = sorted(ev_all)
  
 ##### with subtract
+    subtract = [2,3,5,33,41,55,59]
     H = np.delete(H,subtract,axis = 0)
     H = np.delete(H,subtract,axis = 1) 
     N = np.delete(N,subtract,axis = 0)
     N = np.delete(N,subtract,axis = 1) 
 
-    #np.savetxt('H.test',H,fmt='%.10f')
-    #np.savetxt('N.test',N,fmt='%.10f')
-    #H = np.loadtxt('H.test')
-    #N = np.loadtxt('N.test')
+    np.savetxt('H.test',H,fmt='%.13f')
+    np.savetxt('N.test',N,fmt='%.13f')
+    H = np.loadtxt('H.test')
+    N = np.loadtxt('N.test')
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
 
     loop2 = 0
@@ -293,8 +331,9 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
-#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
+#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
+database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/snm_28_0.16_DNNLOgo_20percent_64points/'
+#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_test_sm_vs_ccd_nmax1_n_2'
 
 
 #print ("ev_all="+str(ev_all))
@@ -309,13 +348,36 @@ print(converge_flag.nonzero())
 
 # start validation 
 
+#LEC = read_LEC("ccm_in_DNNLO450")
+##LEC = read_LEC_2("/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo_20percent_64points/1.txt")
+##LEC = read_LEC_2("14.txt")
+#LEC_random = generate_random_LEC(LEC, LEC_range)
+##LEC_random = LEC
+#print ("LEC="+str(LEC_random))
+##LEC_random = LEC
+#ccd_cal = nuclear_matter(LEC_random)
+##ccd_cal = 0
+#emulator_cal, ev_all_1, ev_all_2 = emulator(LEC_random,subtract)
+#file_path = "validation_different_subspace.txt"
+#with open(file_path,'a') as f_1:
+#    f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
+#file_path = "validation_detail_test_different_subspace.txt"
+#with open(file_path,'a') as f_2:
+#    f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+#    f_2.write('\n')
+#    f_2.write(str(ev_all_1))
+#    f_2.write('\n')
+#    f_2.write(str(ev_all_2))
+#    f_2.write('\n')
+
 
 #seed = 6
-validation_count = 10
+validation_count = 4
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
     LEC_random = generate_random_LEC(LEC, LEC_range)
+    #LEC_random = LEC
     print ("LEC="+str(LEC_random))
     #LEC_random = LEC
     ccd_cal = nuclear_matter(LEC_random)
@@ -327,7 +389,9 @@ for loop1 in range(validation_count):
     file_path = "validation_detail_test_different_subspace.txt"
     with open(file_path,'a') as f_2:
         f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+        f_2.write('\n')
         f_2.write(str(ev_all_1))
+        f_2.write('\n')
         f_2.write(str(ev_all_2))
         f_2.write('\n')
 

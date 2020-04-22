@@ -1283,6 +1283,7 @@ MODULE subspace_cc
      !complex*16, DIMENSION(:,:,:), ALLOCATABLE :: val3
   END TYPE block_storage_2
 
+  character(LEN=200) :: wf_dir
   INTEGER, PUBLIC   ::  subspace_num, converge_flag !converge_flag=0 converge /// =1 not converge
   complex*16, public  :: Ek, external_field_energy
   complex*16, public, allocatable :: vacuum_H_bar(:)
@@ -1294,7 +1295,9 @@ MODULE subspace_cc
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: l2_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: H_bar_subspace(:,:)
   TYPE (block_storage_2), ALLOCATABLE, PUBLIC :: kinetic_bar_subspace(:,:)
-
+  
+  
+ 
 END MODULE subspace_cc
 
 
@@ -1308,7 +1311,6 @@ MODULE shell_model
   REAL *8, PUBLIC, ALLOCATABLE :: sm_evector(:) , sm_evector_subspace(:,:), temp_vector(:)
 
   REAL *8, public, allocatable :: H_matrix_sm(:,:), N_matrix_sm(:,:)
-
 
 
 END MODULE shell_model

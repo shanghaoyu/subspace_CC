@@ -21,7 +21,7 @@ PROGRAM ccm_kspace
   complex*16 :: e0_av, mbpt2_av, eccsd_av, eccsdt_av,ener1
   integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop
   integer :: spec_points(10,10,10)
-  character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
+  character(LEN=200) :: inputfile, t2_file, str_temp, str_temp2
 
   integer ( kind = 4 ), parameter :: dim_num =  17
   integer ( kind = 4 ), parameter :: point_num = 64
@@ -284,9 +284,9 @@ PROGRAM ccm_kspace
 !     call ihs ( dim_num, point_num, duplication, seed, xxx )
 !     print *,xxx
 !     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
-
+ 
      LEC_num = 17 
-     LEC_range = 0.2
+     LEC_range = 2
      if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
      if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
      LEC_max = 0
@@ -373,6 +373,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
+     wf_dir="/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/snm_66_0.16_DNNLOgo_20percent_64points_test/"    
      subspace_num = 64
 
      call setup_N3LO_int_mesh(10)
@@ -424,7 +425,7 @@ PROGRAM ccm_kspace
   case('subspace_cal_sm')
 
      LEC_num = 17 
-     LEC_range = 0.5
+     LEC_range = 2
      if ( .not. allocated(LEC_max)) allocate( LEC_max(LEC_num))
      if ( .not. allocated(LEC_min)) allocate( LEC_min(LEC_num))
      LEC_max = 0
