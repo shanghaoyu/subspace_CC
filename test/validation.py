@@ -265,14 +265,14 @@ def emulator(LEC_target,subtract):
     ev_sorted_1 = sorted(ev_all)
  
 ##### with subtract
-    subtract = [2,3,5,33,41,55,59]
+    #subtract =[]# [2,3,5,33,41,55,59]
     H = np.delete(H,subtract,axis = 0)
     H = np.delete(H,subtract,axis = 1) 
     N = np.delete(N,subtract,axis = 0)
     N = np.delete(N,subtract,axis = 1) 
 
-    np.savetxt('H.test',H,fmt='%.13f')
-    np.savetxt('N.test',N,fmt='%.13f')
+    np.savetxt('H.test',H,fmt='%.10f')
+    np.savetxt('N.test',N,fmt='%.10f')
     H = np.loadtxt('H.test')
     N = np.loadtxt('N.test')
     eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
@@ -332,19 +332,20 @@ LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
-database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/snm_28_0.16_DNNLOgo_20percent_64points/'
+database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/snm_132_0.16_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/DNNLOgo450_test_sm_vs_ccd_nmax1_n_2'
 
-
+print(database_dir)
 #print ("ev_all="+str(ev_all))
 
 
 # pick out not converge CCD results
-converge_flag = np.zeros(subspace_dimension)
-find_notconverge('./',converge_flag)
-subtract = converge_flag.nonzero()
-print("converge_flag"+str(converge_flag))
-print(converge_flag.nonzero())
+#converge_flag = np.zeros(subspace_dimension)
+#find_notconverge('./',converge_flag)
+#subtract = converge_flag.nonzero()
+#print("converge_flag"+str(converge_flag))
+#print(converge_flag.nonzero())
+subtract = [15]
 
 # start validation 
 
@@ -372,16 +373,18 @@ print(converge_flag.nonzero())
 
 
 #seed = 6
-validation_count = 4
+validation_count = 1
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
-    LEC_random = generate_random_LEC(LEC, LEC_range)
-    #LEC_random = LEC
+    file_path = "/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/backup/snm_66_0.16_DNNLOgo_20percent_64points_test/16.txt"
+    LEC = read_LEC_2(file_path)
+    #LEC_random = generate_random_LEC(LEC, LEC_range)
+    LEC_random = LEC
     print ("LEC="+str(LEC_random))
     #LEC_random = LEC
-    ccd_cal = nuclear_matter(LEC_random)
-    #ccd_cal = 0
+    #ccd_cal = nuclear_matter(LEC_random)
+    ccd_cal = 0
     emulator_cal, ev_all_1, ev_all_2 = emulator(LEC_random,subtract)
     file_path = "validation_different_subspace.txt"
     with open(file_path,'a') as f_1:
