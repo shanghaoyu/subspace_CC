@@ -62,6 +62,41 @@ def read_LEC(file_path):
                 LEC[16] = float(temp_1[6])
     return LEC
 
+def read_LEC_2(file_path):
+    LEC = np.zeros(LEC_num)
+    with open(file_path,'r') as f_1:
+        count = len(open(file_path,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            if ( re.search('cD,cE', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[0] = float(temp_1[0])
+                LEC[1] = float(temp_1[1])
+            if ( re.search('LEC=', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[2] = float(temp_1[0])
+                LEC[3] = float(temp_1[1])
+                LEC[4] = float(temp_1[2])
+                LEC[5] = float(temp_1[3])
+            if ( re.search('c1s0, c3s1', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[6] = float(temp_1[4])
+                LEC[7] = float(temp_1[5])
+                LEC[8] = float(temp_1[6])
+                LEC[9] = float(temp_1[7])
+            if ( re.search('cnlo_pw', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+                LEC[10] = float(temp_1[2])
+                LEC[11] = float(temp_1[3])
+                LEC[12] = float(temp_1[4])
+                LEC[13] = float(temp_1[5])
+                LEC[14] = float(temp_1[6])
+                LEC[15] = float(temp_1[7])
+                LEC[16] = float(temp_1[8])
+    return LEC
+
+
 ######################################################
 ######################################################
 ### generate nuclear matter infile
@@ -190,42 +225,38 @@ def emulator(LEC_target,subtract):
 #    eigvals,eigvec = spla.eig(N)
 #    print ("N eigvals = "+str(sorted(eigvals)))
 
-    print("rank of N ="+str(np.linalg.matrix_rank(N)))
-    #print("N= "+str(N))
 
 ##### without subtract 
-    subtract_1 = []
+    subtract_1 = subtract
     H = np.delete(H,subtract_1,axis = 0)
     H = np.delete(H,subtract_1,axis = 1) 
     N = np.delete(N,subtract_1,axis = 0)
     N = np.delete(N,subtract_1,axis = 1) 
+    print("shape of H ="+str(H.shape))
+    print("rank of N ="+str(np.linalg.matrix_rank(N)))
 
-    #np.savetxt('H.test',H,fmt='%.10f')
-    #np.savetxt('N.test',N,fmt='%.10f')
-    #H = np.loadtxt('H.test')
-    #N = np.loadtxt('N.test')
-    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
-    loop2 = 0
-    for loop1 in range(np.size(H,1)):
-        ev = eigvals[loop1]
-        if ev.imag > 0.01:
-            continue
-    #    if ev.real < 0:
-    #        continue
-        loop2 = loop2+1
+#    np.savetxt('H.test',H,fmt='%.10f')
+#    np.savetxt('N.test',N,fmt='%.10f')
+#    H = np.loadtxt('H.test')
+#    N = np.loadtxt('N.test')
 
-    ev_all = np.zeros(loop2)
-    loop2 = 0
-    for loop1 in range(np.size(H,1)):
-        ev = eigvals[loop1]
-        if ev.imag >0.01 :
-            continue
-    #    if ev.real < 0:
-    #        continue
-        ev_all[loop2] = ev.real
-        loop2 = loop2+1
+### solve the general eigval problem
+    eigvals,eigvec_L, eigvec_R = spla.eig(H,N,left =True,right=True)
 
-    ev_sorted_1 = sorted(ev_all)
+### drop states with imaginary part
+    eigvals_new   = eigvals[np.where(abs(eigvals.imag) < 0.01)] 
+    eigvals_R_new = eigvec_R[:,np.where(abs(eigvals.imag) < 0.01)] 
+    eigvals_R_new = eigvals_R_new.T
+
+### sort with eigval
+    x = np.argsort(eigvals_new)
+    eigvals_new   = eigvals_new[x]
+    eigvals_R_new = eigvals_R_new[x]
+    print(sorted(eigvals))
+    print(eigvals_new)
+    print(eigvals_R_new[0])
+    print(np.dot(eigvals_R_new[0],np.conjugate(eigvals_R_new[0].T)))
+
  
 ##### with subtract
     H = np.delete(H,subtract,axis = 0)
@@ -233,11 +264,11 @@ def emulator(LEC_target,subtract):
     N = np.delete(N,subtract,axis = 0)
     N = np.delete(N,subtract,axis = 1) 
 
-    #np.savetxt('H.test',H,fmt='%.10f')
-    #np.savetxt('N.test',N,fmt='%.10f')
+    #np.savetxt('H.test',H,fmt='%.9f')
+    #np.savetxt('N.test',N,fmt='%.9f')
     #H = np.loadtxt('H.test')
     #N = np.loadtxt('N.test')
-    eigvals,eigvec_L, eigvec_0 = spla.eig(H,N,left =True,right=True)
+    eigvals,eigvec_L, eigvec_R = spla.eig(H,N,left =True,right=True)
 
     loop2 = 0
     for loop1 in range(np.size(H,1)):
@@ -268,14 +299,14 @@ def emulator(LEC_target,subtract):
         if ev_ultra != 0:
             break
         for loop2 in range(len(ev_sorted_1)):
-            if ( np.abs(ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1] < 0.01 ):
-                ev_ultra = ev_sorted_2[loop2]
+            if ( np.abs((ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1]) < 0.01 ):
+                print(np.abs(ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1])
+                ev_ultra = ev_sorted_1[loop2]
                 break
-    #print(ev_ultra)
-    #print(ev_sorted_1)
-    #print(ev_sorted_2)
 
-    return ev_ultra, ev_sorted_1, ev_sorted_2
+    #return eigvals_new , eigvals_R_new
+    return eigvals_new , eigvals_R_new
+ 
 
 
 
@@ -293,43 +324,58 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
-
+#database_dir = '/home/slime/subspace_CC/test/emulator/'
+database_dir = '/home/slime/subspace_CC/test/emulator/snm_132_0.12_DNNLOgo_20percent_64points/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/pnm_66_0.16_DNNLOgo_20percent_64points/'
 
 #print ("ev_all="+str(ev_all))
 
 
 # pick out not converge CCD results
-converge_flag = np.zeros(subspace_dimension)
-find_notconverge('./',converge_flag)
-subtract = converge_flag.nonzero()
-print("converge_flag"+str(converge_flag))
-print(converge_flag.nonzero())
-
+#converge_flag = np.zeros(subspace_dimension)
+#find_notconverge('./',converge_flag)
+#subtract = converge_flag.nonzero()
+#print("converge_flag"+str(converge_flag))
+#print(converge_flag.nonzero())
+#subtract = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+#subtract = [2,3,5,33,41,55,59]
+#subtract = range(30,45)
+subtract = []
 # start validation 
 
 
 #seed = 6
-validation_count = 10
+validation_count = 1
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
-    LEC_random = generate_random_LEC(LEC, LEC_range)
+    #file_path = "48.txt"
+    #LEC = read_LEC_2(file_path)
+
+
+    #LEC_random = generate_random_LEC(LEC, LEC_range)
+    LEC_random = LEC
     print ("LEC="+str(LEC_random))
     #LEC_random = LEC
-    ccd_cal = nuclear_matter(LEC_random)
-    #ccd_cal = 0
-    emulator_cal, ev_all_1, ev_all_2 = emulator(LEC_random,subtract)
-    file_path = "validation_different_subspace.txt"
-    with open(file_path,'a') as f_1:
-        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
+    #ccd_cal = nuclear_matter(LEC_random)
+    ccd_cal = 0
+    eigvalue, eigvec = emulator(LEC_random,subtract)
+#    gs = eigvals[x[0]]
+#    gs_vec = eigvec_R[x[0]]
+#    file_path = "validation_different_subspace.txt"
+#    with open(file_path,'w') as f_1:
+#        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
     file_path = "validation_detail_test_different_subspace.txt"
-    with open(file_path,'a') as f_2:
-        f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
-        f_2.write(str(ev_all_1))
-        f_2.write(str(ev_all_2))
+    with open(file_path,'w') as f_2:
+        #f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+        f_2.write(str(eigvalue))
         f_2.write('\n')
+        f_2.write(str(eigvec))
+#        for loop2 in range(len(eigvec)):
+#            f_2.write('eigvalue = %.12f \n' % (eigvalue[loop2]) )
+#            f_2.write('eigvec   =  ' + str(eigvec[loop2]) )
 
 
 ### plot
