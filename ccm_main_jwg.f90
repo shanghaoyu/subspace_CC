@@ -19,7 +19,7 @@ PROGRAM ccm_kspace
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
   complex*16 :: e0_av, mbpt2_av, eccsd_av, eccsdt_av,ener1
-  integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop
+  integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop, loop1,loop2
   integer :: spec_points(10,10,10)
   character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
 
@@ -370,6 +370,87 @@ PROGRAM ccm_kspace
      eccsd_av = eccsd
      mbpt2_av = mbpt2 
      eccsdt_av = eccsdt
+
+  case( 'subspace_cal_read_file' )  !calculate t_ij_ab for different LECs
+!     duplication = 5
+!     seed = 17
+!     call ihs ( dim_num, point_num, duplication, seed, xxx )
+!     print *,xxx
+!     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
+
+     subspace_num = 3 
+     LEC_num = 17 
+     if ( .not. allocated(LEC_read_all)) allocate( LEC_read_all(subspace_num,LEC_num))
+    
+     inputfile = "./LEC_read.txt" 
+     open(443,file=inputfile, access="SEQUENTIAL")
+     read(443,*)
+     do loop1 = 1, subspace_num
+         read(443,*) LEC_read_all(loop1,:)
+     end do 
+
+
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+     !call compute_v3nf_memory
+
+
+     do loop = 1, subspace_num
+       LEC_c1_input     = LEC_read_all(loop,12)
+       LEC_c2_input     = LEC_read_all(loop,13)  
+       LEC_c3_input     = LEC_read_all(loop,14)
+       LEC_c4_input     = LEC_read_all(loop,15)
+       c1s0_input(-1)   = LEC_read_all(loop,1)
+       c1s0_input(0)    = LEC_read_all(loop,2)
+       c1s0_input(1)    = LEC_read_all(loop,3)
+       c3s1_input(-1)   = LEC_read_all(loop,4)
+       c3s1_input(0)    = LEC_read_all(loop,4)
+       c3s1_input(1)    = LEC_read_all(loop,4)
+       cnlo_pw_input(1) = LEC_read_all(loop,5)
+       cnlo_pw_input(2) = LEC_read_all(loop,6)
+       cnlo_pw_input(3) = LEC_read_all(loop,7)
+       cnlo_pw_input(4) = LEC_read_all(loop,8)
+       cnlo_pw_input(5) = LEC_read_all(loop,9)
+       cnlo_pw_input(6) = LEC_read_all(loop,10)
+       cnlo_pw_input(7) = LEC_read_all(loop,11)
+       cD_input         = LEC_read_all(loop,16)
+       cE_input         = LEC_read_all(loop,17)
+
+
+       call init_chp_constants
+       call setup_channel_structures
+       if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+       call normal_ordered_hamiltonian
+       
+       call setup_t_amplitudes
+       if(cc_approx == 'mbpt2') then
+          call ccd_energy_save(ener1 ) 
+          mbpt2 = e0 + ener1
+       else
+       
+          write(6,*) 'here we go...'
+          CALL ccd_iter
+
+          CALL print_gs_amplitudes(loop)        
+
+       end if
+       !  call deallocate_structures
+
+     end do
+     
+     e0_av = e0
+     eccsd_av = eccsd
+     mbpt2_av = mbpt2 
+     eccsdt_av = eccsdt
+
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem

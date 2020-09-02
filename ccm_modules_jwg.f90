@@ -108,7 +108,7 @@ MODULE deltafull_parameters
   REAL, PUBLIC     :: LEC_range
   double precision :: LEC_c1_input, LEC_c2_input, LEC_c3_input, LEC_c4_input, cD_input, cE_input
   double precision :: c1s0_input(-1:1),  c3s1_input(-1:1), cnlo_pw_input(1:7)
-  double precision, allocatable :: LEC_max(:), LEC_min(:)
+  double precision, allocatable :: LEC_max(:), LEC_min(:), LEC_read_all(:,:)
  
 END MODULE deltafull_parameters
 

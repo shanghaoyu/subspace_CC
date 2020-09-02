@@ -254,10 +254,10 @@ CONTAINS
        if(delta_chiral_order == NNLO) then
           
           if(abs(lambda_delta - 500d0) < 1d-5 ) then
-             LEC_c1 = -7.39999999999999991D-01  
-             LEC_c2 = -4.89999999999999991D-01
-             LEC_c3 = -6.50000000000000022D-01  
-             LEC_c4 =  9.59999999999999964D-01 
+             LEC_c1 = LEC_c1_input!-7.39999999999999991D-01  
+             LEC_c2 = LEC_c2_input!-4.89999999999999991D-01
+             LEC_c3 = LEC_c3_input!-6.50000000000000022D-01  
+             LEC_c4 = LEC_c4_input! 9.59999999999999964D-01 
              LEC_c1_3NF =  LEC_c1 
              LEC_c2_3NF =   0.d0 
              LEC_c3_3NF =  LEC_c3 
@@ -278,10 +278,10 @@ CONTAINS
           end if
           
           if(abs(lambda_delta - 394.d0) < 1d-5) then
-             LEC_c1 = -7.39999999999999991D-01
-             LEC_c2 = -4.89999999999999991D-01
-             LEC_c3 = -6.50000000000000022D-01  
-             LEC_c4 =  9.59999999999999964D-01 
+             LEC_c1 = LEC_c1_input!-7.39999999999999991D-01
+             LEC_c2 = LEC_c2_input!-4.89999999999999991D-01
+             LEC_c3 = LEC_c3_input!-6.50000000000000022D-01  
+             LEC_c4 = LEC_c4_input! 9.59999999999999964D-01 
              LEC_c1_3NF =  LEC_c1
              LEC_c2_3NF =   0.d0
              LEC_c3_3NF =  LEC_c3

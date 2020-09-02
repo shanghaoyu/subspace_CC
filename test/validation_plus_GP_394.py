@@ -6,7 +6,67 @@ import matplotlib.pyplot as plt
 import math
 import re
 import scipy.linalg as spla
+import time
 from scipy import interpolate
+
+######################################################
+######################################################
+### GP tool
+######################################################
+######################################################
+class GP_test:
+
+    def __init__(self, optimize=False):
+        self.is_fit = False
+        self.train_x, self.train_y = None, None
+        self.sigma  = 100
+        self.length = 0.25
+        self.optimize = optimize
+        self.gaussian_noise = 1
+
+    def fit_data(self, x, y, gaussian_noise):
+        # store train data
+        self.train_x = np.asarray(x)
+        self.train_y = np.asarray(y)
+        self.gaussian_noise = gaussian_noise
+
+         # hyper parameters optimization
+        def negative_log_likelihood_loss(params):
+            self.l, self.sigma = params[0], params[1]
+            Kyy = self.kernel(self.train_x, self.train_x) + 1e-8 * np.eye(len(self.train_x))
+            return 0.5 * self.train_y.T.dot(np.linalg.inv(Kyy)).dot(self.train_y) + 0.5 * np.linalg.slogdet(Kyy)[1] + 0.5 * len(self.train_x) * np.log(2 * np.pi)
+
+        if self.optimize:
+            res = minimize(negative_log_likelihood_loss, [self.length, self.sigma],
+                   bounds=((1e-4, 1e4), (1e-4, 1e4)),
+                   method='L-BFGS-B')
+            self.length, self.sigma = res.x[0], res.x[1]
+            
+        self.is_fit = True
+
+    def predict(self, x):
+        if not self.is_fit:
+            print("GPR Model not fit yet.")
+            return
+
+        x = np.asarray(x)
+        # gaussian_noise**2 here is the variance of the gaussian like of noise in y ( y = f(x) + noise)  (noise = N (0, gaussian_noise**2))
+        Kff = self.kernel(self.train_x, self.train_x) + self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+        Kyy = self.kernel(x, x)  # (k, k)
+        Kfy = self.kernel(self.train_x, x)  # (N, k)
+        Kff_inv = np.linalg.inv(Kff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
+        
+        mu = Kfy.T.dot(Kff_inv).dot(self.train_y)
+        cov = Kyy - Kfy.T.dot(Kff_inv).dot(Kfy)
+        return mu, cov
+
+    def kernel(self, x1, x2):
+        dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+        return self.sigma ** 2 * np.exp(-0.5 / self.length ** 2 * dist_matrix)
+
+#def yy(y, noise_sigma=1):
+#    y = y + np.random.normal(0, noise_sigma, size=y.shape)
+#    return y.tolist()
 
 ######################################################
 ######################################################
@@ -178,12 +238,12 @@ def nuclear_matter(vec_input):
     output_ccm_in_file(nucl_matt_in_dir,vec_input,neutron_num,'pnm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+nucl_matt_in_dir+' > '+nucl_matt_out_dir) 
     ccd = read_nucl_matt_out(nucl_matt_out_dir)
-    print ("ccd energy from real CC calculation: "+str(ccd))
+#    print ("ccd energy from real CC calculation: "+str(ccd))
     return ccd
 
 ######################################################
 ######################################################
-### Emulator!!!
+### convergence test
 ######################################################
 ######################################################
 def find_notconverge(database_dir,converge_flag):
@@ -204,7 +264,7 @@ def find_notconverge(database_dir,converge_flag):
 ### Emulator!!!
 ######################################################
 ######################################################
-def emulator(LEC_target,subtract):
+def emulator(database_dir,LEC_target,subtract):
     H = np.zeros((subspace_dimension,subspace_dimension))
     N = np.zeros((subspace_dimension,subspace_dimension))
     C = np.zeros((subspace_dimension,subspace_dimension))
@@ -217,92 +277,47 @@ def emulator(LEC_target,subtract):
         in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
         H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
     #H = LECs[0]*H_matrix + K_matrix
+    t5 = time.time()
     for loop1 in range(LEC_num):
         H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
     H = H + C 
 
-    print("H="+str(H))
+#   print("H="+str(H))
 #    eigvals,eigvec = spla.eig(N)
 #    print ("N eigvals = "+str(sorted(eigvals)))
 
+   # print("rank of N ="+str(np.linalg.matrix_rank(N)))
+    #print("N= "+str(N))
 
 ##### without subtract 
     subtract_1 = subtract
-    H[subtract] = 0
-    H[:,subtract] = 0
-    N[subtract] = 0
-    N[:,subtract] = 0
-    N[subtract,subtract] = 1
-     
-#    H = np.delete(H,subtract_1,axis = 0)
-#    H = np.delete(H,subtract_1,axis = 1) 
-#    N = np.delete(N,subtract_1,axis = 0)
-#    N = np.delete(N,subtract_1,axis = 1)
-
-
- 
-    print("shape of H ="+str(H.shape))
-    print("rank of N ="+str(np.linalg.matrix_rank(N)))
-
-#    np.savetxt('H.test',H,fmt='%.10f')
-#    np.savetxt('N.test',N,fmt='%.10f')
-#    H = np.loadtxt('H.test')
-#    N = np.loadtxt('N.test')
+    print("subtract_1="+str(subtract_1))
+    H = np.delete(H,subtract_1,axis = 0)
+    H = np.delete(H,subtract_1,axis = 1) 
+    N = np.delete(N,subtract_1,axis = 0)
+    N = np.delete(N,subtract_1,axis = 1) 
+    #np.savetxt('H.test',H,fmt='%.10f')
+    #np.savetxt('N.test',N,fmt='%.10f')
+    #H = np.loadtxt('H.test')
+    #N = np.loadtxt('N.test')
 
 ### solve the general eigval problem
     eigvals,eigvec_L, eigvec_R = spla.eig(H,N,left =True,right=True)
 
-### sort with eigval
-    x = np.argsort(eigvals)
-    eigvals  = eigvals[x]
-    eigvec_R = eigvec_R.T
-    eigvec_R = eigvec_R[x]
-
 ### drop states with imaginary part
-    eigvals_new   = eigvals[np.where(abs(eigvals.imag) < 0.01)] 
-    eigvec_R_new =  eigvec_R[np.where(abs(eigvals.imag)< 0.01)] 
+    eigvals_new   = eigvals[np.where(abs(eigvals.imag) < 0.01)]
+    eigvals_R_new = eigvec_R[:,np.where(abs(eigvals.imag) < 0.01)]
+    eigvals_R_new = eigvals_R_new.T
 
-#    print(eigvals[0])
-#    print((eigvec_R[0])) 
-#    print(abs(eigvec_R[0])**2) 
-#
-#    print("wtf \n")
-#  
+### sort with eigval
+    x = np.argsort(eigvals_new)
+    eigvals_new   = eigvals_new[x]
+    eigvals_R_new = eigvals_R_new[x]
 #    print(eigvals_new[0])
-#    print((eigvec_R_new[0])) 
-#
-#
-#
-    print(eigvals)
-#    print(eigvals_new)
-#    sum_1 = 0
-#    for loop1 in range(np.size(eigvec_R[0],1)):
-#        print("%d : %.5f %%" % (loop1,eigvec_R_new[0,0,loop1]**2*100))
-#        sum_1 = sum_1 + eigvec_R_new[0,0,loop1]**2
-#    print(eigvec_R_new[0])
-#    print(eigvec_R_new.shape)
-#    print(np.dot(eigvec_R_new[0],np.conjugate(eigvec_R_new[0].T)))
+#    print(eigvals_R_new[0])
+#    print(np.dot(eigvals_R_new[11],np.conjugate(eigvals_R_new[11].T)))
 
-    with open("emulator.wf",'w') as f_1:
-        #f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
-        f_1.write('################################\n')
-        f_1.write('#### emulator wave function ####\n')
-        f_1.write('################################\n')
-        f_1.write('all eigvals: \n')
-        f_1.write(str(eigvals))
-        f_1.write('\n')
-        f_1.write('\n')
-        for loop1 in range(len(eigvals)):
-            if (eigvals[loop1].real != 0): 
-                f_1.write('################################\n')
-                f_1.write('state %d -- eigvals: %r \n' % (loop1,eigvals[loop1]))
-                for loop2 in range(np.size(eigvec_R,1)):
-                    f_1.write('%2d: %.5f%%  ' % (loop2+1,abs(eigvec_R[loop1,loop2])**2*100))
-                    if ((loop2+1)%5==0): f_1.write('\n')
-                f_1.write('\n################################\n')
-
-
-##### with subtract
+###### with subtract
 #    H = np.delete(H,subtract,axis = 0)
 #    H = np.delete(H,subtract,axis = 1) 
 #    N = np.delete(N,subtract,axis = 0)
@@ -344,19 +359,76 @@ def emulator(LEC_target,subtract):
 #            break
 #        for loop2 in range(len(ev_sorted_1)):
 #            if ( np.abs((ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1]) < 0.01 ):
-#                print(np.abs(ev_sorted_2[loop1] - ev_sorted_1[loop2] )/ev_sorted_2[loop1])
 #                ev_ultra = ev_sorted_1[loop2]
 #                break
+#    #print(ev_ultra)
+#    #print(ev_sorted_1)
+#    #print(ev_sorted_2)
 #
-    #return eigvals_new , eigvals_R_new
-    return eigvals_new , eigvec_R_new
+    t6 = time.time()
+    return eigvals_new[0], eigvals_R_new[0]
+
+######################################################
+######################################################
+#### subtract
+######################################################
+######################################################
+def find_subtract(matter_type,input_dir,expectation):
+    subtract = []
+    with open(input_dir,'r') as f_1:
+        count = len(open(input_dir,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            temp_1     = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+            file_count = round(float(temp_1[0]))
+            ccd_1      = float(temp_1[1])
+            if matter_type =="snm":
+                error = error_sample
+            else:
+                error = -error_sample
+            if(ccd_1> (expectation*(1-error) ) or ccd_1< (expectation*(1+error))):
+                subtract.append(file_count-1)
+    #            print(file_count)
+    #            print(ccd_1)
+    return subtract
+
+
+
+######################################################
+######################################################
+###  plot 
+######################################################
+######################################################
+def plot_1():
+    plt.figure()
+    plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+#    plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
+#    plt.plot(test_x, test_y_1, label="predict")
+    plt.scatter(train_x, train_y_1, label="train", c="red", marker="x")
+    ccd_data_x = np.array([0.12,0.14,0.16,0.18,0.20])
+    ccd_data_y = np.array([-1831,-1921,-1955,-1932,-1852])
+    plt.scatter(ccd_data_x, ccd_data_y/132, label="ccd", c="black", marker="o")
+
+    plt.legend()
+    plot_path = 'snm_gp_test.pdf'
+    plt.savefig(plot_path,bbox_inches='tight')
+    plt.close('all')
+    
+    plt.figure()
+    plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+#    plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
+#    plt.plot(test_x, test_y_2, label="predict")
+    plt.scatter(train_x, train_y_2, label="train", c="red", marker="x")
+
+    ccd_data_x = np.array([0.12,0.14,0.16,0.18,0.20])
+    ccd_data_y = np.array([763,896,1044,1206,1378])
  
-
-
-
-
-
-
+    plt.scatter(ccd_data_x, ccd_data_y/66, label="ccd", c="black", marker="o")
+    plt.legend()
+    plot_path = 'pnm_gp_test.pdf'
+    plt.savefig(plot_path,bbox_inches='tight')
+    plt.close('all')
 
 ######################################################
 ######################################################
@@ -368,17 +440,14 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
+#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/DNNLOgo450_20percent_64points_/'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/snm_132_0.16_DNNLOgo_20percent_64points/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/pnm_66_0.20_DNNLOgo_20percent_64points/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.16_DNNLOgo_christian_64points/'
-database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.20_DNNLOgo_christian_64points/'
-#print ("ev_all="+str(ev_all))
+#database_dir = '/home/slime/subspace_CC/test/emulator/snm_132_0.16_DNNLOgo_20percent_64points/'
 
 
-# pick out not converge CCD results
+
+#### pick out not converge CCD results
 #converge_flag = np.zeros(subspace_dimension)
 #find_notconverge('./',converge_flag)
 #subtract = converge_flag.nonzero()
@@ -387,105 +456,94 @@ database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.20_DNNL
 #subtract = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 #subtract = [2,3,5,33,41,55,59]
 #subtract = range(30,45)
-#subtract = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
-#subtract = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
+#subtract_snm = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
+#subtract_pnm = [0,2,3,9,10,16,17,18,22,26,27,28,30,33,37,39,40,42,43,44,45,47,48,52,54,55]
+#subtract_pnm = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
 subtract = []
-# start validation 
+dens_count = 5
+pnm_data = np.zeros(dens_count)
+snm_data = np.zeros(dens_count)
+my_path      = "./"
+error_sample = 0.05
 
-
-#seed = 6
+t3 = time.time()
 validation_count = 1
 for loop1 in range(validation_count):
     file_path = "ccm_in_DNNLO394"
     LEC = read_LEC(file_path)
-    #file_path = "2.txt"
-    #LEC = read_LEC_2(file_path)
     #LEC_random = generate_random_LEC(LEC, LEC_range)
     LEC_random = LEC
-    print ("LEC="+str(LEC_random))
-    #LEC_random = LEC
-    #ccd_cal = nuclear_matter(LEC_random)
-    ccd_cal = 0
-    eigvalue, eigvec = emulator(LEC_random,subtract)
-#    gs = eigvals[x[0]]
-#    gs_vec = eigvec_R[x[0]]
-#    file_path = "validation_different_subspace.txt"
-#    with open(file_path,'w') as f_1:
-#        f_1.write('ccd = %.12f     emulator = %.12f \n' % (ccd_cal, emulator_cal))
-    file_path = "validation_detail_test_different_subspace.txt"
-    with open(file_path,'w') as f_2:
-        #f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
-        f_2.write(str(eigvalue))
-        f_2.write('\n')
-        f_2.write(str(eigvec))
-#        for loop2 in range(len(eigvec)):
-#            f_2.write('eigvalue = %.12f \n' % (eigvalue[loop2]) )
-#            f_2.write('eigvec   =  ' + str(eigvec[loop2]) )
+
+    for loop2 in range(dens_count):
+        dens = 0.12 + loop2 * 0.02
+        dens = np.around(dens, 2 )
+        database_dir = "./emulator/DNNLO394/pnm_66_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
+        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('pnm',66,dens)
+        expectation = [763,896,1044,1206,1378]
+        subtract = find_subtract("pnm",input_dir,expectation[loop2])
+        print(64-len(subtract))
+        print(subtract)
+        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
+        pnm_data[loop2] = emulator_cal.real/66
+
+    for loop2 in range(dens_count):
+        dens = 0.12 + loop2 * 0.02
+        dens = np.around(dens, 2 )
+        database_dir = "./emulator/DNNLO394/snm_132_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
+        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('snm',132,dens)
+        expectation =[-1831,-1921,-1955,-1932,-1852] 
+        subtract = find_subtract("snm",input_dir,expectation[loop2])
+        print(64-len(subtract))
+        print(subtract)
+
+        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
+        snm_data[loop2] = emulator_cal.real/132
+#    print("snm: "+str(snm_data*132))
+
+t4 = time.time()
+
+print("time for snm+pnm : "+ str(t4-t3))
+######################################################
+######################################################
+###  use GP to find the saturation point  
+######################################################
+######################################################
+t1 = time.time()
+train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
+train_x = train_x.reshape(-1,1)
+train_y_1 = snm_data
+test_x  = np.arange(0.12,0.22,0.001).reshape(-1,1)
+
+gpr = GP_test()
+gaussian_noise = 0.02
+
+gpr.fit_data(train_x, train_y_1, gaussian_noise)
+
+snm, snm_cov = gpr.predict(test_x)
+
+iX=np.argmin(snm)
+test_y_1 = snm.ravel()
+confidence_1 = 1.96 * np.sqrt(np.diag(snm_cov))
+
+density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
 
 
-### plot
-##file_path = "ccm_in_DNNLO450"
-##LEC = read_LEC(file_path)
-##
-##LEC_new = np.zeros(LEC_num)
-##
-##LEC_new = LEC.copy() 
-##sm_count   = 20
-##sm_cal_new = np.zeros(sm_count)
-##LEC_new_shift = np.zeros(sm_count)
-##
-##count = 0 
-##which_LEC_1 = 10
-##which_LEC_2 = 7
-##for loop1 in np.arange(0,1,1./sm_count):
-##    LEC_range = 0.6 
-##    LEC_max = LEC * ( 1 + LEC_range)
-##    LEC_min = LEC * ( 1 - LEC_range)
-##    LEC_new[which_LEC_1] = LEC_min[which_LEC_1] + loop1 * (LEC_max[which_LEC_1] - LEC_min[which_LEC_1])
-##    #LEC_new[which_LEC_2] = LEC_min[which_LEC_2] + loop1 * (LEC_max[which_LEC_2] - LEC_min[which_LEC_2])
-##    LEC_new_shift[count] = LEC_new[which_LEC_1]
-##    #sm_cal_new[count],temp__    = emulator(LEC_new)
-##    sm_cal_new[count]    = emulator(LEC_new)
-##    print(LEC_new)
-##    print(sm_cal_new[count])
-##    count  = count + 1 
-##
-###print(sm_cal_new)
-##
-##fig1 = plt.figure('fig1')
-##
-##matplotlib.rcParams['xtick.direction'] = 'in'
-##matplotlib.rcParams['ytick.direction'] = 'in'
-##ax1 = plt.subplot(111)
-##plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
-##ax1.spines['bottom'].set_linewidth(2)
-##ax1.spines['top'].set_linewidth(2)
-##ax1.spines['left'].set_linewidth(2)
-##ax1.spines['right'].set_linewidth(2)
-##
-##y_list_1 =  sm_cal_new
-###x_list_1 =  LEC_new_shift
-##x_list_1 =  np.arange(0, 1.0, 0.05)
-##
-##print (x_list_1)
-##print (y_list_1)
-###l0 = plt.scatter (x_list_0,y_list_0,color = 'k', marker = 's',s = 200 ,zorder = 4, label=r'$\Delta$NNLO$_{\rm{go}}$(450)')
-##l1 = plt.scatter (x_list_1, y_list_1,color = 'k' ,zorder=2,label = 'emulator')
-###l2 = plt.plot([-10, 40], [-10, 40], ls="-",color = 'k', lw = 3, zorder = 3)
-###plt.xlim((-10,40))
-###plt.ylim((-10,40))
-###plt.xticks(np.arange(-10,41,10),fontsize = 15)
-###plt.yticks(np.arange(-10,41,10),fontsize = 15)
-##
-##
-##plt.legend(loc='upper left',fontsize = 15)
-##plt.xlabel(r"$\rm{LEC} \ [\rm{MeV}]$",fontsize=20)
-##plt.ylabel(r"$\rm{E} \ [\rm{MeV}]$",fontsize=20)
-##
-##plot_path = 'emulator_1point_test.pdf'
-##plt.savefig(plot_path,bbox_inches='tight')
-##plt.close('all')
+print("saturation density: %.3f +/- %.3f" % (test_x[iX], 0.5*(np.max(density_range)-np.min(density_range))))
+print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
 
 
+train_y_2 = pnm_data
+gpr = GP_test()
+gpr.fit_data(train_x, train_y_2, gaussian_noise)
 
+pnm, pnm_cov = gpr.predict(test_x)
 
+test_y_2 = pnm.ravel()
+confidence_2 = 1.96 * np.sqrt(np.diag(pnm_cov))
+
+print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
+print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))
+
+t2 = time.time()
+print("time for GP : "+ str(t2-t1))
+plot_1()
