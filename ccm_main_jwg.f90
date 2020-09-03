@@ -454,6 +454,7 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
+     wf_dir = "/home/slime/subspace_CC/test/backup/DNNLOgo_20percent_64points/"
      subspace_num = 64
 
      call setup_N3LO_int_mesh(10)

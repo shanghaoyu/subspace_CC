@@ -352,7 +352,93 @@ def emulator(LEC_target,subtract):
     return eigvals_new , eigvec_R_new
  
 
+def emulator_test(LEC_target,subtract):
+    H = np.zeros((subspace_dimension,subspace_dimension))
+    N = np.zeros((subspace_dimension,subspace_dimension))
+    C = np.zeros((subspace_dimension,subspace_dimension))
+    H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
+    in_dir = database_dir+"N_matrix.txt"
+    N = np.loadtxt(in_dir)
+    in_dir = database_dir+"C_matrix.txt"
+    C = np.loadtxt(in_dir)
+    for loop1 in range(LEC_num):
+        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+        H_matrix[loop1,:,:] = np.loadtxt(in_dir) 
+    #H = LECs[0]*H_matrix + K_matrix
+    for loop1 in range(LEC_num):
+        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
+    H = H + C 
 
+    print("H="+str(H))
+#    eigvals,eigvec = spla.eig(N)
+#    print ("N eigvals = "+str(sorted(eigvals)))
+
+
+##### without subtract 
+    subtract_1 = subtract
+    H[subtract] = 0
+    H[:,subtract] = 0
+    N[subtract] = 0
+    N[:,subtract] = 0
+    N[subtract,subtract] = 1
+     
+ 
+    print("shape of H ="+str(H.shape))
+    print("len of H ="+str(len(H)))
+    print("rank of N ="+str(np.linalg.matrix_rank(N)))
+
+    #generate symmetric matrix
+    
+#    for loop1 in range(len(H)-1):
+#        for loop2 in range(loop1+1):
+#            H[loop1 + 1,loop2] =  H[loop2, loop1+1]
+#
+#    for loop1 in range(len(N)-1):
+#        for loop2 in range(loop1+1):
+#            N[loop1 + 1,loop2] =  N[loop2, loop1+1]
+
+
+    print(H)
+
+#    np.savetxt('H.test',H,fmt='%.10f')
+#    np.savetxt('N.test',N,fmt='%.10f')
+#    H = np.loadtxt('H.test')
+#    N = np.loadtxt('N.test')
+
+### solve the general eigval problem
+    eigvals,eigvec_L, eigvec_R = spla.eig(H,N,left =True,right=True)
+
+### sort with eigval
+    x = np.argsort(eigvals)
+    eigvals  = eigvals[x]
+    eigvec_R = eigvec_R.T
+    eigvec_R = eigvec_R[x]
+
+### drop states with imaginary part
+    eigvals_new   = eigvals[np.where(abs(eigvals.imag) < 0.01)] 
+    eigvec_R_new =  eigvec_R[np.where(abs(eigvals.imag)< 0.01)] 
+
+
+    print(eigvals)
+    with open("emulator.wf",'w') as f_1:
+        #f_2.write('ccd = %.12f     emulator = %.12f   all =' % (ccd_cal, emulator_cal))
+        f_1.write('################################\n')
+        f_1.write('#### emulator wave function ####\n')
+        f_1.write('################################\n')
+        f_1.write('all eigvals: \n')
+        f_1.write(str(eigvals))
+        f_1.write('\n')
+        f_1.write('\n')
+        for loop1 in range(len(eigvals)):
+            if (eigvals[loop1].real != 0): 
+                f_1.write('################################\n')
+                f_1.write('state %d -- eigvals: %r \n' % (loop1,eigvals[loop1]))
+                for loop2 in range(np.size(eigvec_R,1)):
+                    f_1.write('%2d: %.5f%%  ' % (loop2+1,abs(eigvec_R[loop1,loop2])**2*100))
+                    if ((loop2+1)%5==0): f_1.write('\n')
+                f_1.write('\n################################\n')
+
+    return eigvals_new , eigvec_R_new
 
 
 
@@ -374,7 +460,7 @@ nucl_matt_exe = './prog_ccm.exe'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/snm_132_0.16_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/pnm_66_0.20_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.16_DNNLOgo_christian_64points/'
-database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.20_DNNLOgo_christian_64points/'
+database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.16_DNNLOgo_christian_64points/'
 #print ("ev_all="+str(ev_all))
 
 

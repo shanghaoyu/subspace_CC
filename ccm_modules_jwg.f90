@@ -1283,7 +1283,8 @@ MODULE subspace_cc
      !complex*16, DIMENSION(:,:,:), ALLOCATABLE :: val3
   END TYPE block_storage_2
 
-  INTEGER, PUBLIC   ::  subspace_num, converge_flag !converge_flag=0 converge /// =1 not converge
+  character(LEN=200) :: wf_dir
+  INTEGER, PUBLIC    ::  subspace_num, converge_flag !converge_flag=0 converge /// =1 not converge
   complex*16, public  :: Ek, external_field_energy
   complex*16, public, allocatable :: vacuum_H_bar(:)
   complex*16, public, allocatable :: N_matrix(:,:), H_matrix(:,:) , K_matrix(:,:)

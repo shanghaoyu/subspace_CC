@@ -68,7 +68,7 @@ def call_solve_general_EV(vec_input,in_dir,out_dir):
     density_max  = 0.22
     nmax         = 2 #test
 
-    generate_ccm_in_file(in_dir,vec_input,particle_num,'snm',density,nmax)
+    generate_ccm_in_file(in_dir,vec_input,neutron_num,'pnm',density,nmax)
     os.system('./'+nucl_matt_exe+' '+in_dir+' > '+out_dir)
 
 
