@@ -454,13 +454,14 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
+database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/snm_132_0.16_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/pnm_66_0.20_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.16_DNNLOgo_christian_64points/'
-database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.16_DNNLOgo_christian_64points/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.16_DNNLOgo_christian_64points/'
+
 #print ("ev_all="+str(ev_all))
 
 
@@ -482,7 +483,7 @@ subtract = []
 #seed = 6
 validation_count = 1
 for loop1 in range(validation_count):
-    file_path = "ccm_in_DNNLO394"
+    file_path = "ccm_in_DNNLO450"
     LEC = read_LEC(file_path)
     #file_path = "2.txt"
     #LEC = read_LEC_2(file_path)
@@ -490,8 +491,8 @@ for loop1 in range(validation_count):
     LEC_random = LEC
     print ("LEC="+str(LEC_random))
     #LEC_random = LEC
-    #ccd_cal = nuclear_matter(LEC_random)
-    ccd_cal = 0
+    ccd_cal = nuclear_matter(LEC_random)
+    #ccd_cal = 0
     eigvalue, eigvec = emulator(LEC_random,subtract)
 #    gs = eigvals[x[0]]
 #    gs_vec = eigvec_R[x[0]]

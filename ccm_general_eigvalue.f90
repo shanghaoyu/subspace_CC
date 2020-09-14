@@ -403,14 +403,14 @@ SUBROUTINE get_H_matrix
               do ab = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
 
                  H3 = H3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) * H_bar_subspace(ket,channel)%val(ab,ij) 
-                 K3 = K3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) * kinetic_bar_subspace(ket,channel)%val(ab,ij)
+                 !K3 = K3 + 0.25d0 * l2_subspace(bar,channel)%val(ab,ij) * kinetic_bar_subspace(ket,channel)%val(ab,ij)
 
               end do
            end do  
         end do
 
-        if ( iam == 0 ) write(6,*) 'H0=', H0, ' H3=', H3
-        if ( iam == 0 ) write(6,*) 'K0=', K0, ' K3=', K3
+        !if ( iam == 0 ) write(6,*) 'H0=', H0, ' H3=', H3
+        !if ( iam == 0 ) write(6,*) 'K0=', K0, ' K3=', K3
         H_matrix(bar,ket) = H0 + H3
         !K_matrix(bar,ket) = K0 + K3
         K_matrix(bar,ket) = K0 

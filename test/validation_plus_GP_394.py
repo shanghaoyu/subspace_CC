@@ -460,7 +460,7 @@ nucl_matt_exe = './prog_ccm.exe'
 #subtract_pnm = [0,2,3,9,10,16,17,18,22,26,27,28,30,33,37,39,40,42,43,44,45,47,48,52,54,55]
 #subtract_pnm = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
 subtract = []
-dens_count = 5
+dens_count = 1
 pnm_data = np.zeros(dens_count)
 snm_data = np.zeros(dens_count)
 my_path      = "./"
@@ -486,64 +486,66 @@ for loop1 in range(validation_count):
         emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
         pnm_data[loop2] = emulator_cal.real/66
 
-    for loop2 in range(dens_count):
-        dens = 0.12 + loop2 * 0.02
-        dens = np.around(dens, 2 )
-        database_dir = "./emulator/DNNLO394/snm_132_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
-        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('snm',132,dens)
-        expectation =[-1831,-1921,-1955,-1932,-1852] 
-        subtract = find_subtract("snm",input_dir,expectation[loop2])
-        print(64-len(subtract))
-        print(subtract)
-
-        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
-        snm_data[loop2] = emulator_cal.real/132
+#    for loop2 in range(dens_count):
+#        dens = 0.12 + loop2 * 0.02
+#        dens = np.around(dens, 2 )
+#        database_dir = "./emulator/DNNLO394/snm_132_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
+#        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('snm',132,dens)
+#        expectation =[-1831,-1921,-1955,-1932,-1852] 
+#        subtract = find_subtract("snm",input_dir,expectation[loop2])
+#        print(64-len(subtract))
+#        print(subtract)
+#
+#        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
+#        snm_data[loop2] = emulator_cal.real/132
+#
+#
 #    print("snm: "+str(snm_data*132))
 
-t4 = time.time()
-
-print("time for snm+pnm : "+ str(t4-t3))
-######################################################
-######################################################
-###  use GP to find the saturation point  
-######################################################
-######################################################
-t1 = time.time()
-train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
-train_x = train_x.reshape(-1,1)
-train_y_1 = snm_data
-test_x  = np.arange(0.12,0.22,0.001).reshape(-1,1)
-
-gpr = GP_test()
-gaussian_noise = 0.02
-
-gpr.fit_data(train_x, train_y_1, gaussian_noise)
-
-snm, snm_cov = gpr.predict(test_x)
-
-iX=np.argmin(snm)
-test_y_1 = snm.ravel()
-confidence_1 = 1.96 * np.sqrt(np.diag(snm_cov))
-
-density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
-
-
-print("saturation density: %.3f +/- %.3f" % (test_x[iX], 0.5*(np.max(density_range)-np.min(density_range))))
-print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
-
-
-train_y_2 = pnm_data
-gpr = GP_test()
-gpr.fit_data(train_x, train_y_2, gaussian_noise)
-
-pnm, pnm_cov = gpr.predict(test_x)
-
-test_y_2 = pnm.ravel()
-confidence_2 = 1.96 * np.sqrt(np.diag(pnm_cov))
-
-print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
-print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))
-
-t2 = time.time()
-print("time for GP : "+ str(t2-t1))
-plot_1()
+#t4 = time.time()
+#
+#print("time for snm+pnm : "+ str(t4-t3))
+#######################################################
+#######################################################
+####  use GP to find the saturation point  
+#######################################################
+#######################################################
+#t1 = time.time()
+#train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
+#train_x = train_x.reshape(-1,1)
+#train_y_1 = snm_data
+#test_x  = np.arange(0.12,0.22,0.001).reshape(-1,1)
+#
+#gpr = GP_test()
+#gaussian_noise = 0.02
+#
+#gpr.fit_data(train_x, train_y_1, gaussian_noise)
+#
+#snm, snm_cov = gpr.predict(test_x)
+#
+#iX=np.argmin(snm)
+#test_y_1 = snm.ravel()
+#confidence_1 = 1.96 * np.sqrt(np.diag(snm_cov))
+#
+#density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
+#
+#
+#print("saturation density: %.3f +/- %.3f" % (test_x[iX], 0.5*(np.max(density_range)-np.min(density_range))))
+#print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
+#
+#
+#train_y_2 = pnm_data
+#gpr = GP_test()
+#gpr.fit_data(train_x, train_y_2, gaussian_noise)
+#
+#pnm, pnm_cov = gpr.predict(test_x)
+#
+#test_y_2 = pnm.ravel()
+#confidence_2 = 1.96 * np.sqrt(np.diag(pnm_cov))
+#
+#print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
+#print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))
+#
+#t2 = time.time()
+#print("time for GP : "+ str(t2-t1))
+#plot_1()
