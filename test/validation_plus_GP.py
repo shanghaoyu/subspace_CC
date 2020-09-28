@@ -375,23 +375,49 @@ def emulator(database_dir,LEC_target,subtract):
 ######################################################
 ######################################################
 def plot_1():
-    plt.figure()
-    plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(6,10))
+    plt.subplots_adjust(wspace =0, hspace =0)
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(212)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
-    plt.plot(test_x, test_y_1, label="predict")
+    plt.plot(test_x, test_y_1, label="GP")
     plt.scatter(train_x, train_y_1, label="train", c="red", marker="x")
-    plt.legend()
-    plot_path = 'snm_gp_test.pdf'
-    plt.savefig(plot_path,bbox_inches='tight')
-    plt.close('all')
-    
-    plt.figure()
-    plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+    #plt.legend(fontsize=15)
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{snm}/A}[\rm{MeV}]$",fontsize=15)
+    #plot_path = 'snm_gp_test.pdf'
+    #plt.savefig(plot_path,bbox_inches='tight')
+    #plt.close('all')
+
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+   
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
-    plt.plot(test_x, test_y_2, label="predict")
+    plt.plot(test_x, test_y_2, label="GP")
     plt.scatter(train_x, train_y_2, label="train", c="red", marker="x")
-    plt.legend()
-    plot_path = 'pnm_gp_test.pdf'
+    plt.legend(fontsize=15)
+    #plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.xticks([])
+    plot_path = 'snm_pnm.pdf'
     plt.savefig(plot_path,bbox_inches='tight')
     plt.close('all')
 
@@ -498,3 +524,4 @@ print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+con
 t2 = time.time()
 print("time for GP : "+ str(t2-t1))
 plot_1()
+print("wtf")

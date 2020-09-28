@@ -483,7 +483,7 @@ subtract = []
 #seed = 6
 validation_count = 1
 for loop1 in range(validation_count):
-    file_path = "ccm_in_DNNLO450"
+    file_path = "ccm_in_DNNLO394"
     LEC = read_LEC(file_path)
     #file_path = "2.txt"
     #LEC = read_LEC_2(file_path)
@@ -491,7 +491,7 @@ for loop1 in range(validation_count):
     LEC_random = LEC
     print ("LEC="+str(LEC_random))
     #LEC_random = LEC
-    ccd_cal = nuclear_matter(LEC_random)
+    #ccd_cal = nuclear_matter(LEC_random)
     #ccd_cal = 0
     eigvalue, eigvec = emulator(LEC_random,subtract)
 #    gs = eigvals[x[0]]

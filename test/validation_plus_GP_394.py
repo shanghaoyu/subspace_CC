@@ -368,6 +368,92 @@ def emulator(database_dir,LEC_target,subtract):
     t6 = time.time()
     return eigvals_new[0], eigvals_R_new[0]
 
+
+############################################
+############################################
+############################################
+def emulator3(database_dir,LEC_target,subtract):
+    split = 4
+
+    H = np.zeros((subspace_dimension,subspace_dimension))
+    N = np.zeros((subspace_dimension,subspace_dimension))
+    C = np.zeros((subspace_dimension,subspace_dimension))
+    H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
+    in_dir = database_dir+"N_matrix.txt"
+    N = np.loadtxt(in_dir)
+    in_dir = database_dir+"C_matrix.txt"
+    C = np.loadtxt(in_dir)
+    for loop1 in range(LEC_num):
+        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+        H_matrix[loop1,:,:] = np.loadtxt(in_dir)
+    #H = LECs[0]*H_matrix + K_matrix
+    for loop1 in range(LEC_num):
+        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
+    H = H + C
+
+### solve the general eigval problem
+    eigvals_1,eigvec_L_1, eigvec_R_1 = spla.eig(H,N,left =True,right=True)
+
+### sort with eigval
+    x = np.argsort(eigvals_1)
+    eigvals_1  = eigvals_1[x]
+    eigvec_R_1 = eigvec_R_1.T
+    eigvec_R_1 = eigvec_R_1[x]
+
+### drop states with imaginary part
+    eigvals_new_1   = eigvals_1[np.where(abs(eigvals_1.imag) < 0.01)]
+    eigvec_R_new_1 =  eigvec_R_1[np.where(abs(eigvals_1.imag)< 0.01)]
+
+### divide training samples into few parts
+
+    each_split = round(len(H)/split)
+    eigvals       = []
+    eigvals_len = np.zeros(split)
+    for loop in range(split):
+        if (loop == split-1):
+            remain = range(loop*each_split,len(H))
+        else:
+            remain = range(loop*each_split,(loop+1)*each_split)
+        subtract = np.delete(range(64),remain)
+        H2 = np.delete(H,subtract,axis = 0)
+        H2 = np.delete(H2,subtract,axis = 1)
+        N2 = np.delete(N,subtract,axis = 0)
+        N2 = np.delete(N2,subtract,axis = 1)
+        #print("remain"+str(remain))
+###     solve the general eigval problem
+        eigvals_2,eigvec_L_2, eigvec_R_2 = spla.eig(H2,N2,left =True,right=True)
+
+###     sort with eigval
+        x = np.argsort(eigvals_2)
+        eigvals_2  = eigvals_2[x]
+        eigvec_R_2 = eigvec_R_2.T
+        eigvec_R_2 = eigvec_R_2[x]
+        eigvals_len[loop] = len(eigvals_2)
+        eigvals.append(eigvals_2[:])
+
+    score  = np.zeros((len(eigvals_1),split))
+    ev_ultra = 0
+
+    for loop in range(split):
+        for loop1 in range(int(eigvals_len[loop])):
+            for loop2 in range(len(eigvals_1)):
+                if ( np.abs((eigvals[loop][loop1].real - eigvals_1[loop2].real)/eigvals[loop][loop1]) < 0.05 ):
+                    score[loop2,loop] = score[loop2,loop] + 1
+
+    # vote for the lowest ture state
+    for loop in range(len(eigvals_1)):
+        flag = 1
+        for loop1 in range(split):
+            if score[loop,loop1] <= 0:
+                flag = flag * 0
+        if flag == 1 :
+            ev_ultra = eigvals_1[loop]
+            break
+
+    return ev_ultra.real
+
+
+
 ######################################################
 ######################################################
 #### subtract
@@ -460,7 +546,7 @@ nucl_matt_exe = './prog_ccm.exe'
 #subtract_pnm = [0,2,3,9,10,16,17,18,22,26,27,28,30,33,37,39,40,42,43,44,45,47,48,52,54,55]
 #subtract_pnm = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
 subtract = []
-dens_count = 1
+dens_count = 5
 pnm_data = np.zeros(dens_count)
 snm_data = np.zeros(dens_count)
 my_path      = "./"
@@ -483,24 +569,25 @@ for loop1 in range(validation_count):
         subtract = find_subtract("pnm",input_dir,expectation[loop2])
         print(64-len(subtract))
         print(subtract)
-        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
-        pnm_data[loop2] = emulator_cal.real/66
+        gs = emulator3(database_dir,LEC_random,subtract)
+        pnm_data[loop2] = gs/66
 
-#    for loop2 in range(dens_count):
-#        dens = 0.12 + loop2 * 0.02
-#        dens = np.around(dens, 2 )
-#        database_dir = "./emulator/DNNLO394/snm_132_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
-#        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('snm',132,dens)
-#        expectation =[-1831,-1921,-1955,-1932,-1852] 
-#        subtract = find_subtract("snm",input_dir,expectation[loop2])
-#        print(64-len(subtract))
-#        print(subtract)
-#
-#        emulator_cal, emulator_vec = emulator(database_dir,LEC_random,subtract)
-#        snm_data[loop2] = emulator_cal.real/132
-#
-#
-#    print("snm: "+str(snm_data*132))
+    for loop2 in range(dens_count):
+        dens = 0.12 + loop2 * 0.02
+        dens = np.around(dens, 2 )
+        database_dir = "./emulator/DNNLO394/snm_132_"+str(("%.2f" % dens))+"_DNNLOgo_christian_64points/"
+        input_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % ('snm',132,dens)
+        expectation =[-1831,-1921,-1955,-1932,-1852] 
+        subtract = find_subtract("snm",input_dir,expectation[loop2])
+        print(64-len(subtract))
+        print(subtract)
+
+        emulator_cal = emulator3(database_dir,LEC_random,subtract)
+        snm_data[loop2] = gs/132
+
+
+print("snm: "+str(snm_data*132))
+print("pnm: "+str(pnm_data*66))
 
 #t4 = time.time()
 #

@@ -7,7 +7,75 @@ import math
 import re
 import scipy.linalg as spla
 from scipy import interpolate
+from scipy import optimize
 import seaborn as sns
+
+
+#quadratic_curve
+def f_2(x, A, B, C):
+    return A*x*x + B*x + C
+ 
+#cubic_curve
+def f_3(x, A, B, C, D):
+    return A*x*x*x + B*x*x + C*x + D
+
+
+######################################################
+######################################################
+### GP tool
+######################################################
+######################################################
+class GP_test:
+
+    def __init__(self, optimize=False):
+        self.is_fit = False
+        self.train_x, self.train_y = None, None
+        self.sigma  = 100
+        self.length = 0.25
+        self.optimize = optimize
+        self.gaussian_noise = 1
+
+    def fit_data(self, x, y, gaussian_noise):
+        # store train data
+        self.train_x = np.asarray(x)
+        self.train_y = np.asarray(y)
+        self.gaussian_noise = gaussian_noise
+
+         # hyper parameters optimization
+        def negative_log_likelihood_loss(params):
+            self.l, self.sigma = params[0], params[1]
+            Kyy = self.kernel(self.train_x, self.train_x) + 1e-8 * np.eye(len(self.train_x))
+            return 0.5 * self.train_y.T.dot(np.linalg.inv(Kyy)).dot(self.train_y) + 0.5 * np.linalg.slogdet(Kyy)[1    ] + 0.5 * len(self.train_x) * np.log(2 * np.pi)
+
+        if self.optimize:
+            res = minimize(negative_log_likelihood_loss, [self.length, self.sigma],
+                   bounds=((1e-4, 1e4), (1e-4, 1e4)),
+                   method='L-BFGS-B')
+            self.length, self.sigma = res.x[0], res.x[1]
+
+        self.is_fit = True
+    def predict(self, x):
+        if not self.is_fit:
+            print("GPR Model not fit yet.")
+            return
+
+        x = np.asarray(x)
+        # gaussian_noise**2 here is the variance of the gaussian like of noise in y ( y = f(x) + noise)  (noise =     N (0, gaussian_noise**2))
+        Kff = self.kernel(self.train_x, self.train_x) + self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N,     N)
+        Kyy = self.kernel(x, x)  # (k, k)
+        Kfy = self.kernel(self.train_x, x)  # (N, k)
+        Kff_inv = np.linalg.inv(Kff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
+
+        mu = Kfy.T.dot(Kff_inv).dot(self.train_y)
+        cov = Kyy - Kfy.T.dot(Kff_inv).dot(Kfy)
+        return mu, cov
+
+    def kernel(self, x1, x2):
+        dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+        return self.sigma ** 2 * np.exp(-0.5 / self.length ** 2 * dist_matrix)
+
+
+
 ######################################################
 ######################################################
 ### generate random LECs set
@@ -611,7 +679,7 @@ def emulator2(database_dir,LEC_target,subtract):
 
 
 
-def emulator3(database_dir,LEC_target,subtract):
+def emulator3(database_dir,LEC_target,subtract,tolerance):
     split = 4
 
     H = np.zeros((subspace_dimension,subspace_dimension))
@@ -676,7 +744,7 @@ def emulator3(database_dir,LEC_target,subtract):
     for loop in range(split):
         for loop1 in range(int(eigvals_len[loop])):
             for loop2 in range(len(eigvals_1)):
-                if ( np.abs((eigvals[loop][loop1].real - eigvals_1[loop2].real )/eigvals[loop][loop1]) < 0.05 ):
+                if ( np.abs((eigvals[loop][loop1].real - eigvals_1[loop2].real )/eigvals[loop][loop1]) < tolerance ):
                     score[loop2,loop] = score[loop2,loop] + 1 
 
     # vote for the lowest ture state
@@ -790,55 +858,6 @@ def find_subtract(input_dir,expectation,remain_sample_num):
             #    subtract.append(file_count-1)       
     return subtract,remain
 
-
-
-
-
-######################################################
-######################################################
-#### MAIN
-######################################################
-######################################################
-subspace_dimension = 64
-LEC_num = 17
-LEC_range = 0.2
-LEC = np.ones(LEC_num)
-nucl_matt_exe = './prog_ccm.exe'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
-#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/snm_132_0.12_DNNLOgo_20percent_64points/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/pnm_66_0.20_DNNLOgo_20percent_64points/'
-
-#print ("ev_all="+str(ev_all))
-
-
-# pick out not converge CCD results
-#converge_flag = np.zeros(subspace_dimension)
-#find_notconverge('./',converge_flag)
-#subtract = converge_flag.nonzero()
-#print("converge_flag"+str(converge_flag))
-#print(converge_flag.nonzero())
-#subtract = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-#subtract = [2,3,5,33,41,55,59]
-#subtract = range(30,45)
-#subtract = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
-#subtract = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
-#subtract = []
-# start validation 
-subtract = []
-remain   = []
-LEC = np.zeros(17)
-
-
-my_path      = "./"
-density_min  = 0.12
-density_gap  = 0.02
-density_count= 5
-matter_type  = "pnm"
-particle_num = 66
-remain_sample_num = 64 
-
 # 
 def validation(matter_type,particle_num):
     emulator_data = [] 
@@ -886,7 +905,7 @@ def validation(matter_type,particle_num):
                 ccd_data.append(ccd_1[loop1-1])
                 #eigvalue, eigvec = emulator1(database_dir,LEC,subtract)
     #            #gs = eigvalue[0]
-                gs = emulator3(database_dir,LEC,subtract)
+                gs = emulator3(database_dir,LEC,subtract,0.05)
                 emulator_data.append(gs)
                 density_data.append(density)
     return emulator_data,ccd_data,density_data
@@ -939,7 +958,7 @@ def plot_(matter_type,emulator_data,ccd_data,density_data):
     plt.xlabel(r"$\rm{CCD} \ [\rm{MeV}]$",fontsize=20)
     plt.ylabel(r"$\rm{emulator} \ [\rm{MeV}]$",fontsize=20)
     
-    plot_path = 'DNNLO394_%s_6.pdf' % (matter_type)
+    plot_path = 'DNNLO394_%s_1.pdf' % (matter_type)
     plt.savefig(plot_path,bbox_inches='tight')
     plt.close('all')
     #
@@ -955,20 +974,310 @@ def plot_(matter_type,emulator_data,ccd_data,density_data):
     plt.ylabel("count")
     plt.xlabel("error: (emulator - ccd)/abs(ccd)")
     #plt.xlim((-0.1,0.1))
-    plot_path = 'DNNLO394_%s_6_hist.pdf' % (matter_type)
+    plot_path = 'DNNLO394_%s_1_hist.pdf' % (matter_type)
     plt.savefig(plot_path)
 
-emulator_data,ccd_data,density_data = validation("pnm",66)
-#print("emulator"+str(emulator_data))
-#print("density"+str(density_data))
-plot_("pnm",emulator_data,ccd_data,density_data) 
-emulator_data,ccd_data,density_data = validation("snm",132)
-plot_("snm",emulator_data,ccd_data,density_data) 
+def generate_observable(pnm_data,snm_data,density_sequence,switch):
+    density_accuracy = 0.0001
+    if (switch == "GP"):
+        dens_count = len(density_sequence)
+        #######################################################
+        #######################################################
+        ####  use GP to find the saturation point
+        #######################################################
+        #######################################################
+        #t1 = time.time()
+        train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
+        train_x = train_x.reshape(-1,1)
+        train_y_1 = snm_data
+        test_x  = np.arange(0.12,0.20,density_accuracy).reshape(-1,1)
+        
+        gpr = GP_test()
+        gaussian_noise = 0.02
+        
+        gpr.fit_data(train_x, train_y_1, gaussian_noise)
+        
+        snm, snm_cov = gpr.predict(test_x)
+        
+        iX=np.argmin(snm)
+        test_y_1 = snm.ravel()
+        confidence_1 = 1.96 * np.sqrt(np.diag(snm_cov))
+        
+        density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
+        
+        
+        #print("saturation density: %.3f +/- %.3f" % (test_x[iX], 0.5*(np.max(density_range)-np.min(density_range))))
+        #print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
+        
+        
+        train_y_2 = pnm_data
+        gpr = GP_test()
+        gpr.fit_data(train_x, train_y_2, gaussian_noise)
+        
+        pnm, pnm_cov = gpr.predict(test_x)
+        
+        test_y_2 = pnm.ravel()
+        confidence_2 = 1.96 * np.sqrt(np.diag(pnm_cov))
+        
+        #print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
+        #print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))
+        
+        #t2 = time.time()
+        #print("time for GP : "+ str(t2-t1))
+        saturation_density = test_x[iX]
+        saturation_energy  = snm[iX]
+        symmetry_energy    = pnm[iX]-snm[iX]
+    elif (switch =="fit_curve_quadratic"):
+        A2,B2,C2 = optimize.curve_fit(f_2,density_sequence,snm_data)[0]
+        x2  = np.arange(0.12,0.20,density_accuracy)
+        snm = A2*x2*x2 + B2*x2 + C2
+        iX=np.argmin(snm)
 
+        A2,B2,C2 = optimize.curve_fit(f_2,density_sequence,pnm_data)[0]
+        x2  = np.arange(0.12,0.20,density_accuracy)
+        pnm = A2*x2*x2 + B2*x2 + C2
+
+        saturation_density = x2[iX]
+        saturation_energy  = snm[iX]
+        symmetry_energy    = pnm[iX]-snm[iX]
+
+    elif (switch =="fit_curve_cubic"):
+        A3,B3,C3,D3 = optimize.curve_fit(f_3,density_sequence,snm_data)[0]
+        x2  = np.arange(0.12,0.20,density_accuracy)
+        snm = A3*x2*x2*x2 + B3*x2*x2 + C3*x2 +D3
+        iX=np.argmin(snm)
+
+        A3,B3,C3,D3 = optimize.curve_fit(f_3,density_sequence,pnm_data)[0]
+        x2  = np.arange(0.12,0.20,density_accuracy)
+        pnm = A3*x2*x2*x2 + B3*x2*x2 + C3*x2 +D3
+
+        saturation_density = x2[iX]
+        saturation_energy  = snm[iX]
+        symmetry_energy    = pnm[iX]-snm[iX]
+
+    elif (switch =="interpolate"):
+        interpol_count = 1000
+        spl_ccd_snm    = interpolate.UnivariateSpline(density_sequence,snm_data)
+        spl_ccd_pnm    = interpolate.UnivariateSpline(density_sequence,pnm_data)
+        spldens        = np.linspace(density_sequence[0],density_sequence[len(density_sequence)-1],num=interpol_count)
+        snm = spl_ccd_snm(spldens)
+        pnm = spl_ccd_pnm(spldens)
+        iX=np.argmin(snm)
+        saturation_density = spldens[iX]
+        saturation_energy  = snm[iX]
+        symmetry_energy    = pnm[iX]-snm[iX]
+    else:
+        print("error_1")
+    return saturation_density, saturation_energy, symmetry_energy
+
+
+#####################################################
+#####################################################
+#####################################################
+def plot_2(observable,emulator_data_1,ccd_data_1,emulator_data_2,ccd_data_2,emulator_data_3,ccd_data_3):
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(6,10))
+    plt.subplots_adjust(wspace =0.3, hspace =0.4)
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(321)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax.set_title("saturation density")
+   
+    x_list_1 =  ccd_data_1
+    y_list_1 =  emulator_data_1
+    
+    uper_range   = 0.24
+    lower_range  = 0.08
+    gap          = 0.04
+
+    l1 = plt.scatter (x_list_1, y_list_1,color = 'darkblue' ,marker = 's',zorder=0.5)
+    #l2 = plt.plot([lower_range ,uper_range], [lower_range, uper_range], ls="--",color = 'k', lw = 2, zorder = 1)
+    l2 = plt.plot([lower_range ,uper_range], [lower_range, uper_range], ls="--",color = 'k', lw = 2, zorder = 1)
+    
+    plt.xlim((lower_range,uper_range))
+    plt.ylim((lower_range,uper_range))
+    
+    plt.xticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+    plt.yticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+       
+    
+    #plt.legend(loc='upper left',fontsize = 15)
+    plt.xlabel(r"$\rm{CCD} \ [\rm{MeV}]$",fontsize=10)
+    plt.ylabel(r"$\rm{emulator} \ [\rm{MeV}]$",fontsize=10)
+  
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(322)
+    ax.set_title("saturation density")
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+ 
+    x_list_1 = ((np.array(emulator_data_1) - np.array(ccd_data_1))/abs(np.array(ccd_data_1)))
+    
+    sns.set_palette("hls")
+    #matplotlib.rc("figure", figsize=(6,4))
+    sns.distplot(x_list_1,bins=20,kde_kws={"color":"seagreen", "lw":0 }, hist_kws={ "color": "lightblue"})
+    
+    plt.ylabel("count" ,fontsize=10)
+    plt.xlabel("relative error\n(emulator-ccd)/abs(ccd)",fontsize=10)
+    plt.xlim((-0.1,0.1))
+    plt.xticks(np.arange(-0.1,0.11,0.05),fontsize = 10)
+ 
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(323)
+    ax.set_title("saturation energy")
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+   
+    x_list_1 =  ccd_data_2
+    y_list_1 =  emulator_data_2
+    
+    uper_range   =  -10
+    lower_range  =  -24
+    gap          =  4
+
+    l1 = plt.scatter (x_list_1, y_list_1,color = 'darkblue' ,marker = 's',zorder=0.5)
+    #l2 = plt.plot([lower_range ,uper_range], [lower_range, uper_range], ls="--",color = 'k', lw = 2, zorder = 1)
+    l2 = plt.plot([lower_range ,uper_range], [lower_range, uper_range], ls="--",color = 'k', lw = 2, zorder = 1)
+    
+    plt.xlim((lower_range,uper_range))
+    plt.ylim((lower_range,uper_range))
+    
+    plt.xticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+    plt.yticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+       
+    
+    #plt.legend(loc='upper left',fontsize = 15)
+    plt.xlabel(r"$\rm{CCD} \ [\rm{MeV}]$",fontsize=10)
+    plt.ylabel(r"$\rm{emulator} \ [\rm{MeV}]$",fontsize=10)
+  
+
+  
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(324)
+    ax.set_title("saturation energy")
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+ 
+    x_list_1 = ((np.array(emulator_data_2) - np.array(ccd_data_2))/abs(np.array(ccd_data_2)))
+    
+    sns.set_palette("hls")
+    #matplotlib.rc("figure", figsize=(6,4))
+    sns.distplot(x_list_1,bins=20,kde_kws={"color":"seagreen", "lw":0 }, hist_kws={ "color": "lightblue"})
+    
+    plt.ylabel("count" ,fontsize=10)
+    plt.xlabel("relative error\n(emulator-ccd)/abs(ccd)",fontsize=10)
+    plt.xlim((-0.1,0.1))
+    plt.xticks(np.arange(-0.1,0.11,0.05),fontsize = 10)
+ 
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(325)
+    ax.set_title("symmetry energy")
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+   
+    x_list_1 =  ccd_data_3
+    y_list_1 =  emulator_data_3
+    
+    uper_range   =  45
+    lower_range  =  15
+    gap          =  5
+ 
+    l1 = plt.scatter (x_list_1, y_list_1,color = 'darkblue' ,marker = 's',zorder=0.5)
+    l2 = plt.plot([lower_range ,uper_range], [lower_range, uper_range], ls="--",color = 'k', lw = 2, zorder = 1)
+    
+    plt.xlim((lower_range,uper_range))
+    plt.ylim((lower_range,uper_range))
+    
+    plt.xticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+    plt.yticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+       
+    
+    #plt.legend(loc='upper left',fontsize = 15)
+    plt.xlabel(r"$\rm{CCD} \ [\rm{MeV}]$",fontsize=10)
+    plt.ylabel(r"$\rm{emulator} \ [\rm{MeV}]$",fontsize=10)
+  
+  
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(326)
+    ax.set_title("symmetry energy")
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+ 
+    x_list_1 = ((np.array(emulator_data_3) - np.array(ccd_data_3))/abs(np.array(ccd_data_3)))
+    
+    sns.set_palette("hls")
+    #matplotlib.rc("figure", figsize=(6,4))
+    sns.distplot(x_list_1,bins=20,kde_kws={"color":"seagreen", "lw":0 }, hist_kws={ "color": "lightblue"})
+    
+    plt.ylabel("count" ,fontsize=10)
+    plt.xlabel("relative error\n(emulator-ccd)/abs(ccd)",fontsize=10)
+    plt.xlim((-0.1,0.1))
+    plt.xticks(np.arange(-0.1,0.11,0.05),fontsize = 10)
+
+    plot_path = 'DNNLO394_NM_observable_test_GP.pdf' 
+    plt.savefig(plot_path)
+
+
+
+
+######################################################
+######################################################
+#### MAIN
+######################################################
+######################################################
+subspace_dimension = 64
+LEC_num = 17
+LEC_range = 0.2
+LEC = np.ones(LEC_num)
+nucl_matt_exe = './prog_ccm.exe'
+#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
+#database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/snm_132_0.12_DNNLOgo_20percent_64points/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/pnm_66_0.20_DNNLOgo_20percent_64points/'
+
+# pick out not converge CCD results
+#converge_flag = np.zeros(subspace_dimension)
+#find_notconverge('./',converge_flag)
+#subtract = converge_flag.nonzero()
+#print("converge_flag"+str(converge_flag))
+#print(converge_flag.nonzero())
+#subtract = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+#subtract = [2,3,5,33,41,55,59]
+#subtract = range(30,45)
+#subtract = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
+#subtract = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
+#subtract = []
+# start validation 
+subtract = []
+remain   = []
+LEC = np.zeros(17)
+
+
+my_path      = "./"
+density_min  = 0.12
+density_gap  = 0.02
+density_count= 5
+matter_type  = "pnm"
+particle_num = 66
+remain_sample_num = 64 
+
+
+
+emulator_data,ccd_data,density_data = validation("pnm",66)
+plot_("pnm",emulator_data,ccd_data,density_data) 
 
 validation_count=int(len(emulator_data)/density_count)
-
-
 emulator_data_snm = np.zeros((validation_count,density_count))
 emulator_data_pnm = np.zeros((validation_count,density_count))
 ccd_data_snm      = np.zeros((validation_count,density_count))
@@ -976,12 +1285,54 @@ ccd_data_pnm      = np.zeros((validation_count,density_count))
 density_data_snm  = np.zeros((validation_count,density_count))
 density_data_pnm  = np.zeros((validation_count,density_count))
 
+for loop1 in range(validation_count):
+    for loop2 in range(density_count):
+        emulator_data_pnm[loop1,loop2] = emulator_data[loop2*validation_count+loop1] 
+        ccd_data_pnm[loop1,loop2]      = ccd_data[loop2*validation_count+loop1] 
+        density_data_pnm[loop1,loop2]  = density_data[loop2*validation_count+loop1]
+
+
+emulator_data,ccd_data,density_data = validation("snm",132)
+plot_("snm",emulator_data,ccd_data,density_data) 
 
 for loop1 in range(validation_count):
     for loop2 in range(density_count):
         emulator_data_snm[loop1,loop2] = emulator_data[loop2*validation_count+loop1] 
-        ccd_data_snm[loop1,loop2]      = emulator_data[loop2*validation_count+loop1] 
-        density_data_snm[loop1,loop2]  = emulator_data[loop2*validation_count+loop1]
+        ccd_data_snm[loop1,loop2]      = ccd_data[loop2*validation_count+loop1] 
+        density_data_snm[loop1,loop2]  = density_data[loop2*validation_count+loop1]
 
-print(density_data_snm)
- 
+
+saturation_density_emulator = np.zeros(validation_count)
+saturation_energy_emulator  = np.zeros(validation_count)
+symmetry_energy_emulator    = np.zeros(validation_count)
+
+saturation_density_ccd = np.zeros(validation_count)
+saturation_energy_ccd  = np.zeros(validation_count)
+symmetry_energy_ccd    = np.zeros(validation_count)
+
+for loop1 in range(validation_count):
+    saturation_density_emulator[loop1], saturation_energy_emulator[loop1], symmetry_energy_emulator[loop1] = generate_observable(emulator_data_pnm[loop1,:]/66,emulator_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"GP")#"fit_curve_quadratic")
+
+    saturation_density_ccd[loop1], saturation_energy_ccd[loop1], symmetry_energy_ccd[loop1] = generate_observable(ccd_data_pnm[loop1,:]/66,ccd_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"interpolate")
+
+
+plot_2("saturation_density",saturation_density_emulator,saturation_density_ccd, saturation_energy_emulator,saturation_energy_ccd, symmetry_energy_emulator,symmetry_energy_ccd)
+
+print("saturation_density")
+print(saturation_density_emulator)
+print(saturation_density_ccd)
+
+
+print("saturation_energy")
+print(saturation_energy_emulator)
+print(saturation_energy_ccd)
+
+print("symmetry_energy")
+print(symmetry_energy_emulator)
+print(symmetry_energy_ccd)
+
+
+print(emulator_data_pnm)
+print(ccd_data_pnm)
+print(density_data_pnm)
+# 
