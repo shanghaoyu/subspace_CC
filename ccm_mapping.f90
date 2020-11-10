@@ -19,8 +19,8 @@ SUBROUTINE setup_proc_mappings_pp
   REAL*8, allocatable :: work(:), memory(:)
   integer(8):: ltot_work
   
-  if( .not. allocated(work)) allocate( work(1:num_procs) )
-  if( .not. allocated(memory)) allocate( memory(1:num_procs) )
+  allocate( work(1:num_procs) )
+  allocate( memory(1:num_procs) )
 
   ltot_work=0
   tot_work = 0
@@ -52,7 +52,7 @@ if(cc_approx .ne. 'mbpt2')then
   memory = 0.d0
   
   number_channels = channels%number_pppp_confs 
-  if( .not. allocated(mapping)) allocate( mapping(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping(1:num_procs, 1:number_channels, 1:5) )
   mapping = 0 
   
   curr_work = 0
@@ -159,10 +159,9 @@ if(cc_approx .ne. 'mbpt2')then
   number_channels = channels%number_pppp_confs 
   
   
-  if( .not. allocated(check_my_channel)) allocate( check_my_channel(1:number_channels) )
-  if( .not. allocated(fully_stored_channel)) allocate( fully_stored_channel(1:number_channels) )
-  if( .not. allocated(my_channel_low)) allocate( my_channel_low(0:num_procs-1))
-  if( .not. allocated(my_channel_high)) allocate( my_channel_high(0:num_procs-1))
+  allocate( check_my_channel(1:number_channels) )
+  allocate( fully_stored_channel(1:number_channels) )
+  allocate( my_channel_low(0:num_procs-1), my_channel_high(0:num_procs-1))
   fully_stored_channel = 0
   check_my_channel = 0
   
@@ -178,7 +177,7 @@ if(cc_approx .ne. 'mbpt2')then
   end do
   !write(6,*) my_channel_low, my_channel_high
   if(cc_approx .ne. 'mbpt2')then
-     if( .not. allocated(vnn_pppp))allocate( vnn_pppp(my_channel_low(iam):my_channel_high(iam)) )
+     allocate( vnn_pppp(my_channel_low(iam):my_channel_high(iam)) )
   end if
 end if
 
@@ -205,7 +204,7 @@ end if
   work_pr_proc = int( ltot_work/int(num_procs,8) )
   work = 0.d0
   
-  if( .not. allocated(mapping_hhpp))allocate( mapping_hhpp(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping_hhpp(1:num_procs, 1:number_channels, 1:5) )
   mapping_hhpp = 0 
   if ( iam == 0 ) write(6,*) ltot_work, work_pr_proc, number_channels 
 
@@ -308,9 +307,8 @@ end if
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_hhpp_confs 
 
-  if( .not. allocated(my_hhpp_channel_low))allocate( my_hhpp_channel_low(0:num_procs-1))
-  if( .not. allocated(my_hhpp_channel_high))allocate( my_hhpp_channel_high(0:num_procs-1) )
-  if( .not. allocated(check_my_channel_hhpp))allocate( check_my_channel_hhpp(1:number_channels) )
+  allocate( my_hhpp_channel_low(0:num_procs-1), my_hhpp_channel_high(0:num_procs-1) )
+  allocate( check_my_channel_hhpp(1:number_channels) )
   check_my_channel_hhpp = 0
   
   my_hhpp_channel_low(iam)  = number_channels + 1
@@ -348,7 +346,7 @@ end if
   work_pr_proc = int( ltot_work/int(num_procs,8) )
   work = 0.d0
 
-  if( .not. allocated(mapping_hphp)) allocate( mapping_hphp(1:num_procs, 1:number_channels, 1:5) )
+  allocate( mapping_hphp(1:num_procs, 1:number_channels, 1:5) )
   mapping_hphp = 0 
   if ( iam == 0 ) write(6,*) ltot_work, work_pr_proc, number_channels 
 
@@ -450,7 +448,7 @@ end if
   
   call mpi_barrier(mpi_comm_world,ierror)
   number_channels = channels%number_hphp_confs 
-  if( .not. allocated(check_my_channel_hphp))allocate( check_my_channel_hphp(1:number_channels) )
+  allocate( check_my_channel_hphp(1:number_channels) )
   check_my_channel_hphp = 0
   
   do local_ch_id = 1, number_channels 

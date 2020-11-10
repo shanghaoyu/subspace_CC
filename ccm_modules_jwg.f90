@@ -85,7 +85,7 @@ MODULE constants
   INTEGER, PUBLIC :: occ_protons, occ_neutrons, ntot
   real*8, public :: com_beta,com_switch, j2_beta, volume, lx, ly, lz
   REAL*8, public :: hcom_value, kin, kf, dens, cutoff_3nf_reg, lambda_delta 
-  COMPLEX*16 :: E0,  eccsd, eccsdt, mbpt2, total_energy
+  COMPLEX*16 :: E0,e_k,  eccsd, eccsdt, mbpt2, total_energy
   INTEGER, PUBLIC :: mass_nucleus, tot_orbs, below_ef, above_ef
   REAL(DP), PUBLIC ::  oscl, hbar_omega, kinfactor
   REAL(DP) , PARAMETER, PUBLIC :: p_mass = 939.565 !938.926_dp

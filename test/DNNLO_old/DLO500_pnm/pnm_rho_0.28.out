@@ -1,0 +1,1165 @@
+ LEC_c1_input!!!!= -0.73999999999999999     
+ NN regulator Exponent:    3.0000000000000000     
+ -----------
+ NN ci's
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+ 3NF ci's
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+ -----------
+ --------
+ c1s0(-1) -0.10852247022934999     
+ c1s0(0) -0.10852247022934999     
+ c1s0(1) -0.10852247022934999     
+ c3s1(-1)  -6.8443711195320001E-002
+ c3s1(0)  -6.8443711195320001E-002
+ c3s1(1)  -6.8443711195320001E-002
+ --------
+ -----------
+ NLO contacts PW
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+   0.0000000000000000     
+ ----------
+          C1            0.0000000000000000
+          C2            0.0000000000000000
+          C3           -0.0000000000000000
+          C4           -0.0000000000000000
+          C5           -0.0000000000000000
+          C6            0.0000000000000000
+          C7           -0.0000000000000000
+          D1           -0.3771581126597507
+          D2           -0.9305750209334183
+          D3            2.1195254080520742
+          D4           -2.1246309930064329
+          D5           -0.0131882077354610
+          D6            0.6645429882213397
+          D7            0.7806033045976430
+          D8           -0.4752342494327860
+          D9            0.0920642557695526
+         D10           -0.0312443369241453
+         D11            0.0232036046033312
+         D12           -0.3040203100732521
+         D13           -0.2963726204319913
+         D14            1.4856672935233888
+         D15           -0.3992014237014200
+ wtf cE,cD=    0.0000000000000000           0.0000000000000000     
+
+   3NF LECs:
+          C1            0.0000000000000000
+          C3            0.0000000000000000
+          C4            0.0000000000000000
+          cE            0.0000000000000000
+          cD            0.0000000000000000
+
+ delta_chiral_order           0
+ delta cutoff   500.00000000000000     
+Boundary Conditions PBC                                                                                                 
+CC approx CCD(T)                                                                                              
+ TNF: T TNF-approx:           3
+ 3NF Cutoff:   500.00000000000000      Nexp_3NF:           3
+ Boxsize   6.1772517543204382     
+ Density  0.28000000000000003     
+ K_f   2.0239184548705360     
+ Nmax           4
+ Total number of states        1458
+ K-mesh   0.0000000000000000     
+ K-mesh  -1.0171489777448444     
+ K-mesh   1.0171489777448444     
+ K-mesh  -2.0342979554896887     
+ K-mesh   2.0342979554896887     
+ K-mesh  -3.0514469332345331     
+ K-mesh   3.0514469332345331     
+ K-mesh  -4.0685959109793775     
+ K-mesh   4.0685959109793775     
+   0.0000000000000000        6.1772517543204382     
+   0.0000000000000000        6.1772517543204382     
+   0.0000000000000000        6.1772517543204382     
+   0.0000000000000000        6.1772517543204382     
+ Kz-mesh   0.0000000000000000     
+ Kz-mesh  -1.0171489777448444     
+ Kz-mesh   1.0171489777448444     
+ Kz-mesh  -2.0342979554896887     
+ Kz-mesh   2.0342979554896887     
+ Kz-mesh  -3.0514469332345331     
+ Kz-mesh   3.0514469332345331     
+ Kz-mesh  -4.0685959109793775     
+ Kz-mesh   4.0685959109793775     
+ KY-mesh   0.0000000000000000     
+ KY-mesh  -1.0171489777448444     
+ KY-mesh   1.0171489777448444     
+ KY-mesh  -2.0342979554896887     
+ KY-mesh   2.0342979554896887     
+ KY-mesh  -3.0514469332345331     
+ KY-mesh   3.0514469332345331     
+ KY-mesh  -4.0685959109793775     
+ KY-mesh   4.0685959109793775     
+           4           4           4          -1           1           1           1
+ nkmin, nkmax           4           4           4
+ Occupied j-orbits
+     1       0.000000000        0   0   0  -1   1 hole      
+     2       0.000000000        0   0   0   1   1 hole      
+     3       21.43804570        1   0   0  -1   1 hole      
+     4       21.43804570        1   0   0   1   1 hole      
+     5       21.43804570        0   0  -1  -1   1 hole      
+     6       21.43804570        0   0  -1   1   1 hole      
+     7       21.43804570        0  -1   0  -1   1 hole      
+     8       21.43804570        0  -1   0   1   1 hole      
+     9       21.43804570       -1   0   0  -1   1 hole      
+    10       21.43804570       -1   0   0   1   1 hole      
+    11       21.43804570        0   1   0  -1   1 hole      
+    12       21.43804570        0   1   0   1   1 hole      
+    13       21.43804570        0   0   1  -1   1 hole      
+    14       21.43804570        0   0   1   1   1 hole      
+    15       42.87609141        0  -1  -1  -1   1 hole      
+    16       42.87609141        0  -1  -1   1   1 hole      
+    17       42.87609141        1  -1   0  -1   1 hole      
+    18       42.87609141        1  -1   0   1   1 hole      
+    19       42.87609141        1   0  -1  -1   1 hole      
+    20       42.87609141        1   0  -1   1   1 hole      
+    21       42.87609141        0   1  -1  -1   1 hole      
+    22       42.87609141        0   1  -1   1   1 hole      
+    23       42.87609141        1   1   0  -1   1 hole      
+    24       42.87609141        1   1   0   1   1 hole      
+    25       42.87609141       -1   1   0  -1   1 hole      
+    26       42.87609141       -1   1   0   1   1 hole      
+    27       42.87609141        0   1   1  -1   1 hole      
+    28       42.87609141        0   1   1   1   1 hole      
+    29       42.87609141        1   0   1  -1   1 hole      
+    30       42.87609141        1   0   1   1   1 hole      
+    31       42.87609141        0  -1   1  -1   1 hole      
+    32       42.87609141        0  -1   1   1   1 hole      
+    33       42.87609141       -1   0   1  -1   1 hole      
+    34       42.87609141       -1   0   1   1   1 hole      
+    35       42.87609141       -1  -1   0  -1   1 hole      
+    36       42.87609141       -1  -1   0   1   1 hole      
+    37       42.87609141       -1   0  -1  -1   1 hole      
+    38       42.87609141       -1   0  -1   1   1 hole      
+    39       64.31413711        1  -1   1  -1   1 hole      
+    40       64.31413711        1  -1   1   1   1 hole      
+    41       64.31413711       -1   1   1  -1   1 hole      
+    42       64.31413711       -1   1   1   1   1 hole      
+    43       64.31413711        1   1   1  -1   1 hole      
+    44       64.31413711        1   1   1   1   1 hole      
+    45       64.31413711       -1   1  -1  -1   1 hole      
+    46       64.31413711       -1   1  -1   1   1 hole      
+    47       64.31413711       -1  -1   1  -1   1 hole      
+    48       64.31413711       -1  -1   1   1   1 hole      
+    49       64.31413711       -1  -1  -1  -1   1 hole      
+    50       64.31413711       -1  -1  -1   1   1 hole      
+    51       64.31413711        1  -1  -1  -1   1 hole      
+    52       64.31413711        1  -1  -1   1   1 hole      
+    53       64.31413711        1   1  -1  -1   1 hole      
+    54       64.31413711        1   1  -1   1   1 hole      
+    55       85.75218281        0   2   0  -1   1 hole      
+    56       85.75218281        0   2   0   1   1 hole      
+    57       85.75218281        0   0   2  -1   1 hole      
+    58       85.75218281        0   0   2   1   1 hole      
+    59       85.75218281       -2   0   0  -1   1 hole      
+    60       85.75218281       -2   0   0   1   1 hole      
+    61       85.75218281        0   0  -2  -1   1 hole      
+    62       85.75218281        0   0  -2   1   1 hole      
+    63       85.75218281        0  -2   0  -1   1 hole      
+    64       85.75218281        0  -2   0   1   1 hole      
+    65       85.75218281        2   0   0  -1   1 hole      
+    66       85.75218281        2   0   0   1   1 hole      
+ Unoccupied j-orbits
+    67       107.1902285       -1  -2   0  -1   1 particle  
+    68       107.1902285       -1  -2   0   1   1 particle  
+    69       107.1902285        0  -2  -1  -1   1 particle  
+    70       107.1902285        0  -2  -1   1   1 particle  
+    71       107.1902285       -1   2   0  -1   1 particle  
+    72       107.1902285       -1   2   0   1   1 particle  
+    73       107.1902285        0   2   1  -1   1 particle  
+    74       107.1902285        0   2   1   1   1 particle  
+    75       107.1902285       -1   0  -2  -1   1 particle  
+    76       107.1902285       -1   0  -2   1   1 particle  
+    77       107.1902285        0  -1   2  -1   1 particle  
+ Sz and Tz for vacuum state   0.0000000000000000        66.000000000000000     
+          -8           8          -8           8          -8           8
+ Total memory for lookup configs   5.6901119999999113E-003 GByte
+ Total memory for channels   4.0880000000000002E-005 GByte
+              8067968      504248         185
+              8067968      504248        1816
+ Setting up vnn for hhhh block
+ Time to setup hhhh block  0.21823512483388186     
+ Setting up vnn for hhhp block
+ Time to setup hhhp block  0.43340442469343543     
+ Setting up vnn for hhpp block
+ Time to setup hhpp block   1.8590138130821288     
+ Setting up vnn for hphp block
+ Time to setup hphp block   1.2692879778333008     
+ Setting up vnn for pppp block
+ Time to setup pppp block   34.767132378183305     
+ Total memory for vnn storage  0.55222438400000029      GByte
+          -8           8          -8           8          -8           8
+ Total memory for lookup ph configs   3.6748800000001611E-003 GByte
+ Total memory for ph channels   8.7168000000000003E-005 GByte
+              8067968      504248        1816
+ Setting up vnn for ph hpph block
+ Time to setup ph hpph block  0.15225917287170887     
+ Total memory for vnn/t2 ph storage  0.25817497600000122      GByte
+ Vacuum expectation value               (1826.5140642390254,0.0000000000000000)
+ 3NF vacuum expectation value               (14.391280603195414,0.0000000000000000)
+ Vacuum expectation value with 3nf               (42.065736121968527,0.0000000000000000)
+ Time for e0   2.1707535721361637E-002
+ Time for f3nf  0.30219648731872439     
+ e0 3nf               (949.82452139105817,0.0000000000000000)               (949.82451981089730,0.0000000000000000)
+ Setting up v3nf_2bNO for hhhh block
+ Time to setup v3nf_2bNO hhhh block  0.92785868560895324     
+ Setting up v3nf_2bNO for hhpp block
+ Time to setup v3nf_2bNO hhpp block   18.849488840904087     
+ Setting up v3nf_2bNO for hphp block
+ Time to setup v3nf_2bNO hphp block   9.9756412473507226     
+ Setting up v3nf_NO for pppp block
+ Time to setup v3nf_2bNO pppp block   134.86982361506671     
+ here we go...
+ Total memory for t2 storage  0.25817497600000017      GByte
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ CCD energy         (2612.8010617619771,5.20993859921979848E-018)
+ diis space     8067968
+ Storage of diis vectors  0.90361241599999997      Gb
+ CCD energy        (2621.0566851754616,-2.74296596775217439E-017)
+dener    0    1  0.82556234E+01
+ CCD energy        (2625.8882698845246,-1.60071583349376365E-017)
+dener    0    2  0.48315847E+01
+ CCD energy        (2628.5267086224299,-2.15568686748794098E-017)
+dener    0    3  0.26384387E+01
+ CCD energy         (2629.7875236139525,8.33318657548233071E-018)
+dener    0    4  0.12608150E+01
+ CCD energy        (2630.2032501400536,-3.13985934790816316E-018)
+dener    0    5  0.41572653E+00
+diis_mat    1    1  0.2140E-01
+diis_mat    1    2  0.1520E-01
+diis_mat    1    3  0.1098E-01
+diis_mat    1    4  0.8086E-02
+diis_mat    1    5  0.6085E-02
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1520E-01
+diis_mat    2    2  0.1093E-01
+diis_mat    2    3  0.7995E-02
+diis_mat    2    4  0.5969E-02
+diis_mat    2    5  0.4555E-02
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1098E-01
+diis_mat    3    2  0.7995E-02
+diis_mat    3    3  0.5932E-02
+diis_mat    3    4  0.4493E-02
+diis_mat    3    5  0.3477E-02
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.8086E-02
+diis_mat    4    2  0.5969E-02
+diis_mat    4    3  0.4493E-02
+diis_mat    4    4  0.3453E-02
+diis_mat    4    5  0.2710E-02
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.6085E-02
+diis_mat    5    2  0.4555E-02
+diis_mat    5    3  0.3477E-02
+diis_mat    5    4  0.2710E-02
+diis_mat    5    5  0.2154E-02
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.1797E+02 -0.4828E-07
+sol_vec    2 -0.1351E+03  0.2555E-06
+sol_vec    3  0.3463E+03 -0.5026E-06
+sol_vec    4 -0.3721E+03  0.4348E-06
+sol_vec    5  0.1439E+03 -0.1393E-06
+sol_vec    6  0.4272E-05  0.7686E-14
+ CCD energy         (2622.7645229846412,1.17926122547008291E-009)
+dener    0    6 -0.74387272E+01
+ CCD energy         (2622.7073838879655,8.64452945416978475E-010)
+dener    0    7 -0.57139097E-01
+ CCD energy         (2622.6717358509504,6.49209194805514232E-010)
+dener    0    8 -0.35648037E-01
+ CCD energy         (2622.6487977365477,5.00124464153817562E-010)
+dener    0    9 -0.22938114E-01
+ CCD energy         (2622.6332566529036,3.95200378735547187E-010)
+dener    0   10 -0.15541084E-01
+ CCD energy         (2622.6219413234212,3.19926672622620390E-010)
+dener    0   11 -0.11315329E-01
+diis_mat    1    1  0.4148E-05
+diis_mat    1    2  0.3238E-05
+diis_mat    1    3  0.2583E-05
+diis_mat    1    4  0.2101E-05
+diis_mat    1    5  0.1738E-05
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.3238E-05
+diis_mat    2    2  0.2584E-05
+diis_mat    2    3  0.2102E-05
+diis_mat    2    4  0.1739E-05
+diis_mat    2    5  0.1459E-05
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.2583E-05
+diis_mat    3    2  0.2102E-05
+diis_mat    3    3  0.1739E-05
+diis_mat    3    4  0.1459E-05
+diis_mat    3    5  0.1238E-05
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.2101E-05
+diis_mat    4    2  0.1739E-05
+diis_mat    4    3  0.1459E-05
+diis_mat    4    4  0.1238E-05
+diis_mat    4    5  0.1061E-05
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1738E-05
+diis_mat    5    2  0.1459E-05
+diis_mat    5    3  0.1238E-05
+diis_mat    5    4  0.1061E-05
+diis_mat    5    5  0.9154E-06
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.1976E+03  0.7487E-04
+sol_vec    2 -0.1042E+04 -0.3705E-03
+sol_vec    3  0.2050E+04  0.6806E-03
+sol_vec    4 -0.1781E+04 -0.5505E-03
+sol_vec    5  0.5771E+03  0.1655E-03
+sol_vec    6  0.1876E-09 -0.2287E-14
+ CCD energy        (2622.4982021140559,-1.64804789333745438E-009)
+dener    0   12 -0.12373921E+00
+ CCD energy        (2622.4979302910351,-1.58644518709819904E-009)
+dener    0   13 -0.27182302E-03
+ CCD energy        (2622.4976742596923,-1.49729904010422771E-009)
+dener    0   14 -0.25603134E-03
+ CCD energy        (2622.4974395052932,-1.38821527503486994E-009)
+dener    0   15 -0.23475440E-03
+ CCD energy        (2622.4972276073786,-1.26746222627981009E-009)
+dener    0   16 -0.21189791E-03
+ CCD energy        (2622.4970381059161,-1.14228014185099665E-009)
+dener    0   17 -0.18950146E-03
+diis_mat    1    1  0.1284E-09
+diis_mat    1    2  0.1064E-09
+diis_mat    1    3  0.8873E-10
+diis_mat    1    4  0.7439E-10
+diis_mat    1    5  0.6267E-10
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1064E-09
+diis_mat    2    2  0.8909E-10
+diis_mat    2    3  0.7497E-10
+diis_mat    2    4  0.6337E-10
+diis_mat    2    5  0.5376E-10
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.8873E-10
+diis_mat    3    2  0.7497E-10
+diis_mat    3    3  0.6361E-10
+diis_mat    3    4  0.5414E-10
+diis_mat    3    5  0.4621E-10
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.7439E-10
+diis_mat    4    2  0.6337E-10
+diis_mat    4    3  0.5414E-10
+diis_mat    4    4  0.4637E-10
+diis_mat    4    5  0.3979E-10
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.6267E-10
+diis_mat    5    2  0.5376E-10
+diis_mat    5    3  0.4621E-10
+diis_mat    5    4  0.3979E-10
+diis_mat    5    5  0.3431E-10
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.1111E+03  0.1148E-05
+sol_vec    2 -0.6005E+03 -0.9993E-05
+sol_vec    3  0.1211E+04  0.2694E-04
+sol_vec    4 -0.1080E+04 -0.2907E-04
+sol_vec    5  0.3595E+03  0.1097E-04
+sol_vec    6  0.1460E-13 -0.2734E-19
+ CCD energy         (2622.4956015038306,3.31782408663041946E-011)
+dener    0   18 -0.14366021E-02
+ CCD energy         (2622.4956019981405,2.54929745380899728E-011)
+dener    0   19  0.49431023E-06
+ Total execution time CCD   33.400443108286709     
+ preparing to do CCD(T): 
+          -8           8          -8           8          -8           8
+ Total memory for lookup configs   1.1863487999999986E-002 GByte
+ Total memory for channels   1.1892543999999986E-002 GByte
+             89696544     5606034        1816
+ Setting up vnn (NN+3NF) for hppp block
+ Time to setup hppp block   206.89923264272511     
+ Total memory for vnn storage  0.72946489599999531      GByte
+          12          12          12           3           3
+ Total memory for lookup t3-confs   1.2188792640000019      Gbyte
+ 3NF with deltas: T
+           9835169512   614698094         539
+
+ proc number   0      % work  0.100000E+03
+
+          Channel #:     1
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     2
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     3
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     4
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     5
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     6
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     7
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     8
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:     9
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    10
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    11
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    12
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    13
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    14
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    15
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    16
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    17
+    Row index start:     1
+      Row index end:    26
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    18
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    19
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    20
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    21
+    Row index start:     1
+      Row index end:    26
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    22
+    Row index start:     1
+      Row index end:    36
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    23
+    Row index start:     1
+      Row index end:    26
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    24
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    25
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    26
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    27
+    Row index start:     1
+      Row index end:    26
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    28
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    29
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    30
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    31
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    32
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    33
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    34
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    35
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    36
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    37
+    Row index start:     1
+      Row index end:    16
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    38
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    39
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    40
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    41
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    42
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    43
+    Row index start:     1
+      Row index end:    58
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    44
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    45
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    46
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    47
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    48
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    49
+    Row index start:     1
+      Row index end:    90
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    50
+    Row index start:     1
+      Row index end:   110
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    51
+    Row index start:     1
+      Row index end:    90
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    52
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    53
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    54
+    Row index start:     1
+      Row index end:    16
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    55
+    Row index start:     1
+      Row index end:    58
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    56
+    Row index start:     1
+      Row index end:   110
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    57
+    Row index start:     1
+      Row index end:   138
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    58
+    Row index start:     1
+      Row index end:   110
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    59
+    Row index start:     1
+      Row index end:    58
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    60
+    Row index start:     1
+      Row index end:    16
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    61
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    62
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    63
+    Row index start:     1
+      Row index end:    90
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    64
+    Row index start:     1
+      Row index end:   110
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    65
+    Row index start:     1
+      Row index end:    90
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    66
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    67
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    68
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    69
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    70
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    71
+    Row index start:     1
+      Row index end:    58
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    72
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    73
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    74
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    75
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    76
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    77
+    Row index start:     1
+      Row index end:    16
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    78
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    79
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    80
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    81
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    82
+    Row index start:     1
+      Row index end:    12
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    83
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    84
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    85
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    86
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    87
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    88
+    Row index start:     1
+      Row index end:    58
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    89
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    90
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    91
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    92
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    93
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    94
+    Row index start:     1
+      Row index end:    72
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    95
+    Row index start:     1
+      Row index end:   132
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    96
+    Row index start:     1
+      Row index end:   162
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    97
+    Row index start:     1
+      Row index end:   132
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    98
+    Row index start:     1
+      Row index end:    72
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:    99
+    Row index start:     1
+      Row index end:    18
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:   100
+    Row index start:     1
+      Row index end:     2
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:   101
+    Row index start:     1
+      Row index end:     8
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:   102
+    Row index start:     1
+      Row index end:    44
+ Column index start:     1
+   Column index end:  ****
+
+          Channel #:   103
+    Row index start:     1
+      Row index end:   132
+ Column index start:     1
+   Column index end:  ****
+           1      140934           2
+           2      142142           2
+           3      140934           2
+           4      142142           2
+           5      143314           2
+           6      142142           2
+           7      140934           2
+           8      142142           2
+           9      140934           2
+          10      165140           2
+          11      171146           8
+          12      172700          12
+          13      171146           8
+          14      165140           2
+          15      171146           8
+          16      177104          18
+          17      178618          26
+          18      177104          18
+          19      171146           8
+          20      172700          12
+          21      178618          26
+          22      180090          36
+          23      178618          26
+          24      172700          12
+          25      171146           8
+          26      177104          18
+          27      178618          26
+          28      177104          18
+          29      171146           8
+          30      165140           2
+          31      171146           8
+          32      172700          12
+          33      171146           8
+          34      165140           2
+          35      175428           2
+          36      181878          12
+          37      183578          16
+          38      181878          12
+          39      175428           2
+          40      175428           2
+          41      189980          18
+          42      196714          44
+          43      198434          58
+          44      196714          44
+          45      189980          18
+          46      175428           2
+          47      181878          12
+          48      196714          44
+          49      203344          90
+          50      205010         110
+          51      203344          90
+          52      196714          44
+          53      181878          12
+          54      183578          16
+          55      198434          58
+          56      205010         110
+          57      206610         138
+          58      205010         110
+          59      198434          58
+          60      183578          16
+          61      181878          12
+          62      196714          44
+          63      203344          90
+          64      205010         110
+          65      203344          90
+          66      196714          44
+          67      181878          12
+          68      175428           2
+          69      189980          18
+          70      196714          44
+          71      198434          58
+          72      196714          44
+          73      189980          18
+          74      175428           2
+          75      175428           2
+          76      181878          12
+          77      183578          16
+          78      181878          12
+          79      175428           2
+          80      165140           2
+          81      171146           8
+          82      172700          12
+          83      171146           8
+          84      165140           2
+          85      175428           2
+          86      189980          18
+          87      196714          44
+          88      198434          58
+          89      196714          44
+          90      189980          18
+          91      175428           2
+          92      165140           2
+          93      189980          18
+          94      205512          72
+          95      212492         132
+          96      214200         162
+          97      212492         132
+          98      205512          72
+          99      189980          18
+         100      165140           2
+         101      171146           8
+         102      196714          44
+         103      212492         132
+ EXECUTION TIME FOR CCD(T)   457.54946013120934     
+Kf, Dens          2.02392           0.28000  CCSD(T)         -0.48222           -0.47098
+
+
+ ---------------------------------------------------------------------
+ Boxsize   6.1772517543204382      Nmax           4
+ A, Density, Kf          66  0.28000000000000003        2.0239184548705360     
+ Twist averaged E0/N               (42.065736121968527,0.0000000000000000)
+ Twist averaged mbpt2         (39.587894875181469,7.89384636245423968E-020)
+ Twist averaged CCSD         (39.734781848456677,3.86257189971060215E-013)
+ kinetic_TF   3361.2225260458590     
+  0.28000000000000003                    (42.065736121968527,0.0000000000000000)         (2622.4956019981405,2.54929745380899728E-011)
+
+ E/N   2.02391839      0.280000001       42.065736121968527        39.587894875181469        39.734781848456677        39.263803748452375     
+#Nmax, Nucleons, 3NFnexp, 3NFCutoff: 4  66 3 500
+     0.00000     0.00000     2.02392     0.28000    42.06574    39.58789    39.73478    39.26380
+ ---------------------------------------------------------------------
+ Total execution time for CCD code   949.05228136619553     

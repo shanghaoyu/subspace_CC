@@ -859,7 +859,7 @@ def find_subtract(input_dir,expectation,remain_sample_num):
     return subtract,remain
 
 # 
-def validation(matter_type,particle_num):
+def validation(matter_type,particle_num,tolerance):
     emulator_data = [] 
     density_data  = []
     ccd_data      = [] 
@@ -905,7 +905,7 @@ def validation(matter_type,particle_num):
                 ccd_data.append(ccd_1[loop1-1])
                 #eigvalue, eigvec = emulator1(database_dir,LEC,subtract)
     #            #gs = eigvalue[0]
-                gs = emulator3(database_dir,LEC,subtract,0.05)
+                gs = emulator3(database_dir,LEC,subtract,tolerance)
                 emulator_data.append(gs)
                 density_data.append(density)
     return emulator_data,ccd_data,density_data
@@ -1224,7 +1224,7 @@ def plot_2(observable,emulator_data_1,ccd_data_1,emulator_data_2,ccd_data_2,emul
     plt.xlim((-0.1,0.1))
     plt.xticks(np.arange(-0.1,0.11,0.05),fontsize = 10)
 
-    plot_path = 'DNNLO394_NM_observable_test_GP.pdf' 
+    plot_path = 'DNNLO394_NM_observable_test_GP_tolerance_0.5.pdf' 
     plt.savefig(plot_path)
 
 
@@ -1274,7 +1274,7 @@ remain_sample_num = 64
 
 
 
-emulator_data,ccd_data,density_data = validation("pnm",66)
+emulator_data,ccd_data,density_data = validation("pnm",66,0.05)
 plot_("pnm",emulator_data,ccd_data,density_data) 
 
 validation_count=int(len(emulator_data)/density_count)
@@ -1292,8 +1292,14 @@ for loop1 in range(validation_count):
         density_data_pnm[loop1,loop2]  = density_data[loop2*validation_count+loop1]
 
 
-emulator_data,ccd_data,density_data = validation("snm",132)
+emulator_data,ccd_data,density_data = validation("snm",132,0.05)
 plot_("snm",emulator_data,ccd_data,density_data) 
+
+emulator_data,ccd_data,density_data = validation("snm",132,0.05)
+plot_("snm",emulator_data,ccd_data,density_data) 
+
+
+
 
 for loop1 in range(validation_count):
     for loop2 in range(density_count):
@@ -1311,12 +1317,12 @@ saturation_energy_ccd  = np.zeros(validation_count)
 symmetry_energy_ccd    = np.zeros(validation_count)
 
 for loop1 in range(validation_count):
-    saturation_density_emulator[loop1], saturation_energy_emulator[loop1], symmetry_energy_emulator[loop1] = generate_observable(emulator_data_pnm[loop1,:]/66,emulator_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"GP")#"fit_curve_quadratic")
+    saturation_density_emulator[loop1], saturation_energy_emulator[loop1], symmetry_energy_emulator[loop1] = generate_observable(emulator_data_pnm[loop1,:]/66,emulator_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"fit_curve_quadratic")#"fit_curve_quadratic")
 
     saturation_density_ccd[loop1], saturation_energy_ccd[loop1], symmetry_energy_ccd[loop1] = generate_observable(ccd_data_pnm[loop1,:]/66,ccd_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"interpolate")
 
 
-plot_2("saturation_density",saturation_density_emulator,saturation_density_ccd, saturation_energy_emulator,saturation_energy_ccd, symmetry_energy_emulator,symmetry_energy_ccd)
+#plot_2("saturation_density",saturation_density_emulator,saturation_density_ccd, saturation_energy_emulator,saturation_energy_ccd, symmetry_energy_emulator,symmetry_energy_ccd)
 
 print("saturation_density")
 print(saturation_density_emulator)

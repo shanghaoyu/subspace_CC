@@ -319,8 +319,7 @@ subroutine pert_triples
   
   startwtime = MPI_WTIME()
   
-  if( .not. allocated(nconf_low))allocate( nconf_low(num_procs) )
-  if( .not. allocated(nconf_high))allocate(  nconf_high(num_procs) )
+  allocate( nconf_low(num_procs), nconf_high(num_procs) )
   
   ket_confs = 0 
   bra_confs = 0 

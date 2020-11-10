@@ -59,10 +59,10 @@ SUBROUTINE setup_t3_channel_structures
   end do
   
   if ( iam == 0 ) write(6,*) nx_max3,ny_max3, nz_max3, tz_min3,tz_max3
-  if( .not. allocated(locate_t3channel)) allocate( locate_t3channel(tz_min3:tz_max3, nx_min3:nx_max3, ny_min3:ny_max3, nz_min3:nz_max3) )
+  allocate( locate_t3channel(tz_min3:tz_max3, nx_min3:nx_max3, ny_min3:ny_max3, nz_min3:nz_max3) )
   locate_t3channel = 0  
   
-  if( .not. allocated(numstates)) allocate( numstates(1:2,tz_min3:tz_max3, nx_min3:nx_max3, ny_min3:ny_max3, nz_min3:nz_max3) )
+  allocate( numstates(1:2,tz_min3:tz_max3, nx_min3:nx_max3, ny_min3:ny_max3, nz_min3:nz_max3) )
   numstates = 0 
   do a = 1,tot_orbs
      nxa = all_orbit%nx(a)
@@ -122,7 +122,7 @@ SUBROUTINE setup_t3_channel_structures
   end DO
   
   
-  if( .not. allocated(lookup_t3_configs)) allocate( lookup_t3_configs(1:2,numchannels))
+  ALLOCATE( lookup_t3_configs(1:2,numchannels))
   memory = 0.d0 
   !     loop over isospin projection
   DO tz=tz_min3,tz_max3,2 
@@ -138,8 +138,8 @@ SUBROUTINE setup_t3_channel_structures
               ij_confs = numstates(1,tz, nx, ny, nz) 
               ab_confs = numstates(2,tz, nx, ny, nz) 
               memory = memory + dble(ij_confs+ab_confs)*3.*4./1.e9 
-              if( .not. allocated(lookup_t3_configs(1,channel)%ival)) allocate( lookup_t3_configs(1,channel)%ival(3,ij_confs) )
-              if( .not. allocated(lookup_t3_configs(2,channel)%ival)) allocate( lookup_t3_configs(2,channel)%ival(3,ab_confs) )
+              ALLOCATE( lookup_t3_configs(1,channel)%ival(3,ij_confs) )
+              ALLOCATE( lookup_t3_configs(2,channel)%ival(3,ab_confs) )
               
            end DO
         end do
@@ -148,7 +148,7 @@ SUBROUTINE setup_t3_channel_structures
   
   if ( iam == 0 ) write(6,*) 'Total memory for lookup t3-confs', memory, 'Gbyte'
     
-  if( .not. allocated(numchannels1)) allocate( numchannels1( maxval( locate_t3channel(:,:,:,:) ) ) )
+  allocate( numchannels1( maxval( locate_t3channel(:,:,:,:) ) ) )
   
   !
   ! ppp configurations
@@ -340,8 +340,8 @@ SUBROUTINE setup_t3
      
      dim1 = bra_max-bra_min+1 
      dim2 = ket_max-ket_min+1
-     if( .not. allocated(t3_ccm(channel)%val)) allocate( t3_ccm(channel)%val(bra_min:bra_max, ket_min:ket_max))
-     if( .not. allocated(v3nf_ppphhh(channel)%val)) allocate( v3nf_ppphhh(channel)%val(bra_min:bra_max, ket_min:ket_max))
+     allocate( t3_ccm(channel)%val(bra_min:bra_max, ket_min:ket_max))
+     allocate( v3nf_ppphhh(channel)%val(bra_min:bra_max, ket_min:ket_max))
      t3_ccm(channel)%val(bra_min:bra_max, ket_min:ket_max) = 0.d0
      v3nf_ppphhh(channel)%val(bra_min:bra_max, ket_min:ket_max) = 0.d0 
      

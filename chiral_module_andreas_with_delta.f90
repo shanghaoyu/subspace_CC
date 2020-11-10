@@ -194,6 +194,7 @@ CONTAINS
              LEC_c4 = 0.d0 
              LEC_c1_3NF =  LEC_c1
              LEC_c2_3NF =   0.d0 
+             LEC_c3_3NF =  LEC_c3 
              LEC_c4_3NF =  LEC_c4 
           end if
           

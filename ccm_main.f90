@@ -11,8 +11,6 @@ PROGRAM ccm_kspace
   use chiral_constants
   use single_particle_orbits
   USE constants
-  use deltafull_parameters  
-
   
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
@@ -36,12 +34,7 @@ PROGRAM ccm_kspace
   startwtime = MPI_WTIME()
   read(5,*);read(5,*) delta_chiral_order, lambda_delta
   read(5,*);read(5,*)  cE, cD 
-  read(5,*);read(5,*)  LEC_c1_input, LEC_c2_input, LEC_c3_input, LEC_c4_input
-  read(5,*);read(5,*)  c1s0_input(-1), c1s0_input(0), c1s0_input(1), c3s1_input(-1), c3s1_input(0), c3s1_input(1)
-  read(5,*);read(5,*)  cnlo_pw_input(1), cnlo_pw_input(2), cnlo_pw_input(3), cnlo_pw_input(4), cnlo_pw_input(5), cnlo_pw_input(6), cnlo_pw_input(7)
-
-  if(iam == 0) write(6,*) 'LEC_c1_input!!!!=', LEC_c1_input 
-
+  
   if(delta_chiral_order < NNLO) then 
      cE  = 0.d0
      cD = 0.d0

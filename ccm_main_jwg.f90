@@ -13,15 +13,14 @@ PROGRAM ccm_kspace
   USE constants
   use deltafull_parameters  
   use subspace_cc
-  use minnesota_potentials 
   use shell_model
  
   implicit none
   real*8  :: factor, startwtime , endwtime, x, diff, e00, einf, q1(3),q3(3),int_3pt,q12,q32,z
   complex*16 :: e0_av, mbpt2_av, eccsd_av, eccsdt_av,ener1
-  integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop, loop1,loop2
+  integer :: nx, ny, nz, i , nxx, nyy, nzz,p,q,r,s,  loop, loop1,loop2, subspace_start, subspace_end
   integer :: spec_points(10,10,10)
-  character(LEN=50) :: inputfile, t2_file, str_temp, str_temp2
+  character(LEN=50) :: inputfile,output_file, t2_file, str_temp, str_temp2
 
   integer ( kind = 4 ), parameter :: dim_num =  17
   integer ( kind = 4 ), parameter :: point_num = 64
@@ -57,6 +56,7 @@ PROGRAM ccm_kspace
   read(5,*);read(5,*) cc_approx
   read(5,*);read(5,*) tnf_switch, tnf_approx
   read(5,*);read(5,*) cutoff_3nf_reg, nexp_3nf_nonlocal
+ ! read(5,*);read(5,*) subspace_start, subspace_end
   if ( iam == 0 ) write(6,'(2(a,1x))') 'Boundary Conditions', boundary_conditions 
   if ( iam == 0 ) write(6,'(2(a,1x))') 'CC approx', cc_approx
   if ( iam == 0 ) write(6,*) 'TNF:', tnf_switch, 'TNF-approx:', tnf_approx
@@ -372,17 +372,12 @@ PROGRAM ccm_kspace
      eccsdt_av = eccsdt
 
   case( 'subspace_cal_read_file' )  !calculate t_ij_ab for different LECs
-!     duplication = 5
-!     seed = 17
-!     call ihs ( dim_num, point_num, duplication, seed, xxx )
-!     print *,xxx
-!     call i4mat_transpose_print ( dim_num, point_num, xxx, '  X:' );
+     subspace_num   = 34
 
-     subspace_num = 3 
      LEC_num = 17 
      if ( .not. allocated(LEC_read_all)) allocate( LEC_read_all(subspace_num,LEC_num))
     
-     inputfile = "./LEC_read.txt" 
+     inputfile = "./LEC_read.dat" 
      open(443,file=inputfile, access="SEQUENTIAL")
      read(443,*)
      do loop1 = 1, subspace_num
@@ -403,7 +398,7 @@ PROGRAM ccm_kspace
      !call compute_v3nf_memory
 
 
-     do loop = 1, subspace_num
+     do loop = subspace_start, subspace_end
        LEC_c1_input     = LEC_read_all(loop,12)
        LEC_c2_input     = LEC_read_all(loop,13)  
        LEC_c3_input     = LEC_read_all(loop,14)
@@ -632,7 +627,35 @@ PROGRAM ccm_kspace
      call get_H_matrix_sm
      call print_N_H_matrix_sm
 
+  case('generate_Ehf_matrix') 
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+     !call compute_v3nf_memory
+     call setup_channel_structures
+     
+     if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+     call normal_ordered_hamiltonian
+  
+   
+     output_file = 'hf.txt'
+     open(230,file = output_file)     
+     if (iam == 0) write(230,*) 'kinetic energy       hf energy'
+     if (iam == 0) write(230,*)  e_k,  REAL(e0)
+     close(230) 
+     
+
+
   end select
+   
+
  
  
   
@@ -2010,7 +2033,7 @@ SUBROUTINE normal_ordered_hamiltonian
   do i = 1, below_ef
      e0 = e0 + tkin(i,i)
   end do
-  
+  e_k = e0  
   if ( iam == 0 ) write(6,*) 'kinetic energy =', e0 
   if ( iam == 0 ) write(6,*) 'below_ef =', below_ef 
   do i = 1, below_ef

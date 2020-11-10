@@ -58,11 +58,55 @@ class GP_test:
         
         mu = Kfy.T.dot(Kff_inv).dot(self.train_y)
         cov = Kyy - Kfy.T.dot(Kff_inv).dot(Kfy)
-        return mu, cov
+
+#        Kdff = self.d_kernel(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+#        Kdyy = self.d_kernel(x, x)  # (k, k)
+#        Kdfy = self.d_kernel(self.train_x, x)  # (N, k)
+#        Kdff_inv = np.linalg.inv(Kdff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
+#        
+#        d_mu = Kdfy.T.dot(Kdff_inv).dot(self.train_dy_dx)
+#        d_cov = Kdyy - Kdfy.T.dot(Kdff_inv).dot(Kdfy)
+        Kff11 = self.kernel_11(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+        Kyy11 = self.kernel_11(x, x)  # (k, k)
+        Kyf10 = self.kernel_10(x,self.train_x)  # (N, k)
+        Kfy01 = self.kernel_01(self.train_x, x)  # (N, k)
+        #Kff_inv = np.linalg.inv(Kdff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
+        
+        d_mu = Kyf10.dot(Kff_inv).dot(self.train_y)
+        d_cov = Kyy11 - Kyf10.dot(Kff_inv).dot(Kfy01)
+        return mu, cov, d_mu, d_cov
 
     def kernel(self, x1, x2):
         dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+        #x1 = np.array([1,2])
+        #x2 = np.array([3,4,5])
+        #x1 = x1.reshape(-1,1)
+        #x2 = x2.reshape(-1,1)
+        #print("x1="+str(x1))
+        #print("x2="+str(x2))
+        #print("x1-x2="+str(x1-x2.T))
+        #print("x1-x2="+str(-(x1-x2.T)))
+        #print("dist="+str(dist_matrix))
+
         return self.sigma ** 2 * np.exp(-0.5 / self.length ** 2 * dist_matrix)
+
+    def kernel_11(self, x1,x2):
+        dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+
+        return self.sigma**2/self.length**4*(self.length**2-dist_matrix)*\
+               np.exp(-0.5 / self.length ** 2 * dist_matrix)
+
+    def kernel_01(self, x1,x2):
+        dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+        x1x2_matrix = x1 - x2.T
+        return self.sigma**2/self.length**2*(x1x2_matrix)*\
+               np.exp(-0.5 / self.length ** 2 * dist_matrix)
+    def kernel_10(self, x1,x2):
+        dist_matrix = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+
+        x2x1_matrix = -(x1 -x2.T)
+        return self.sigma**2/self.length**2*(x2x1_matrix)*\
+               np.exp(-0.5 / self.length ** 2 * dist_matrix)
 
 #def yy(y, noise_sigma=1):
 #    y = y + np.random.normal(0, noise_sigma, size=y.shape)
@@ -391,6 +435,8 @@ def plot_1():
     #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
     plt.plot(test_x, test_y_1, label="GP")
+    plt.fill_between(test_x.ravel(), test_dy_1 + confidence_1_dy, test_dy_1 - confidence_1_dy, alpha=0.1)
+    plt.plot(test_x, test_dy_1, label="GP")
     plt.scatter(train_x, train_y_1, label="train", c="red", marker="x")
     #plt.legend(fontsize=15)
     plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
@@ -412,6 +458,8 @@ def plot_1():
     #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
     plt.plot(test_x, test_y_2, label="GP")
+    plt.fill_between(test_x.ravel(), test_dy_2 + confidence_2_dy, test_dy_2 - confidence_2_dy, alpha=0.1)
+    plt.plot(test_x, test_dy_2, label="GP")
     plt.scatter(train_x, train_y_2, label="train", c="red", marker="x")
     plt.legend(fontsize=15)
     #plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
@@ -488,6 +536,9 @@ print("time for snm+pnm : "+ str(t4-t3))
 t1 = time.time()
 train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
 train_x = train_x.reshape(-1,1)
+#dsnm_train = [-36.70556775,-22.70277165,-4.229778,18.3694022,44.4952940, 73.3118830]
+#dsnm_train = np.array(dsnm_train)
+#dsnm_train = dsnm_train.reshape(-1,1)
 train_y_1 = snm_data
 test_x  = np.arange(0.12,0.26,0.001).reshape(-1,1)
 
@@ -496,11 +547,19 @@ gaussian_noise = 0.05
 
 gpr.fit_data(train_x, train_y_1, gaussian_noise)
 
-snm, snm_cov = gpr.predict(test_x)
+snm, snm_cov, d_snm, d_snm_cov = gpr.predict(test_x)
+
+dsnm_dx = np.diff(snm) / np.diff(test_x.T[0][:])
+dsnm_dx_1 = dsnm_dx[np.where(test_x==0.16)[0]]
+print("snm"+str(snm))
+print("test_x"+str(test_x))
+print("dsnm_dx_1"+str(dsnm_dx))
 
 iX=np.argmin(snm)
 test_y_1 = snm.ravel()
-confidence_1 = 1.96 * np.sqrt(np.diag(snm_cov))
+test_dy_1 = d_snm.ravel()
+confidence_1     = 1.96 * np.sqrt(np.diag(snm_cov))
+confidence_1_dy  = 1.96 * np.sqrt(np.diag(d_snm_cov))
 
 density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
 
@@ -513,10 +572,12 @@ train_y_2 = pnm_data
 gpr = GP_test()
 gpr.fit_data(train_x, train_y_2, gaussian_noise)
 
-pnm, pnm_cov = gpr.predict(test_x)
+pnm, pnm_cov, d_pnm, d_pnm_cov = gpr.predict(test_x)
 
 test_y_2 = pnm.ravel()
-confidence_2 = 1.96 * np.sqrt(np.diag(pnm_cov))
+test_dy_2 = d_pnm.ravel()
+confidence_2    = 1.96 * np.sqrt(np.diag(pnm_cov))
+confidence_2_dy = 1.96 * np.sqrt(np.diag(d_pnm_cov))
 
 print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
 print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))

@@ -1,0 +1,1167 @@
+mpprun info: Starting impi run on 4 node ( 16 rank X 8 th ) for job ID 8722354
+Boundary Conditions PBC                                                                                                 
+CC approx CCD                                                                                                 
+ TNF: T TNF-approx:           3
+ 3NF Cutoff:   450.00000000000000      Nexp_3NF:           3
+ NN regulator Exponent:    3.0000000000000000     
+ -----------
+ NN ci's
+ -0.83075200848300002     
+ -0.49670129492699999     
+ -0.61667396629899995     
+  0.93507631514500000     
+ 3NF ci's
+ -0.83075200848300002     
+   0.0000000000000000     
+ -0.61667396629899995     
+  0.93507631514500000     
+ -----------
+ --------
+ c1s0(-1) -0.39365854475000001     
+ c1s0(0) -0.37614669762899999     
+ c1s0(1) -0.39729967132900001     
+ c3s1(-1) -0.22013561017700001     
+ c3s1(0) -0.22013561017700001     
+ c3s1(1) -0.22013561017700001     
+ --------
+ -----------
+ NLO contacts PW
+   2.2697077014680000     
+  0.60962425857900004     
+ -0.20648007281799999     
+ -0.94519478611499996     
+   1.0999509203190001     
+  0.36959624784000000     
+ -0.98394809021800000     
+ ----------
+          C1            0.0940220841915105
+          C2            0.0671232024560192
+          C3           -0.0027618645000083
+          C4           -0.0404446374274312
+          C5           -0.0657191465873272
+          C6           -0.0003244939136686
+          C7           -0.1234845989656249
+          D1           -0.3771581126597507
+          D2           -0.9305750209334183
+          D3            2.1195254080520742
+          D4           -2.1246309930064329
+          D5           -0.0131882077354610
+          D6            0.6645429882213397
+          D7            0.7806033045976430
+          D8           -0.4752342494327860
+          D9            0.0920642557695526
+         D10           -0.0312443369241453
+         D11            0.0232036046033312
+         D12           -0.3040203100732521
+         D13           -0.2963726204319913
+         D14            1.4856672935233888
+         D15           -0.3992014237014200
+
+   3NF LECs:
+          C1           -0.8307520084830000
+          C3           -0.6166739662990000
+          C4            0.9350763151450000
+          cE           -0.1864350370980000
+          cD           -0.5209092149920000
+
+ delta_chiral_order           3
+ delta cutoff   450.00000000000000     
+ Boxsize   8.1932127060064577     
+ Density  0.12000000000000000     
+ K_f   1.5259281401037115     
+ Nmax           4
+ Total number of states        1458
+ K-mesh   0.0000000000000000     
+ K-mesh -0.76687686901785990     
+ K-mesh  0.76687686901785990     
+ K-mesh  -1.5337537380357198     
+ K-mesh   1.5337537380357198     
+ K-mesh  -2.3006306070535798     
+ K-mesh   2.3006306070535798     
+ K-mesh  -3.0675074760714396     
+ K-mesh   3.0675074760714396     
+   0.0000000000000000        8.1932127060064577     
+   0.0000000000000000        8.1932127060064577     
+   0.0000000000000000        8.1932127060064577     
+   0.0000000000000000        8.1932127060064577     
+ Kz-mesh   0.0000000000000000     
+ Kz-mesh -0.76687686901785990     
+ Kz-mesh  0.76687686901785990     
+ Kz-mesh  -1.5337537380357198     
+ Kz-mesh   1.5337537380357198     
+ Kz-mesh  -2.3006306070535798     
+ Kz-mesh   2.3006306070535798     
+ Kz-mesh  -3.0675074760714396     
+ Kz-mesh   3.0675074760714396     
+ KY-mesh   0.0000000000000000     
+ KY-mesh -0.76687686901785990     
+ KY-mesh  0.76687686901785990     
+ KY-mesh  -1.5337537380357198     
+ KY-mesh   1.5337537380357198     
+ KY-mesh  -2.3006306070535798     
+ KY-mesh   2.3006306070535798     
+ KY-mesh  -3.0675074760714396     
+ KY-mesh   3.0675074760714396     
+           4           4           4          -1           1           1           1
+ nkmin, nkmax           4           4           4
+ Occupied j-orbits
+     1       0.000000000        0   0   0  -1   1 hole      
+     2       0.000000000        0   0   0   1   1 hole      
+     3       12.18617290       -1   0   0  -1   1 hole      
+     4       12.18617290       -1   0   0   1   1 hole      
+     5       12.18617290        0   0  -1  -1   1 hole      
+     6       12.18617290        0   0  -1   1   1 hole      
+     7       12.18617290        0  -1   0  -1   1 hole      
+     8       12.18617290        0  -1   0   1   1 hole      
+     9       12.18617290        0   1   0  -1   1 hole      
+    10       12.18617290        0   1   0   1   1 hole      
+    11       12.18617290        1   0   0  -1   1 hole      
+    12       12.18617290        1   0   0   1   1 hole      
+    13       12.18617290        0   0   1  -1   1 hole      
+    14       12.18617290        0   0   1   1   1 hole      
+    15       24.37234579        1   1   0  -1   1 hole      
+    16       24.37234579        1   1   0   1   1 hole      
+    17       24.37234579        0   1   1  -1   1 hole      
+    18       24.37234579        0   1   1   1   1 hole      
+    19       24.37234579        1  -1   0  -1   1 hole      
+    20       24.37234579        1  -1   0   1   1 hole      
+    21       24.37234579       -1   0  -1  -1   1 hole      
+    22       24.37234579       -1   0  -1   1   1 hole      
+    23       24.37234579       -1  -1   0  -1   1 hole      
+    24       24.37234579       -1  -1   0   1   1 hole      
+    25       24.37234579       -1   0   1  -1   1 hole      
+    26       24.37234579       -1   0   1   1   1 hole      
+    27       24.37234579       -1   1   0  -1   1 hole      
+    28       24.37234579       -1   1   0   1   1 hole      
+    29       24.37234579        0   1  -1  -1   1 hole      
+    30       24.37234579        0   1  -1   1   1 hole      
+    31       24.37234579        1   0   1  -1   1 hole      
+    32       24.37234579        1   0   1   1   1 hole      
+    33       24.37234579        0  -1  -1  -1   1 hole      
+    34       24.37234579        0  -1  -1   1   1 hole      
+    35       24.37234579        0  -1   1  -1   1 hole      
+    36       24.37234579        0  -1   1   1   1 hole      
+    37       24.37234579        1   0  -1  -1   1 hole      
+    38       24.37234579        1   0  -1   1   1 hole      
+    39       36.55851869        1  -1   1  -1   1 hole      
+    40       36.55851869        1  -1   1   1   1 hole      
+    41       36.55851869       -1   1   1  -1   1 hole      
+    42       36.55851869       -1   1   1   1   1 hole      
+    43       36.55851869       -1  -1   1  -1   1 hole      
+    44       36.55851869       -1  -1   1   1   1 hole      
+    45       36.55851869        1  -1  -1  -1   1 hole      
+    46       36.55851869        1  -1  -1   1   1 hole      
+    47       36.55851869       -1   1  -1  -1   1 hole      
+    48       36.55851869       -1   1  -1   1   1 hole      
+    49       36.55851869       -1  -1  -1  -1   1 hole      
+    50       36.55851869       -1  -1  -1   1   1 hole      
+    51       36.55851869        1   1   1  -1   1 hole      
+    52       36.55851869        1   1   1   1   1 hole      
+    53       36.55851869        1   1  -1  -1   1 hole      
+    54       36.55851869        1   1  -1   1   1 hole      
+    55       48.74469159        0   0   2  -1   1 hole      
+    56       48.74469159        0   0   2   1   1 hole      
+    57       48.74469159       -2   0   0  -1   1 hole      
+    58       48.74469159       -2   0   0   1   1 hole      
+    59       48.74469159        0   2   0  -1   1 hole      
+    60       48.74469159        0   2   0   1   1 hole      
+    61       48.74469159        0   0  -2  -1   1 hole      
+    62       48.74469159        0   0  -2   1   1 hole      
+    63       48.74469159        2   0   0  -1   1 hole      
+    64       48.74469159        2   0   0   1   1 hole      
+    65       48.74469159        0  -2   0  -1   1 hole      
+    66       48.74469159        0  -2   0   1   1 hole      
+ Unoccupied j-orbits
+    67       60.93086448       -2   0   1  -1   1 particle  
+    68       60.93086448       -2   0   1   1   1 particle  
+    69       60.93086448       -1   2   0  -1   1 particle  
+    70       60.93086448       -1   2   0   1   1 particle  
+    71       60.93086448       -1   0  -2  -1   1 particle  
+    72       60.93086448       -1   0  -2   1   1 particle  
+    73       60.93086448       -2   0  -1  -1   1 particle  
+    74       60.93086448       -2   0  -1   1   1 particle  
+    75       60.93086448        2  -1   0  -1   1 particle  
+    76       60.93086448        2  -1   0   1   1 particle  
+    77       60.93086448        2   0  -1  -1   1 particle  
+ Sz and Tz for vacuum state   0.0000000000000000        66.000000000000000     
+          -8           8          -8           8          -8           8
+ Total memory for lookup configs   5.6901119999999113E-003 GByte
+ Total memory for channels   4.0880000000000002E-005 GByte
+              8067968      504248         185
+              8067968      504248        1816
+ Setting up vnn for hhhh block
+ Time to setup hhhh block   1.3374319076538086     
+ Setting up vnn for hhhp block
+ Time to setup hhhp block   2.6939771175384521     
+ Setting up vnn for hhpp block
+ Time to setup hhpp block   4.0963289737701416     
+ Setting up vnn for hphp block
+ Time to setup hphp block   4.0436911582946777     
+ Setting up vnn for pppp block
+ Time to setup pppp block   216.66541695594788     
+ Total memory for vnn storage  0.55222438400000029      GByte
+          -8           8          -8           8          -8           8
+ Total memory for lookup ph configs   3.6748800000001611E-003 GByte
+ Total memory for ph channels   8.7168000000000003E-005 GByte
+              8067968      504248        1816
+ Setting up vnn for ph hpph block
+ Time to setup ph hpph block  0.14075207710266113     
+ Total memory for vnn/t2 ph storage  0.25817497600000122      GByte
+ kinetic energy = (  1901.0429718634123     ,  0.0000000000000000     )
+ below_ef =          66
+ Vacuum expectation value ( -442.99991040911351     ,  0.0000000000000000     )
+ 3NF vacuum expectation value (  3.3757109154693907     ,  0.0000000000000000     )
+ Vacuum expectation value with 3nf ( -3.3364089392141469     ,  0.0000000000000000     )
+ Time for e0   1.2299060821533203E-002
+ Time for f3nf  0.21661186218261719     
+ e0 3nf (  222.79692052323907     ,  0.0000000000000000     ) (  222.79692042097980     ,  0.0000000000000000     )
+ Setting up v3nf_2bNO for hhhh block
+ Time to setup v3nf_2bNO hhhh block  0.62400984764099121     
+ Setting up v3nf_2bNO for hhpp block
+ Time to setup v3nf_2bNO hhpp block   12.114021062850952     
+ Setting up v3nf_2bNO for hphp block
+ Time to setup v3nf_2bNO hphp block   6.5337860584259033     
+ Setting up v3nf_NO for pppp block
+ here we go...
+ here we go...
+ here we go...
+ Time to setup v3nf_2bNO pppp block   89.657155036926270     
+ Total memory for t2 storage  0.25817497600000017      GByte
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ here we go...
+ CCD energy ( -615.36040251294912     ,  8.5018420536344049E-018)
+ diis space     8067968
+ Storage of diis vectors  0.90361241599999997      Gb
+ CCD energy ( -584.35030170689674     ,  8.8285847045621699E-018)
+dener    0    1  0.31010101E+02
+ CCD energy ( -565.82825726463341     ,  2.3930665993404112E-017)
+dener    0    2  0.18522044E+02
+ CCD energy ( -555.32787599461039     ,  3.0926946379487819E-017)
+dener    0    3  0.10500381E+02
+ CCD energy ( -549.87703216257978     , -8.8560471008989304E-018)
+dener    0    4  0.54508438E+01
+ CCD energy ( -547.56194009502656     ,  2.5516099912427349E-017)
+dener    0    5  0.23150921E+01
+diis_mat    1    1  0.5640E-01
+diis_mat    1    2  0.4154E-01
+diis_mat    1    3  0.3184E-01
+diis_mat    1    4  0.2572E-01
+diis_mat    1    5  0.2205E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.4154E-01
+diis_mat    2    2  0.3261E-01
+diis_mat    2    3  0.2690E-01
+diis_mat    2    4  0.2347E-01
+diis_mat    2    5  0.2162E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.3184E-01
+diis_mat    3    2  0.2690E-01
+diis_mat    3    3  0.2391E-01
+diis_mat    3    4  0.2230E-01
+diis_mat    3    5  0.2171E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.2572E-01
+diis_mat    4    2  0.2347E-01
+diis_mat    4    3  0.2230E-01
+diis_mat    4    4  0.2195E-01
+diis_mat    4    5  0.2225E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.2205E-01
+diis_mat    5    2  0.2162E-01
+diis_mat    5    3  0.2171E-01
+diis_mat    5    4  0.2225E-01
+diis_mat    5    5  0.2319E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.4155E+02 -0.5422E-08
+sol_vec    2  0.2693E+03  0.2537E-07
+sol_vec    3 -0.6124E+03 -0.4399E-07
+sol_vec    4  0.5864E+03  0.3333E-07
+sol_vec    5 -0.2007E+03 -0.9288E-08
+sol_vec    6  0.5974E-03 -0.7913E-13
+ CCD energy ( -539.68556108668849     ,  5.3545890153932376E-010)
+dener    0    6  0.78763790E+01
+ CCD energy ( -539.45511548906836     ,  1.5159546599242331E-010)
+dener    0    7  0.23044560E+00
+ CCD energy ( -539.93435628636530     , -7.4551469477531683E-011)
+dener    0    8 -0.47924080E+00
+ CCD energy ( -540.83255077175227     , -2.0600239165001150E-010)
+dener    0    9 -0.89819449E+00
+ CCD energy ( -541.98314445288224     , -2.8165959360334565E-010)
+dener    0   10 -0.11505937E+01
+ CCD energy ( -543.29450915108941     , -3.2544886131184004E-010)
+dener    0   11 -0.13113647E+01
+diis_mat    1    1  0.1599E-01
+diis_mat    1    2  0.1599E-01
+diis_mat    1    3  0.1615E-01
+diis_mat    1    4  0.1648E-01
+diis_mat    1    5  0.1700E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1599E-01
+diis_mat    2    2  0.1600E-01
+diis_mat    2    3  0.1617E-01
+diis_mat    2    4  0.1651E-01
+diis_mat    2    5  0.1703E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1615E-01
+diis_mat    3    2  0.1617E-01
+diis_mat    3    3  0.1636E-01
+diis_mat    3    4  0.1671E-01
+diis_mat    3    5  0.1724E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1648E-01
+diis_mat    4    2  0.1651E-01
+diis_mat    4    3  0.1671E-01
+diis_mat    4    4  0.1707E-01
+diis_mat    4    5  0.1762E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1700E-01
+diis_mat    5    2  0.1703E-01
+diis_mat    5    3  0.1724E-01
+diis_mat    5    4  0.1762E-01
+diis_mat    5    5  0.1819E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.3624E+03  0.1896E-07
+sol_vec    2  0.1800E+04 -0.9122E-07
+sol_vec    3 -0.3295E+04  0.1613E-06
+sol_vec    4  0.2639E+04 -0.1247E-06
+sol_vec    5 -0.7801E+03  0.3559E-07
+sol_vec    6  0.2427E-03  0.6540E-14
+ CCD energy ( -539.55171648913688     ,  2.8125133386995908E-010)
+dener    0   12  0.37427927E+01
+ CCD energy ( -541.09386160007421     ,  1.6033946171311500E-010)
+dener    0   13 -0.15421451E+01
+ CCD energy ( -542.58831922288834     ,  8.5921538396425063E-011)
+dener    0   14 -0.14944576E+01
+ CCD energy ( -544.06783909463968     ,  3.9810880479913939E-011)
+dener    0   15 -0.14795199E+01
+ CCD energy ( -545.56133808665436     ,  1.0862459629896957E-011)
+dener    0   16 -0.14934990E+01
+ CCD energy ( -547.09559557524892     , -7.7695275992385945E-012)
+dener    0   17 -0.15342575E+01
+diis_mat    1    1  0.1795E-01
+diis_mat    1    2  0.1814E-01
+diis_mat    1    3  0.1859E-01
+diis_mat    1    4  0.1928E-01
+diis_mat    1    5  0.2024E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1814E-01
+diis_mat    2    2  0.1836E-01
+diis_mat    2    3  0.1882E-01
+diis_mat    2    4  0.1953E-01
+diis_mat    2    5  0.2050E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1859E-01
+diis_mat    3    2  0.1882E-01
+diis_mat    3    3  0.1930E-01
+diis_mat    3    4  0.2003E-01
+diis_mat    3    5  0.2104E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1928E-01
+diis_mat    4    2  0.1953E-01
+diis_mat    4    3  0.2003E-01
+diis_mat    4    4  0.2080E-01
+diis_mat    4    5  0.2184E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.2024E-01
+diis_mat    5    2  0.2050E-01
+diis_mat    5    3  0.2104E-01
+diis_mat    5    4  0.2184E-01
+diis_mat    5    5  0.2294E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.3838E+03  0.2856E-07
+sol_vec    2 -0.1793E+04 -0.1346E-06
+sol_vec    3  0.3059E+04  0.2335E-06
+sol_vec    4 -0.2249E+04 -0.1764E-06
+sol_vec    5  0.6000E+03  0.4899E-07
+sol_vec    6  0.3617E-04 -0.1323E-14
+ CCD energy ( -512.36139329094510     ,  1.0998893301882900E-009)
+dener    0   18  0.34734202E+02
+ CCD energy ( -517.66021465442009     ,  7.5943577415881513E-010)
+dener    0   19 -0.52988214E+01
+ CCD energy ( -521.42933862374298     ,  5.6487360903958012E-010)
+dener    0   20 -0.37691240E+01
+ CCD energy ( -524.28170849674257     ,  4.4852197604002476E-010)
+dener    0   21 -0.28523699E+01
+ CCD energy ( -526.56149933829806     ,  3.7634007943145965E-010)
+dener    0   22 -0.22797908E+01
+ CCD energy ( -528.47137023450591     ,  3.3012907279686533E-010)
+dener    0   23 -0.19098709E+01
+diis_mat    1    1  0.1163E+00
+diis_mat    1    2  0.9344E-01
+diis_mat    1    3  0.7797E-01
+diis_mat    1    4  0.6710E-01
+diis_mat    1    5  0.5928E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.9344E-01
+diis_mat    2    2  0.7546E-01
+diis_mat    2    3  0.6322E-01
+diis_mat    2    4  0.5458E-01
+diis_mat    2    5  0.4833E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.7797E-01
+diis_mat    3    2  0.6322E-01
+diis_mat    3    3  0.5314E-01
+diis_mat    3    4  0.4599E-01
+diis_mat    3    5  0.4080E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.6710E-01
+diis_mat    4    2  0.5458E-01
+diis_mat    4    3  0.4599E-01
+diis_mat    4    4  0.3988E-01
+diis_mat    4    5  0.3542E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.5928E-01
+diis_mat    5    2  0.4833E-01
+diis_mat    5    3  0.4080E-01
+diis_mat    5    4  0.3542E-01
+diis_mat    5    5  0.3150E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.1484E+03 -0.2304E-07
+sol_vec    2 -0.9190E+03  0.1314E-06
+sol_vec    3  0.2061E+04 -0.2744E-06
+sol_vec    4 -0.1998E+04  0.2500E-06
+sol_vec    5  0.7092E+03 -0.8389E-07
+sol_vec    6  0.8522E-04 -0.1384E-14
+ CCD energy ( -578.46905942529202     ,  3.6566435443362668E-009)
+dener    0   24 -0.49997689E+02
+ CCD energy ( -587.97538034606850     ,  5.1495924797624975E-009)
+dener    0   25 -0.95063209E+01
+ CCD energy ( -599.33492969534700     ,  7.1073926937644311E-009)
+dener    0   26 -0.11359549E+02
+ CCD energy ( -613.81982092262319     ,  9.9074730168172627E-009)
+dener    0   27 -0.14484891E+02
+ CCD energy ( -633.38789605649868     ,  1.4202461894649528E-008)
+dener    0   28 -0.19568075E+02
+ CCD energy ( -661.35863624334104     ,  2.1229679203958479E-008)
+dener    0   29 -0.27970740E+02
+diis_mat    1    1  0.8919E+00
+diis_mat    1    2  0.1171E+01
+diis_mat    1    3  0.1598E+01
+diis_mat    1    4  0.2281E+01
+diis_mat    1    5  0.3425E+01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1171E+01
+diis_mat    2    2  0.1536E+01
+diis_mat    2    3  0.2098E+01
+diis_mat    2    4  0.2994E+01
+diis_mat    2    5  0.4496E+01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1598E+01
+diis_mat    3    2  0.2098E+01
+diis_mat    3    3  0.2864E+01
+diis_mat    3    4  0.4087E+01
+diis_mat    3    5  0.6139E+01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.2281E+01
+diis_mat    4    2  0.2994E+01
+diis_mat    4    3  0.4087E+01
+diis_mat    4    4  0.5833E+01
+diis_mat    4    5  0.8761E+01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.3425E+01
+diis_mat    5    2  0.4496E+01
+diis_mat    5    3  0.6139E+01
+diis_mat    5    4  0.8761E+01
+diis_mat    5    5  0.1316E+02
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.3554E+02 -0.5151E-08
+sol_vec    2  0.1119E+03  0.1788E-07
+sol_vec    3 -0.1199E+03 -0.2216E-07
+sol_vec    4  0.5264E+02  0.1159E-07
+sol_vec    5 -0.8087E+01 -0.2164E-08
+sol_vec    6  0.1053E-03 -0.8054E-14
+ CCD energy ( -556.72519880183813     ,  2.1360165557384674E-009)
+dener    0   30  0.10463344E+03
+ CCD energy ( -559.74387708190375     ,  2.4854683465729427E-009)
+dener    0   31 -0.30186783E+01
+ CCD energy ( -563.08401040573438     ,  2.9105664520450257E-009)
+dener    0   32 -0.33401333E+01
+ CCD energy ( -566.85948856562823     ,  3.4423333174477544E-009)
+dener    0   33 -0.37754782E+01
+ CCD energy ( -571.22445982831800     ,  4.1252806245138472E-009)
+dener    0   34 -0.43649713E+01
+ CCD energy ( -576.39115375695542     ,  5.0254654531343038E-009)
+dener    0   35 -0.51666939E+01
+diis_mat    1    1  0.9271E-01
+diis_mat    1    2  0.1047E+00
+diis_mat    1    3  0.1209E+00
+diis_mat    1    4  0.1428E+00
+diis_mat    1    5  0.1728E+00
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1047E+00
+diis_mat    2    2  0.1183E+00
+diis_mat    2    3  0.1367E+00
+diis_mat    2    4  0.1616E+00
+diis_mat    2    5  0.1955E+00
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1209E+00
+diis_mat    3    2  0.1367E+00
+diis_mat    3    3  0.1581E+00
+diis_mat    3    4  0.1869E+00
+diis_mat    3    5  0.2262E+00
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1428E+00
+diis_mat    4    2  0.1616E+00
+diis_mat    4    3  0.1869E+00
+diis_mat    4    4  0.2210E+00
+diis_mat    4    5  0.2674E+00
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1728E+00
+diis_mat    5    2  0.1955E+00
+diis_mat    5    3  0.2262E+00
+diis_mat    5    4  0.2674E+00
+diis_mat    5    5  0.3237E+00
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.6072E+02  0.7291E-07
+sol_vec    2 -0.2278E+03 -0.2998E-06
+sol_vec    3  0.3062E+03  0.4507E-06
+sol_vec    4 -0.1691E+03 -0.2936E-06
+sol_vec    5  0.3094E+02  0.6971E-07
+sol_vec    6  0.7722E-04 -0.1399E-13
+ CCD energy ( -551.85564383382825     ,  4.1758557809505872E-009)
+dener    0   36  0.24535510E+02
+ CCD energy ( -554.33451873357944     ,  4.8019143638317773E-009)
+dener    0   37 -0.24788749E+01
+ CCD energy ( -556.91155496940348     ,  5.5089595104077968E-009)
+dener    0   38 -0.25770362E+01
+ CCD energy ( -559.68302222731688     ,  6.3422216498412410E-009)
+dener    0   39 -0.27714673E+01
+ CCD energy ( -562.74873472134038     ,  7.3572975039831971E-009)
+dener    0   40 -0.30657125E+01
+ CCD energy ( -566.22387175188851     ,  8.6280485123123718E-009)
+dener    0   41 -0.34751370E+01
+diis_mat    1    1  0.5482E-01
+diis_mat    1    2  0.5971E-01
+diis_mat    1    3  0.6636E-01
+diis_mat    1    4  0.7522E-01
+diis_mat    1    5  0.8696E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.5971E-01
+diis_mat    2    2  0.6511E-01
+diis_mat    2    3  0.7244E-01
+diis_mat    2    4  0.8216E-01
+diis_mat    2    5  0.9502E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.6636E-01
+diis_mat    3    2  0.7244E-01
+diis_mat    3    3  0.8063E-01
+diis_mat    3    4  0.9149E-01
+diis_mat    3    5  0.1058E+00
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.7522E-01
+diis_mat    4    2  0.8216E-01
+diis_mat    4    3  0.9149E-01
+diis_mat    4    4  0.1038E+00
+diis_mat    4    5  0.1202E+00
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.8696E-01
+diis_mat    5    2  0.9502E-01
+diis_mat    5    3  0.1058E+00
+diis_mat    5    4  0.1202E+00
+diis_mat    5    5  0.1390E+00
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.5399E+02 -0.5181E-08
+sol_vec    2 -0.1975E+03  0.2936E-07
+sol_vec    3  0.2511E+03 -0.6236E-07
+sol_vec    4 -0.1226E+03  0.5767E-07
+sol_vec    5  0.1597E+02 -0.1950E-07
+sol_vec    6  0.1903E-04 -0.1593E-13
+ CCD energy ( -546.90568624808463     ,  4.1864384103868368E-009)
+dener    0   42  0.19318186E+02
+ CCD energy ( -549.05029178060556     ,  4.6198130413233569E-009)
+dener    0   43 -0.21446055E+01
+ CCD energy ( -551.12999575420804     ,  5.0968349225112484E-009)
+dener    0   44 -0.20797040E+01
+ CCD energy ( -553.24249527542224     ,  5.6451774476018046E-009)
+dener    0   45 -0.21124995E+01
+ CCD energy ( -555.46685006098596     ,  6.2950194061785899E-009)
+dener    0   46 -0.22243548E+01
+ CCD energy ( -557.87571901234458     ,  7.0827475048168599E-009)
+dener    0   47 -0.24088690E+01
+diis_mat    1    1  0.3402E-01
+diis_mat    1    2  0.3578E-01
+diis_mat    1    3  0.3831E-01
+diis_mat    1    4  0.4174E-01
+diis_mat    1    5  0.4624E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.3578E-01
+diis_mat    2    2  0.3768E-01
+diis_mat    2    3  0.4040E-01
+diis_mat    2    4  0.4405E-01
+diis_mat    2    5  0.4883E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.3831E-01
+diis_mat    3    2  0.4040E-01
+diis_mat    3    3  0.4336E-01
+diis_mat    3    4  0.4730E-01
+diis_mat    3    5  0.5245E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.4174E-01
+diis_mat    4    2  0.4405E-01
+diis_mat    4    3  0.4730E-01
+diis_mat    4    4  0.5163E-01
+diis_mat    4    5  0.5726E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.4624E-01
+diis_mat    5    2  0.4883E-01
+diis_mat    5    3  0.5245E-01
+diis_mat    5    4  0.5726E-01
+diis_mat    5    5  0.6351E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.5496E+02 -0.5823E-07
+sol_vec    2  0.2917E+03  0.2787E-06
+sol_vec    3 -0.5633E+03 -0.4961E-06
+sol_vec    4  0.4737E+03  0.3888E-06
+sol_vec    5 -0.1461E+03 -0.1132E-06
+sol_vec    6  0.4347E-05 -0.4941E-14
+ CCD energy ( -544.24929739636889     ,  4.1884141114871420E-009)
+dener    0   48  0.13626422E+02
+ CCD energy ( -546.18685747634083     ,  4.5225863064672676E-009)
+dener    0   49 -0.19375601E+01
+ CCD energy ( -548.02443038361901     ,  4.8821384389253012E-009)
+dener    0   50 -0.18375729E+01
+ CCD energy ( -549.84976124383320     ,  5.2899933799380487E-009)
+dener    0   51 -0.18253309E+01
+ CCD energy ( -551.72923422686722     ,  5.7683117695395629E-009)
+dener    0   52 -0.18794730E+01
+ CCD energy ( -553.71894331858164     ,  6.3414668684673939E-009)
+dener    0   53 -0.19897091E+01
+diis_mat    1    1  0.2682E-01
+diis_mat    1    2  0.2767E-01
+diis_mat    1    3  0.2904E-01
+diis_mat    1    4  0.3097E-01
+diis_mat    1    5  0.3353E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.2767E-01
+diis_mat    2    2  0.2860E-01
+diis_mat    2    3  0.3006E-01
+diis_mat    2    4  0.3208E-01
+diis_mat    2    5  0.3476E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.2904E-01
+diis_mat    3    2  0.3006E-01
+diis_mat    3    3  0.3162E-01
+diis_mat    3    4  0.3377E-01
+diis_mat    3    5  0.3660E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.3097E-01
+diis_mat    4    2  0.3208E-01
+diis_mat    4    3  0.3377E-01
+diis_mat    4    4  0.3608E-01
+diis_mat    4    5  0.3911E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.3353E-01
+diis_mat    5    2  0.3476E-01
+diis_mat    5    3  0.3660E-01
+diis_mat    5    4  0.3911E-01
+diis_mat    5    5  0.4241E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.9366E+02 -0.5425E-07
+sol_vec    2  0.4788E+03  0.2688E-06
+sol_vec    3 -0.8994E+03 -0.4956E-06
+sol_vec    4  0.7394E+03  0.4024E-06
+sol_vec    5 -0.2242E+03 -0.1213E-06
+sol_vec    6  0.1140E-05 -0.5893E-15
+ CCD energy ( -541.39242049484449     ,  5.0176752531586509E-009)
+dener    0   54  0.12326523E+02
+ CCD energy ( -543.16987302416635     ,  5.2367235773974358E-009)
+dener    0   55 -0.17774525E+01
+ CCD energy ( -544.82249643265050     ,  5.4935446161391737E-009)
+dener    0   56 -0.16526234E+01
+ CCD energy ( -546.42907287121625     ,  5.8011433634714224E-009)
+dener    0   57 -0.16065764E+01
+ CCD energy ( -548.04630363817000     ,  6.1729581429072612E-009)
+dener    0   58 -0.16172308E+01
+ CCD energy ( -549.71881592843636     ,  6.6243987409282879E-009)
+dener    0   59 -0.16725123E+01
+diis_mat    1    1  0.2217E-01
+diis_mat    1    2  0.2240E-01
+diis_mat    1    3  0.2300E-01
+diis_mat    1    4  0.2397E-01
+diis_mat    1    5  0.2534E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.2240E-01
+diis_mat    2    2  0.2268E-01
+diis_mat    2    3  0.2332E-01
+diis_mat    2    4  0.2432E-01
+diis_mat    2    5  0.2573E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.2300E-01
+diis_mat    3    2  0.2332E-01
+diis_mat    3    3  0.2400E-01
+diis_mat    3    4  0.2505E-01
+diis_mat    3    5  0.2651E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.2397E-01
+diis_mat    4    2  0.2432E-01
+diis_mat    4    3  0.2505E-01
+diis_mat    4    4  0.2617E-01
+diis_mat    4    5  0.2771E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.2534E-01
+diis_mat    5    2  0.2573E-01
+diis_mat    5    3  0.2651E-01
+diis_mat    5    4  0.2771E-01
+diis_mat    5    5  0.2934E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.1350E+03 -0.8084E-07
+sol_vec    2  0.6851E+03  0.4044E-06
+sol_vec    3 -0.1282E+04 -0.7526E-06
+sol_vec    4  0.1052E+04  0.6169E-06
+sol_vec    5 -0.3190E+03 -0.1879E-06
+sol_vec    6  0.2131E-05  0.1748E-14
+ CCD energy ( -537.94397609517205     ,  6.3797197942952148E-009)
+dener    0   60  0.11774840E+02
+ CCD energy ( -539.64289846087877     ,  6.4142241691754676E-009)
+dener    0   61 -0.16989224E+01
+ CCD energy ( -541.18417256458463     ,  6.5156937836659641E-009)
+dener    0   62 -0.15412741E+01
+ CCD energy ( -542.64352979319915     ,  6.6827181509124097E-009)
+dener    0   63 -0.14593572E+01
+ CCD energy ( -544.07315818010522     ,  6.9176207121522222E-009)
+dener    0   64 -0.14296284E+01
+ CCD energy ( -545.51144523775247     ,  7.2260740983377377E-009)
+dener    0   65 -0.14382871E+01
+diis_mat    1    1  0.1973E-01
+diis_mat    1    2  0.1943E-01
+diis_mat    1    3  0.1943E-01
+diis_mat    1    4  0.1972E-01
+diis_mat    1    5  0.2028E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1943E-01
+diis_mat    2    2  0.1917E-01
+diis_mat    2    3  0.1920E-01
+diis_mat    2    4  0.1951E-01
+diis_mat    2    5  0.2008E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1943E-01
+diis_mat    3    2  0.1920E-01
+diis_mat    3    3  0.1926E-01
+diis_mat    3    4  0.1958E-01
+diis_mat    3    5  0.2016E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1972E-01
+diis_mat    4    2  0.1951E-01
+diis_mat    4    3  0.1958E-01
+diis_mat    4    4  0.1992E-01
+diis_mat    4    5  0.2052E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.2028E-01
+diis_mat    5    2  0.2008E-01
+diis_mat    5    3  0.2016E-01
+diis_mat    5    4  0.2052E-01
+diis_mat    5    5  0.2116E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.1896E+03 -0.1034E-06
+sol_vec    2  0.9648E+03  0.5379E-06
+sol_vec    3 -0.1814E+04 -0.1038E-05
+sol_vec    4  0.1497E+04  0.8811E-06
+sol_vec    5 -0.4570E+03 -0.2772E-06
+sol_vec    6  0.5628E-05  0.6258E-14
+ CCD energy ( -533.17666038636423     ,  9.7992919096092440E-009)
+dener    0   66  0.12334785E+02
+ CCD energy ( -534.98489629893982     ,  9.3159839267589904E-009)
+dener    0   67 -0.18082359E+01
+ CCD energy ( -536.56301057979169     ,  9.0280365977334076E-009)
+dener    0   68 -0.15781143E+01
+ CCD energy ( -537.99960058797205     ,  8.8865541827916842E-009)
+dener    0   69 -0.14365900E+01
+ CCD energy ( -539.35343237652694     ,  8.8626052147896762E-009)
+dener    0   70 -0.13538318E+01
+ CCD energy ( -540.66511629213483     ,  8.9400778952074307E-009)
+dener    0   71 -0.13116839E+01
+diis_mat    1    1  0.2100E-01
+diis_mat    1    2  0.1993E-01
+diis_mat    1    3  0.1924E-01
+diis_mat    1    4  0.1884E-01
+diis_mat    1    5  0.1871E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1993E-01
+diis_mat    2    2  0.1897E-01
+diis_mat    2    3  0.1834E-01
+diis_mat    2    4  0.1799E-01
+diis_mat    2    5  0.1788E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1924E-01
+diis_mat    3    2  0.1834E-01
+diis_mat    3    3  0.1775E-01
+diis_mat    3    4  0.1743E-01
+diis_mat    3    5  0.1734E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1884E-01
+diis_mat    4    2  0.1799E-01
+diis_mat    4    3  0.1743E-01
+diis_mat    4    4  0.1713E-01
+diis_mat    4    5  0.1705E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1871E-01
+diis_mat    5    2  0.1788E-01
+diis_mat    5    3  0.1734E-01
+diis_mat    5    4  0.1705E-01
+diis_mat    5    5  0.1698E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.2971E+03 -0.2819E-06
+sol_vec    2  0.1520E+04  0.1457E-05
+sol_vec    3 -0.2878E+04 -0.2796E-05
+sol_vec    4  0.2394E+04  0.2361E-05
+sol_vec    5 -0.7377E+03 -0.7401E-06
+sol_vec    6  0.1278E-04  0.1664E-13
+ CCD energy ( -525.04690306179043     ,  1.9571559826223068E-008)
+dener    0   72  0.15618213E+02
+ CCD energy ( -527.61909973551519     ,  1.6824237149604446E-008)
+dener    0   73 -0.25721967E+01
+ CCD energy ( -529.70212892918823     ,  1.4999497451299859E-008)
+dener    0   74 -0.20830292E+01
+ CCD energy ( -531.46719166149478     ,  1.3766817020110089E-008)
+dener    0   75 -0.17650627E+01
+ CCD energy ( -533.02294537951093     ,  1.2929977953728466E-008)
+dener    0   76 -0.15557537E+01
+ CCD energy ( -534.44022343243569     ,  1.2370222956221750E-008)
+dener    0   77 -0.14172781E+01
+diis_mat    1    1  0.3683E-01
+diis_mat    1    2  0.3278E-01
+diis_mat    1    3  0.2979E-01
+diis_mat    1    4  0.2759E-01
+diis_mat    1    5  0.2598E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.3278E-01
+diis_mat    2    2  0.2926E-01
+diis_mat    2    3  0.2665E-01
+diis_mat    2    4  0.2473E-01
+diis_mat    2    5  0.2332E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.2979E-01
+diis_mat    3    2  0.2665E-01
+diis_mat    3    3  0.2433E-01
+diis_mat    3    4  0.2261E-01
+diis_mat    3    5  0.2135E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.2759E-01
+diis_mat    4    2  0.2473E-01
+diis_mat    4    3  0.2261E-01
+diis_mat    4    4  0.2103E-01
+diis_mat    4    5  0.1987E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.2598E-01
+diis_mat    5    2  0.2332E-01
+diis_mat    5    3  0.2135E-01
+diis_mat    5    4  0.1987E-01
+diis_mat    5    5  0.1879E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.6673E+03 -0.1495E-05
+sol_vec    2  0.3488E+04  0.8096E-05
+sol_vec    3 -0.6745E+04 -0.1613E-04
+sol_vec    4  0.5726E+04  0.1405E-04
+sol_vec    5 -0.1801E+04 -0.4522E-05
+sol_vec    6  0.8386E-04  0.5365E-12
+ CCD energy ( -496.36482274364124     ,  1.2221774971128041E-007)
+dener    0   78  0.38075401E+02
+ CCD energy ( -508.15979001478070     ,  5.9915396229389437E-008)
+dener    0   79 -0.11794967E+02
+ CCD energy ( -514.97228261995792     ,  3.5365394756523373E-008)
+dener    0   80 -0.68124926E+01
+ CCD energy ( -519.40156085409626     ,  2.4150306366281358E-008)
+dener    0   81 -0.44292782E+01
+ CCD energy ( -522.55183232471848     ,  1.8622396154027145E-008)
+dener    0   82 -0.31502715E+01
+ CCD energy ( -524.96648591919757     ,  1.5750255048793403E-008)
+dener    0   83 -0.24146536E+01
+diis_mat    1    1  0.3826E+00
+diis_mat    1    2  0.2710E+00
+diis_mat    1    3  0.2065E+00
+diis_mat    1    4  0.1658E+00
+diis_mat    1    5  0.1386E+00
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.2710E+00
+diis_mat    2    2  0.1937E+00
+diis_mat    2    3  0.1487E+00
+diis_mat    2    4  0.1200E+00
+diis_mat    2    5  0.1006E+00
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.2065E+00
+diis_mat    3    2  0.1487E+00
+diis_mat    3    3  0.1147E+00
+diis_mat    3    4  0.9296E-01
+diis_mat    3    5  0.7817E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1658E+00
+diis_mat    4    2  0.1200E+00
+diis_mat    4    3  0.9296E-01
+diis_mat    4    4  0.7553E-01
+diis_mat    4    5  0.6364E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1386E+00
+diis_mat    5    2  0.1006E+00
+diis_mat    5    3  0.7817E-01
+diis_mat    5    4  0.6364E-01
+diis_mat    5    5  0.5369E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.2485E+02 -0.2438E-06
+sol_vec    2 -0.1883E+03  0.1540E-05
+sol_vec    3  0.4895E+03 -0.3462E-05
+sol_vec    4 -0.5331E+03  0.3335E-05
+sol_vec    5  0.2081E+03 -0.1168E-05
+sol_vec    6  0.8367E-04  0.4427E-13
+ CCD energy ( -552.78374183855794     ,  7.3238896264287202E-008)
+dener    0   84 -0.27817256E+02
+ CCD energy ( -555.32788202282416     ,  8.3824459891116824E-008)
+dener    0   85 -0.25441402E+01
+ CCD energy ( -558.05428662608733     ,  9.5931454153140982E-008)
+dener    0   86 -0.27264046E+01
+ CCD energy ( -561.04504165571643     ,  1.1046748631998263E-007)
+dener    0   87 -0.29907550E+01
+ CCD energy ( -564.40029923631346     ,  1.2852374173702894E-007)
+dener    0   88 -0.33552576E+01
+ CCD energy ( -568.24769375971027     ,  1.5155206321907594E-007)
+dener    0   89 -0.38473945E+01
+diis_mat    1    1  0.5734E-01
+diis_mat    1    2  0.6401E-01
+diis_mat    1    3  0.7268E-01
+diis_mat    1    4  0.8396E-01
+diis_mat    1    5  0.9878E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.6401E-01
+diis_mat    2    2  0.7148E-01
+diis_mat    2    3  0.8118E-01
+diis_mat    2    4  0.9379E-01
+diis_mat    2    5  0.1103E+00
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.7268E-01
+diis_mat    3    2  0.8118E-01
+diis_mat    3    3  0.9220E-01
+diis_mat    3    4  0.1065E+00
+diis_mat    3    5  0.1253E+00
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.8396E-01
+diis_mat    4    2  0.9379E-01
+diis_mat    4    3  0.1065E+00
+diis_mat    4    4  0.1231E+00
+diis_mat    4    5  0.1448E+00
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.9878E-01
+diis_mat    5    2  0.1103E+00
+diis_mat    5    3  0.1253E+00
+diis_mat    5    4  0.1448E+00
+diis_mat    5    5  0.1704E+00
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1  0.1222E+03  0.8940E-05
+sol_vec    2 -0.5543E+03 -0.3699E-04
+sol_vec    3  0.9118E+03  0.5631E-04
+sol_vec    4 -0.6407E+03 -0.3740E-04
+sol_vec    5  0.1620E+03  0.9138E-05
+sol_vec    6  0.1301E-03 -0.8636E-12
+ CCD energy ( -536.86591519443334     ,  1.4475062291812149E-007)
+dener    0   90  0.31381779E+02
+ CCD energy ( -538.66634169385088     ,  1.4776669295087045E-007)
+dener    0   91 -0.18004265E+01
+ CCD energy ( -540.29176170950234     ,  1.5198165407298322E-007)
+dener    0   92 -0.16254200E+01
+ CCD energy ( -541.81795245831142     ,  1.5744427880555220E-007)
+dener    0   93 -0.15261907E+01
+ CCD energy ( -543.29799691693972     ,  1.6426637865145398E-007)
+dener    0   94 -0.14800445E+01
+ CCD energy ( -544.77140371605969     ,  1.7262390956926613E-007)
+dener    0   95 -0.14734068E+01
+diis_mat    1    1  0.1942E-01
+diis_mat    1    2  0.1907E-01
+diis_mat    1    3  0.1902E-01
+diis_mat    1    4  0.1925E-01
+diis_mat    1    5  0.1975E-01
+diis_mat    1    6 -0.1000E+01
+diis_mat    2    1  0.1907E-01
+diis_mat    2    2  0.1876E-01
+diis_mat    2    3  0.1874E-01
+diis_mat    2    4  0.1899E-01
+diis_mat    2    5  0.1950E-01
+diis_mat    2    6 -0.1000E+01
+diis_mat    3    1  0.1902E-01
+diis_mat    3    2  0.1874E-01
+diis_mat    3    3  0.1874E-01
+diis_mat    3    4  0.1900E-01
+diis_mat    3    5  0.1953E-01
+diis_mat    3    6 -0.1000E+01
+diis_mat    4    1  0.1925E-01
+diis_mat    4    2  0.1899E-01
+diis_mat    4    3  0.1900E-01
+diis_mat    4    4  0.1928E-01
+diis_mat    4    5  0.1982E-01
+diis_mat    4    6 -0.1000E+01
+diis_mat    5    1  0.1975E-01
+diis_mat    5    2  0.1950E-01
+diis_mat    5    3  0.1953E-01
+diis_mat    5    4  0.1982E-01
+diis_mat    5    5  0.2038E-01
+diis_mat    5    6 -0.1000E+01
+diis_mat    6    1 -0.1000E+01
+diis_mat    6    2 -0.1000E+01
+diis_mat    6    3 -0.1000E+01
+diis_mat    6    4 -0.1000E+01
+diis_mat    6    5 -0.1000E+01
+diis_mat    6    6  0.0000E+00
+ csysv info           0
+sol_vec    1 -0.7369E+02 -0.3150E-05
+sol_vec    2  0.4349E+03  0.1573E-04
+sol_vec    3 -0.9217E+03 -0.2936E-04
+sol_vec    4  0.8413E+03  0.2430E-04
+sol_vec    5 -0.2798E+03 -0.7510E-05
+sol_vec    6  0.2039E-04 -0.7461E-12
+ CCD energy ( -528.98324876992194     ,  2.7546113676905615E-007)
+dener    0   96  0.15788155E+02
+ CCD energy ( -531.20924930586762     ,  2.5234814551338588E-007)
+dener    0   97 -0.22260005E+01
+ CCD energy ( -533.06081296796765     ,  2.3703572851632047E-007)
+dener    0   98 -0.18515637E+01
+ CCD energy ( -534.67191001850711     ,  2.2712758248586036E-007)
+dener    0   99 -0.16110971E+01
+ CCD calculation did not converge
+ CCD energy ( -536.12906802958855     ,  2.2116693421881967E-007)
+dener    0  100 -0.14571580E+01
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ CCD calculation did not converge
+ Total execution time CCD   136.19216394424438     
+
+
+ ---------------------------------------------------------------------
+ Boxsize   8.1932127060064577      Nmax           4
+ A, Density, Kf          66  0.12000000000000000        1.5259281401037115     
+ Twist averaged E0/N ( -3.3364089392141469     ,  0.0000000000000000     )
+ Twist averaged mbpt2 ( -9.3236424623174106     ,  1.2881578869143038E-019)
+ Twist averaged CCSD ( -8.1231676974180083     ,  3.3510141548306008E-009)
+ kinetic_TF   1910.6423885152130     
+  0.12000000000000000      ( -3.3364089392141469     ,  0.0000000000000000     ) ( -536.12906802958855     ,  2.2116693421881967E-007)
+
+ E/N   1.52592814      0.119999997      -3.3364089392141469       -9.3236424623174106       -8.1231676974180083        0.0000000000000000     
+#Nmax, Nucleons, 3NFnexp, 3NFCutoff: 4  66 3 450
+    -0.18644    -0.52091     1.52593     0.12000    -3.33641    -9.32364    -8.12317     0.00000
+ ---------------------------------------------------------------------
+ Total execution time for CCD code   491.42905712127686     
+mpprun info: Elapsed time (h:m:s):  0:08:12.711942
