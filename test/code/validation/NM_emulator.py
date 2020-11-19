@@ -1,17 +1,17 @@
- import os
- import numpy as np
- import matplotlib
- matplotlib.use('PS')
- import matplotlib.pyplot as plt
- import math
- import re
- import scipy.linalg as spla
- from scipy import interpolate
- from scipy import optimize
- import seaborn as sns
- import random
- from random import choice
- import matplotlib.colors as mcolors
+import os
+import numpy as np
+import matplotlib
+matplotlib.use('PS')
+import matplotlib.pyplot as plt
+import math
+import re
+import scipy.linalg as spla
+from scipy import interpolate
+from scipy import optimize
+import seaborn as sns
+import random
+from random import choice
+import matplotlib.colors as mcolors
 
 ######################################################
 ######################################################

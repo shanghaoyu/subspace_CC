@@ -35,16 +35,16 @@ density_batch_all = np.zeros((validation_count,density_count))
 #    ccd_snm_batch_all[:,loop]=io_1.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt_n3.out"),data_count=validation_count)/particle_num
 
 
-for loop in range(density_count):
-    density = round(density_min + loop*density_gap,2)
-    matter_type   = "pnm"
-    particle_num  = 66
-    ccd_pnm_batch_all[:,loop]=emulator.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt.out"),data_count=validation_count)/particle_num
-    density_batch_all[:,loop]= density
-    matter_type   = "snm"
-    particle_num  = 132
-    ccd_snm_batch_all[:,loop]=emulator.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt_n3.out"),data_count=validation_count)/particle_num
-
+#for loop in range(density_count):
+#    density = round(density_min + loop*density_gap,2)
+#    matter_type   = "pnm"
+#    particle_num  = 66
+#    ccd_pnm_batch_all[:,loop]=emulator.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt.out"),data_count=validation_count)/particle_num
+#    density_batch_all[:,loop]= density
+#    matter_type   = "snm"
+#    particle_num  = 132
+#    ccd_snm_batch_all[:,loop]=emulator.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt_n3.out"),data_count=validation_count)/particle_num
+#
 
 
 #print(density_batch_all)
