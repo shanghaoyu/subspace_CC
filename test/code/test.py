@@ -97,7 +97,7 @@ d_snm_2   = raw_data[9]
 dd_snm_2  = raw_data[11] 
 
 
-io_1.plot_6(train_x, train_y_1,train_y_2,dens_list,pnm,pnm_cov,d_pnm,d_pnm_cov, dd_pnm,dd_pnm_cov,snm,snm_cov,d_snm, d_snm_cov, dd_snm, dd_snm_cov,dens_list_2,pnm_2,d_pnm_2,dd_pnm_2,snm_2,d_snm_2, dd_snm_2 )
+#io_1.plot_6(train_x, train_y_1,train_y_2,dens_list,pnm,pnm_cov,d_pnm,d_pnm_cov, dd_pnm,dd_pnm_cov,snm,snm_cov,d_snm, d_snm_cov, dd_snm, dd_snm_cov,dens_list_2,pnm_2,d_pnm_2,dd_pnm_2,snm_2,d_snm_2, dd_snm_2 )
 
 print(saturation_density_batch)
 print(saturation_energy_batch)
@@ -105,13 +105,13 @@ print(symmetry_energy_batch)
 print(L_batch)
 print(K_batch)
 
-sympy.E
-x1 = sympy.Symbol('x1')
-x2 = sympy.Symbol('x2')
-a = sympy.Symbol('a')
-l = sympy.Symbol('l')
-f = sympy.Function('f')(x1,x2,a,l)
-
-f = a**2* sympy.E**(-(x1-x2)**2/2/l**2)
-print(sympy.diff(f,x1,2,x2,2).subs(l,2))
+#sympy.E
+#x1 = sympy.Symbol('x1')
+#x2 = sympy.Symbol('x2')
+#a = sympy.Symbol('a')
+#l = sympy.Symbol('l')
+#f = sympy.Function('f')(x1,x2,a,l)
+#
+#f = a**2* sympy.E**(-(x1-x2)**2/2/l**2)
+#print(sympy.diff(f,x1,2,x2,2).subs(l,2))
 

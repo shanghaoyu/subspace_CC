@@ -18,7 +18,31 @@ import matplotlib.colors as mcolors
 ### Emulator!!!
 ######################################################
 ######################################################
+def emulator(switch,H_matrix,C,N,subtract,LEC_target):
+    if(switch == 1):
+        ev_ultra,eigvals,vote = emulator1(H_matrix,C,N,subtract,LEC_target)
+    elif(switch == 2):
+        ev_ultra,eigvals,vote = emulator2(H_matrix,C,N,subtract,LEC_target,0.03)
+    elif(switch == 3):
+        ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
+    elif(switch == 4):
+        ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
+    elif(switch == 5):
+        ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.01)
+    else:
+        print("NM emulator choice error.")
+
+    return ev_ultra, eigvals, vote
+
+
+######################################################
+######################################################
+### Emulator1
+######################################################
+######################################################
 def emulator1(LEC_target,subtract):
+    subspace_dimension = np.size(H_matrix,1)
+    LEC_num            = np.size(H_matrix,0)
     H = np.zeros((subspace_dimension,subspace_dimension))
 #    N = np.zeros((subspace_dimension,subspace_dimension))
 #    C = np.zeros((subspace_dimension,subspace_dimension))
@@ -101,6 +125,8 @@ def emulator1(LEC_target,subtract):
 def emulator2(subtract_count,LEC_target,tolerance):
     split = 5
     #vote_need = 5
+    subspace_dimension = np.size(H_matrix,1)
+    LEC_num            = np.size(H_matrix,0)
 
     H = np.zeros((subspace_dimension,subspace_dimension))
     for loop1 in range(LEC_num):
@@ -211,6 +237,9 @@ def emulator2(subtract_count,LEC_target,tolerance):
 ######################################################
 def emulator3(LEC_target,tolerance):
     split = 3
+    subspace_dimension = np.size(H_matrix,1)
+    LEC_num            = np.size(H_matrix,0)
+
     H = np.zeros((subspace_dimension,subspace_dimension))
 
     for loop1 in range(LEC_num):
@@ -286,6 +315,8 @@ def emulator3(LEC_target,tolerance):
 ######################################################
 def emulator4(H_matrix,C,N,subtract_count,LEC_target,tolerance):
     split = 4
+    subspace_dimension = np.size(H_matrix,1)
+    LEC_num            = np.size(H_matrix,0)
     H = np.zeros((subspace_dimension,subspace_dimension))
 
     for loop1 in range(LEC_num):
@@ -409,10 +440,12 @@ def emulator4(H_matrix,C,N,subtract_count,LEC_target,tolerance):
 #### emulator5
 ######################################################
 ######################################################
-def emulator5(H_matrxi,C,N,subtract_count,LEC_target,tolerance,ccsdt_1):
+def emulator5(H_matrix,C,N,subtract_count,LEC_target,tolerance):
     split = 100
     sample_each_slice = 30
     vote_need = round(0.70*split)
+    subspace_dimension = np.size(H_matrix,1)
+    LEC_num            = np.size(H_matrix,0)
 
     H = np.zeros((subspace_dimension,subspace_dimension))
 
@@ -495,9 +528,12 @@ def emulator5(H_matrxi,C,N,subtract_count,LEC_target,tolerance,ccsdt_1):
 #        if ( np.abs((ccsdt_1 - eigvals_1[loop].real )/ccsdt_1) < 0.01 ):
 #            print("emulator_should_be="+str(eigvals_1[loop]))
 #            print("the vote it gets="+str(vote[loop]))
-
+    if vote.max() < vote_need:
+        vote_need_new = vote.max()
+    else:
+        vote_need_new = vote_need
     for loop in range(len(eigvals_1)):
-        if vote[loop] >= vote_need :
+        if vote[loop] >= vote_need_new :
             ev_ultra = eigvals_1[loop]
             break
 

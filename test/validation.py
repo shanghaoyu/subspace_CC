@@ -289,7 +289,9 @@ def emulator(LEC_target,subtract):
         f_1.write('#### emulator wave function ####\n')
         f_1.write('################################\n')
         f_1.write('all eigvals: \n')
-        f_1.write(str(eigvals))
+        for loop in range(len(eigvals)):
+            loop2 = len(eigvals)-loop-1
+            f_1.write("(%.4f + %.4fi)\n" % (float(eigvals[loop2].real/66), float(eigvals[loop2].imag/66)))
         f_1.write('\n')
         f_1.write('\n')
         for loop1 in range(len(eigvals)):
@@ -454,12 +456,12 @@ LEC_num = 17
 LEC_range = 0.2
 LEC = np.ones(LEC_num)
 nucl_matt_exe = './prog_ccm.exe'
-database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
+#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64points_/'
 #database_dir = '/home/slime/work/Eigenvector_continuation/CCM_kspace_deltafull/test/emulator/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/snm_132_0.16_DNNLOgo_20percent_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO450/pnm_66_0.20_DNNLOgo_20percent_64points/'
-#database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.16_DNNLOgo_christian_64points/'
+database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.16_DNNLOgo_christian_64points/'
 #database_dir = '/home/slime/subspace_CC/test/emulator/DNNLO394/snm_132_0.16_DNNLOgo_christian_64points/'
 
 #print ("ev_all="+str(ev_all))
@@ -476,7 +478,7 @@ database_dir = '/home/slime/subspace_CC/test/emulator/DNNLOgo450_20percent_64poi
 #subtract = range(30,45)
 #subtract = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
 #subtract = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
-subtract = []
+subtract = range(48)
 # start validation 
 
 

@@ -22,7 +22,7 @@ class GP_test:
         self.sigma  = 100
         self.length = 0.25
         self.optimize = optimize
-        self.gaussian_noise = 1
+        self.gaussian_noise = 1000
 
     def fit_data(self, x, y, gaussian_noise):
         # store train data
@@ -51,7 +51,7 @@ class GP_test:
 
         x = np.asarray(x)
         # gaussian_noise**2 here is the variance of the gaussian like of noise in y ( y = f(x) + noise)  (noise = N (0, gaussian_noise**2))
-        Kff = self.kernel(self.train_x, self.train_x) + self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+        Kff = self.kernel(self.train_x, self.train_x) +   (0.015*self.train_y)**2 * np.eye(len(self.train_x))  # (N, N)
         Kyy = self.kernel(x, x)  # (k, k)
         Kfy = self.kernel(self.train_x, x)  # (N, k)
         Kff_inv = np.linalg.inv(Kff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
@@ -59,13 +59,13 @@ class GP_test:
         mu = Kfy.T.dot(Kff_inv).dot(self.train_y)
         cov = Kyy - Kfy.T.dot(Kff_inv).dot(Kfy)
 
-#        Kdff = self.d_kernel(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
-#        Kdyy = self.d_kernel(x, x)  # (k, k)
-#        Kdfy = self.d_kernel(self.train_x, x)  # (N, k)
-#        Kdff_inv = np.linalg.inv(Kdff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
+#       Kdff = self.d_kernel(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+#       Kdyy = self.d_kernel(x, x)  # (k, k)
+#       Kdfy = self.d_kernel(self.train_x, x)  # (N, k)
+#       Kdff_inv = np.linalg.inv(Kdff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
 #        
-#        d_mu = Kdfy.T.dot(Kdff_inv).dot(self.train_dy_dx)
-#        d_cov = Kdyy - Kdfy.T.dot(Kdff_inv).dot(Kdfy)
+#       d_mu = Kdfy.T.dot(Kdff_inv).dot(self.train_dy_dx)
+#       d_cov = Kdyy - Kdfy.T.dot(Kdff_inv).dot(Kdfy)
         Kff11 = self.kernel_11(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
         Kyy11 = self.kernel_11(x, x)  # (k, k)
         Kyf10 = self.kernel_10(x,self.train_x)  # (N, k)
@@ -435,13 +435,18 @@ def plot_1():
     #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
     plt.plot(test_x, test_y_1, label="GP")
-    plt.fill_between(test_x.ravel(), test_dy_1 + confidence_1_dy, test_dy_1 - confidence_1_dy, alpha=0.1)
-    plt.plot(test_x, test_dy_1, label="GP")
-    plt.scatter(train_x, train_y_1, label="train", c="red", marker="x")
+    #plt.fill_between(test_x.ravel(), test_dy_1 + confidence_1_dy, test_dy_1 - confidence_1_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_1, label="GP")
+    plt.scatter(train_x, train_y_1, label="Emulator", c="red", marker="x")
     #plt.legend(fontsize=15)
+    #plt.vlines(0.162, -15.5, -7,colors="grey",linestyles="-.",lw=1)
+
+    plt.legend(fontsize=15,loc= "upper left")
     plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
     plt.ylabel(r"$\rm{E_{snm}/A}[\rm{MeV}]$",fontsize=15)
-    #plot_path = 'snm_gp_test.pdf'
+    plt.xlim((0.115,0.265))  
+    plt.ylim((-15.5,-7.5))  
+  #plot_path = 'snm_gp_test.pdf'
     #plt.savefig(plot_path,bbox_inches='tight')
     #plt.close('all')
 
@@ -458,13 +463,16 @@ def plot_1():
     #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
     plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
     plt.plot(test_x, test_y_2, label="GP")
-    plt.fill_between(test_x.ravel(), test_dy_2 + confidence_2_dy, test_dy_2 - confidence_2_dy, alpha=0.1)
-    plt.plot(test_x, test_dy_2, label="GP")
-    plt.scatter(train_x, train_y_2, label="train", c="red", marker="x")
-    plt.legend(fontsize=15)
+    #plt.fill_between(test_x.ravel(), test_dy_2 + confidence_2_dy, test_dy_2 - confidence_2_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_2, label="GP")
+    plt.scatter(train_x, train_y_2, label="Emulator", c="red", marker="x")
+    #plt.vlines(0.162, 10, 32.5,colors="grey",linestyles="-.",lw=1)
+    plt.legend(fontsize=15,loc= "upper left")
     #plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
     plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
     plt.xticks([])
+    plt.xlim((0.115,0.265))  
+    plt.ylim((10,32.4))  
     plot_path = 'snm_pnm.pdf'
     plt.savefig(plot_path,bbox_inches='tight')
     plt.close('all')
@@ -498,7 +506,7 @@ nucl_matt_exe = './prog_ccm.exe'
 subtract_snm = [4,6,9,12,16,18,19,20,21,22,23,24,25,26,28,30,34,35,37,38,39,40,42,43,45,46,47,48,49,51,52,54,57,62]
 subtract_pnm = [0,2,3,9,10,16,17,18,22,26,27,28,30,33,37,39,40,42,43,44,45,47,48,52,54,55]
 #subtract_pnm = [0,2,3,5,9,10,11,16,17,18,22,23,26,27,28,29,30,32,33,34,36,37,39,40,42,43,44,45,47,48,51,52,54,55,61,62]
-dens_count = 6
+dens_count = 5
 pnm_data = np.zeros(dens_count)
 snm_data = np.zeros(dens_count)
 
@@ -533,6 +541,8 @@ print("time for snm+pnm : "+ str(t4-t3))
 ###  use GP to find the saturation point  
 ######################################################
 ######################################################
+
+
 t1 = time.time()
 train_x = np.arange(0.12,0.12+dens_count*0.02,0.02)
 train_x = train_x.reshape(-1,1)
@@ -540,26 +550,31 @@ train_x = train_x.reshape(-1,1)
 #dsnm_train = np.array(dsnm_train)
 #dsnm_train = dsnm_train.reshape(-1,1)
 train_y_1 = snm_data
+print(train_y_1)
 test_x  = np.arange(0.12,0.26,0.001).reshape(-1,1)
 
+ 
+train_y_1   = np.array([[-1831,-1921,-1955,-1932,-1852]])/132 
+train_y_1 = train_y_1.reshape(-1,1)
 gpr = GP_test()
 gaussian_noise = 0.05
+
 
 gpr.fit_data(train_x, train_y_1, gaussian_noise)
 
 snm, snm_cov, d_snm, d_snm_cov = gpr.predict(test_x)
 
-dsnm_dx = np.diff(snm) / np.diff(test_x.T[0][:])
-dsnm_dx_1 = dsnm_dx[np.where(test_x==0.16)[0]]
+#dsnm_dx = np.diff(snm) / np.diff(test_x.T[0][:])
+#dsnm_dx_1 = dsnm_dx[np.where(test_x==0.16)[0]]
 print("snm"+str(snm))
 print("test_x"+str(test_x))
-print("dsnm_dx_1"+str(dsnm_dx))
+#print("dsnm_dx_1"+str(dsnm_dx))
 
 iX=np.argmin(snm)
 test_y_1 = snm.ravel()
-test_dy_1 = d_snm.ravel()
+#test_dy_1 = d_snm.ravel()
 confidence_1     = 1.96 * np.sqrt(np.diag(snm_cov))
-confidence_1_dy  = 1.96 * np.sqrt(np.diag(d_snm_cov))
+#confidence_1_dy  = 1.96 * np.sqrt(np.diag(d_snm_cov))
 
 density_range = test_x[np.where((snm[:]<(snm[iX]+confidence_1[iX]))&(snm[:]>(snm[iX]-confidence_1[iX])))]
 
@@ -569,15 +584,18 @@ print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
 
 
 train_y_2 = pnm_data
+train_y_2 = np.array([763,896,1044,1206,1378])/66
+train_y_2 = train_y_2.reshape(-1,1)
 gpr = GP_test()
+
 gpr.fit_data(train_x, train_y_2, gaussian_noise)
 
 pnm, pnm_cov, d_pnm, d_pnm_cov = gpr.predict(test_x)
 
 test_y_2 = pnm.ravel()
-test_dy_2 = d_pnm.ravel()
+#test_dy_2 = d_pnm.ravel()
 confidence_2    = 1.96 * np.sqrt(np.diag(pnm_cov))
-confidence_2_dy = 1.96 * np.sqrt(np.diag(d_pnm_cov))
+#confidence_2_dy = 1.96 * np.sqrt(np.diag(d_pnm_cov))
 
 print("pnm energy:  %.3f +/- %.3f" % ( pnm[iX], confidence_2[iX]))
 print("symmetry energy:  %.3f +/- %.3f" % (pnm[iX]-snm[iX],(confidence_1[iX]+confidence_2[iX])))

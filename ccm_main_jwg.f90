@@ -651,8 +651,24 @@ PROGRAM ccm_kspace
      if (iam == 0) write(230,*)  e_k,  REAL(e0)
      close(230) 
      
+  case( 'hf_emulator' )
 
-
+     call setup_N3LO_int_mesh(10)
+     twist_angle = 0.d0 
+     CALL setup_sp_data(1,1,1)
+     call precalc_chp_functions
+     
+     if(.not. chiral_delta_flag)then    
+!        print*,"error"
+        call ring_functions_table
+        call sigmaXsigma_dot_q_table
+     end if 
+     !call compute_v3nf_memory
+     call setup_channel_structures
+     
+     if(cc_approx .ne. 'mbpt2') call setup_ph_channel_structures
+     call normal_ordered_hamiltonian
+     
   end select
    
 

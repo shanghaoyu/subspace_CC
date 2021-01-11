@@ -11,6 +11,47 @@ import seaborn as sns
 import pandas as pd
 
 
+######################################################
+######################################################
+### read LECs set from file
+######################################################
+######################################################
+def read_LEC(file_path):
+    LEC_num = 17
+    LEC = np.zeros(LEC_num)
+    with open(file_path,'r') as f_1:
+        count = len(open(file_path,'rU').readlines())
+        data = f_1.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(0,count):
+            if ( re.search('cE and cD', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
+                LEC[0] = float(temp_1[0])
+                LEC[1] = float(temp_1[1])
+            if ( re.search('LEC ci', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
+                LEC[2] = float(temp_1[0])
+                LEC[3] = float(temp_1[1])
+                LEC[4] = float(temp_1[2])
+                LEC[5] = float(temp_1[3])
+            if ( re.search('c1s0 & c3s1', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
+                LEC[6] = float(temp_1[0])
+                LEC[7] = float(temp_1[1])
+                LEC[8] = float(temp_1[2])
+                LEC[9] = float(temp_1[3])
+            if ( re.search('cnlo', data[loop1],flags=0) != wtf):
+                temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
+                LEC[10] = float(temp_1[0])
+                LEC[11] = float(temp_1[1])
+                LEC[12] = float(temp_1[2])
+                LEC[13] = float(temp_1[3])
+                LEC[14] = float(temp_1[4])
+                LEC[15] = float(temp_1[5])
+                LEC[16] = float(temp_1[6])
+    return LEC
+
+
 def read_ccd_data(input_dir,data_count):
     ccd_batch   = np.zeros(data_count)
     file_count  = np.zeros(data_count)
@@ -27,7 +68,7 @@ def read_ccd_data(input_dir,data_count):
     ccd_batch = ccd_batch[xx]
     return ccd_batch
 
-def read_rskin_data(input_dir,data_count):
+def read_rskin_data(input_dir,data_count,start_line,position):
     rskin_batch   = np.zeros(data_count)
     file_count  = np.zeros(data_count)
     with open(input_dir,'r') as f:   
@@ -35,10 +76,35 @@ def read_rskin_data(input_dir,data_count):
         data  = f.readlines()
         wtf = re.match('#', 'abc',flags=0)
         for loop1 in range(data_count):
-            temp_1           = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
-            rskin_batch[loop1]=float(temp_1[3])
+            temp_1           = re.findall(r"[-+]?\d+\.?\d*",data[loop1+start_line])
+            rskin_batch[loop1]=float(temp_1[position])
     return rskin_batch
 
+def read_LEC_batch(file_path):
+    LEC_batch = []
+    my_LEC_label = ['cE','cD','c1','c2','c3','c4','Ct1S0pp','Ct1S0np','Ct1S0nn','Ct3S1','C1S0','C3P0','C1P1','C3P1','C3S1','CE1','C3P2']
+    with open(file_path,'r') as f:
+        count = len(open(file_path,'rU').readlines())
+        data = f.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        LEC_label = data[0].split()
+        LEC_label = LEC_label[1::]
+
+        #print("LEC_label"+str(LEC_label))
+        x = []
+        for loop1 in range(len(my_LEC_label)):
+            for loop2 in range(len(my_LEC_label)):
+                if LEC_label[loop2]==my_LEC_label[loop1]:
+                    x.append(loop2)
+        #print("x=",x)
+        for loop1 in range(1,count):
+            myarray = np.fromstring(data[loop1],dtype=float, sep=' ')
+            myarray = myarray[x]
+            LEC_batch.append(myarray)
+            #temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+            #LEC_batch[loop1-1][0:16]    = temp_1[0:16]
+        #print("LEC_batch"+str(LEC_batch))
+    return LEC_batch
 
 
 
@@ -381,7 +447,10 @@ def generate_NM_observable_batch(pnm_batch_all,snm_batch_all,density_sequence_al
 ################################
 ## plots
 ################################
-def plot_3(list_1,list_2,list_3,list_4):
+def plot_3(list_1,list_2,list_3,list_4,list_5):
+    fontsize_legend = 12
+    fontsize_x_label = 15
+    fontsize_y_label = 15
     fig1 = plt.figure('fig1')
 #    plt.figure(figsize=(5,10))
 #    plt.subplots_adjust(wspace =0.3, hspace =0.4)
@@ -421,22 +490,24 @@ def plot_3(list_1,list_2,list_3,list_4):
 
     df = pd.DataFrame(data, columns=["x", "y"])
     g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
-    g.plot_joint(plt.scatter, c="m", s=20, linewidth=1, marker="x",label = r"$\rm{HM \ (34\ samples)}$")
+    g.plot_joint(plt.scatter, c="m", s=5, linewidth=1, marker=".",label = r"$\rm{HM \ (589\ samples)}$")
     g.ax_joint.collections[0].set_alpha(0)
     #g.set_axis_labels("$X$", "$Y$")
     #g.ax_joint.legend_.remove()
-    plt.legend(loc='upper right',fontsize = 9)
-    l2 = plt.scatter (0.163, -15.386,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163, -15.386,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
     #plt.xlim((0.11,0.225))
     #plt.ylim((-18.1,-11.9))
     #plt.xticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
     #plt.yticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
 
-    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=10)
-    plt.ylabel(r"$\rm{saturation \ energy} \ [\rm{MeV}]$",fontsize=10)
+    plt.ylim((-21,-5))
+    plt.xlim((0.11,0.21))
+    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$\rm{saturation \ energy} \ [\rm{MeV}]$",fontsize=fontsize_y_label)
 
 
-    plot_path = 'Pb208_34_sample_ccdt_1.pdf'
+    plot_path = 'NM_emulator_589_samples_ccd_1.pdf'
     plt.savefig(plot_path)
     plt.close('all')
 
@@ -480,17 +551,17 @@ def plot_3(list_1,list_2,list_3,list_4):
 
     df = pd.DataFrame(data, columns=["x", "y"])
     g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
-    g.plot_joint(plt.scatter, c="m", s=20, linewidth=1, marker="x",label = r"$\rm{HM \ (34\ samples)}$")
+    g.plot_joint(plt.scatter, c="m", s=5, linewidth=1, marker=".",label = r"$\rm{HM \ (589\ samples)}$")
     g.ax_joint.collections[0].set_alpha(0)
     #g.set_axis_labels("$X$", "$Y$")
     #g.ax_joint.legend_.remove()
-    plt.legend(loc='upper right',fontsize = 9)
-    l2 = plt.scatter (0.163,31.5 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
-    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=10)
-    plt.ylabel(r"$\rm{symmetry \ energy} \ [\rm{MeV}]$",fontsize=10)
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163,31.5 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$\rm{symmetry \ energy} \ [\rm{MeV}]$",fontsize=fontsize_y_label)
 
 
-    plot_path = 'Pb208_34_sample_ccdt_2.pdf'
+    plot_path = 'NM_emulator_589_samples_ccd_2.pdf'
     plt.savefig(plot_path)
 
 ####################################################
@@ -533,22 +604,130 @@ def plot_3(list_1,list_2,list_3,list_4):
 
     df = pd.DataFrame(data, columns=["x", "y"])
     g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
-    g.plot_joint(plt.scatter, c="m", s=20, linewidth=1, marker="x",label = r"$\rm{HM \ (34\ samples)}$")
+    g.plot_joint(plt.scatter, c="m", s=5, linewidth=1, marker=".",label = r"$\rm{HM \ (589\ samples)}$")
     g.ax_joint.collections[0].set_alpha(0)
     #g.set_axis_labels("$X$", "$Y$")
     #g.ax_joint.legend_.remove()
-    plt.legend(loc='upper right',fontsize = 9)
-    l2 = plt.scatter (0.163,251 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
-    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=10)
-    plt.ylabel(r"$\rm{K} \ [\rm{MeV}]$",fontsize=10)
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163,251 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.xlabel(r"$\rm{saturation \ density} \ [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$\rm{K} \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+    plt.ylim((0,500))
 
 
-    plot_path = 'Pb208_34_sample_ccdt_3.pdf'
+    plot_path = 'NM_emulator_589_samples_ccd_3.pdf'
+    plt.savefig(plot_path)
+
+
+####################################################
+    fig4 = plt.figure('fig4')
+#    plt.figure(figsize=(5,10))
+#    plt.subplots_adjust(wspace =0.3, hspace =0.4)
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+#    ax = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    #ax.set_title("saturation density")
+
+#   range ajustment
+#    y_min = 0
+#    y_max = 0.04
+#    x_min = -27.7
+#    x_max = -27.5
+    #regulator = (x_max-x_min)/(y_max-y_min)
+    x_list = list_3
+    y_list = list_5
+#    l = plt.scatter(x_list,y_list,color='crimson',s = 20, marker = '    o')
+
+    sns.set(color_codes=True)
+
+    z = np.zeros((len(list_3),2))
+    for loop1 in range(0,len(list_3)):
+        z[loop1,0] = x_list[loop1]
+        z[loop1,1] = y_list[loop1]
+    #data = z[np.where((z[:,0]>x_min)&(z[:,0]<x_max)&(z[:,1]<y_max))]
+    data = z
+    #data = z
+    #print("z(3,1)= "+str(z[3,2]))
+    #input()
+    #print("x="+str(x_list))
+    #print("y="+str(y_list))
+    #print(data)
+    #input()
+
+    df = pd.DataFrame(data, columns=["x", "y"])
+    g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
+    g.plot_joint(plt.scatter, c="m", s=5, linewidth=1, marker=".",label = r"$\rm{HM \ (589\ samples)}$")
+    g.ax_joint.collections[0].set_alpha(0)
+    #g.set_axis_labels("$X$", "$Y$")
+    #g.ax_joint.legend_.remove()
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163,251 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.xlabel(r"$\rm{symmetry \ energy} \ [\rm{MeV}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$\rm{L} \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+    #plt.ylim((0,500))
+
+
+    plot_path = 'NM_emulator_589_samples_ccd_4.pdf'
     plt.savefig(plot_path)
 
 
 
+####################################################
+    fig5 = plt.figure('fig5')
+#    plt.figure(figsize=(5,10))
+#    plt.subplots_adjust(wspace =0.3, hspace =0.4)
 
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+#    ax = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    #ax.set_title("saturation density")
+
+#   range ajustment
+#    y_min = 0
+#    y_max = 0.04
+#    x_min = -27.7
+#    x_max = -27.5
+    #regulator = (x_max-x_min)/(y_max-y_min)
+    x_list = list_3
+    y_list = list_4
+#    l = plt.scatter(x_list,y_list,color='crimson',s = 20, marker = '    o')
+
+    sns.set(color_codes=True)
+
+    z = np.zeros((len(list_3),2))
+    for loop1 in range(0,len(list_3)):
+        z[loop1,0] = x_list[loop1]
+        z[loop1,1] = y_list[loop1]
+    #data = z[np.where((z[:,0]>x_min)&(z[:,0]<x_max)&(z[:,1]<y_max))]
+    data = z
+    #data = z
+    #print("z(3,1)= "+str(z[3,2]))
+    #input()
+    #print("x="+str(x_list))
+    #print("y="+str(y_list))
+    #print(data)
+    #input()
+
+    df = pd.DataFrame(data, columns=["x", "y"])
+    g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
+    g.plot_joint(plt.scatter, c="m", s=5, linewidth=1, marker=".",label = r"$\rm{HM \ (589\ samples)}$")
+    g.ax_joint.collections[0].set_alpha(0)
+    #g.set_axis_labels("$X$", "$Y$")
+    #g.ax_joint.legend_.remove()
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163,251 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.xlabel(r"$\rm{symmetry \ energy} \ [\rm{MeV}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$\rm{K} \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+    plt.ylim((-50,650))
+
+
+    plot_path = 'NM_emulator_589_samples_ccd_5.pdf'
+    plt.savefig(plot_path)
 
 
 
@@ -1132,7 +1311,241 @@ def plot_6(train_x, train_y_1,train_y_2,dens_list,pnm,pnm_cov,d_pnm,d_pnm_cov, d
     plt.savefig(plot_path,bbox_inches='tight')
     plt.close('all')
 
+######################################################                                                                 
+######################################################
+###  plot
+######################################################
+######################################################
+def plot_8():
 
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(6,10))
+    plt.subplots_adjust(wspace =0, hspace =0)
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(212)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+    plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
+    plt.plot(test_x, test_y_1, label="GP")
+    #plt.fill_between(test_x.ravel(), test_dy_1 + confidence_1_dy, test_dy_1 - confidence_1_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_1, label="GP")
+    plt.scatter(train_x, train_y_1, label="train", c="red", marker="x")
+    #plt.legend(fontsize=15)
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{snm}/A}[\rm{MeV}]$",fontsize=15)
+    #plot_path = 'snm_gp_test.pdf'
+    #plt.savefig(plot_path,bbox_inches='tight')
+    #plt.close('all')
+
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+    plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
+    plt.plot(test_x, test_y_2, label="GP")
+    #plt.fill_between(test_x.ravel(), test_dy_2 + confidence_2_dy, test_dy_2 - confidence_2_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_2, label="GP")                                                                   
+    plt.scatter(train_x, train_y_2, label="train", c="red", marker="x")
+    plt.legend(fontsize=15)
+    #plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.xticks([])
+    plot_path = 'snm_pnm.pdf'
+    plt.savefig(plot_path,bbox_inches='tight')
+    plt.close('all')
+
+######################################################                                                                 
+######################################################
+###  plot
+######################################################
+######################################################
+def plot_9(train_x,train_y_1,train_y_2,test_x,test_y_1,test_y_2):
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(6,10))                    
+    plt.subplots_adjust(wspace =0, hspace =0)
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+    #plt.fill_between(test_x.ravel(), test_y_1 + confidence_1, test_y_1 - confidence_1, alpha=0.1)
+    plt.plot(test_x, test_y_1, label="GP")
+    #plt.fill_between(test_x.ravel(), test_dy_1 + confidence_1_dy, test_dy_1 - confidence_1_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_1, label="GP")
+    plt.scatter(train_x, train_y_1, label="Emulator", c="red", marker="x")
+    #plt.legend(fontsize=15)
+
+    plt.legend(fontsize=15,loc= "upper left")
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{snm}/A}[\rm{MeV}]$",fontsize=15)
+    #plt.xlim((0.115,0.265))
+    #plt.ylim((-15.5,-7.5))
+    #plot_path = 'snm_gp_test.pdf'
+    #plt.savefig(plot_path,bbox_inches='tight')
+    #plt.close('all')
+
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax1 = plt.subplot(212)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+
+
+    #plt.title("l=%.2f sigma=%.2f" % (gpr.length, gpr.sigma))
+    #plt.fill_between(test_x.ravel(), test_y_2 + confidence_2, test_y_2 - confidence_2, alpha=0.1)
+    plt.plot(test_x, test_y_2, label="GP")
+    #plt.fill_between(test_x.ravel(), test_dy_2 + confidence_2_dy, test_dy_2 - confidence_2_dy, alpha=0.1)
+    #plt.plot(test_x, test_dy_2, label="GP")
+    plt.scatter(train_x, train_y_2, label="Emulator", c="red", marker="x")
+    plt.legend(fontsize=15,loc= "upper left")
+    #plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.xticks([])
+    #plt.xlim((0.115,0.265))
+    #plt.ylim((10,32.4))
+    plot_path = 'snm_pnm.pdf'
+    plt.savefig(plot_path,bbox_inches='tight')
+    plt.close('all')
+
+#####################################################
+#####################################################
+#####################################################
+def plot_10(list_1,list_2,list_3,list_4):
+    fontsize_legend = 12
+    fontsize_x_label = 15
+    fontsize_y_label = 15
+    fig1 = plt.figure('fig1')
+#    plt.figure(figsize=(5,10))
+#    plt.subplots_adjust(wspace =0.3, hspace =0.4)
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+#    ax = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    #ax.set_title("saturation density")
+
+#   range ajustment
+    y_min = 0
+    y_max = 0.04
+    x_min = 0.05
+    x_max = 0.25
+    x_gap = 0.05
+    #regulator = (x_max-x_min)/(y_max-y_min)
+
+    x_list = list_3
+    y_list = list_1*list_2
+#    l = plt.scatter(x_list,y_list,color='crimson',s = 20, marker = '    o')
+
+    sns.set(color_codes=True)
+
+    z = np.zeros((len(list_2),2))
+    for loop1 in range(0,len(list_2)):
+        z[loop1,0] = x_list[loop1]
+        z[loop1,1] = y_list[loop1]
+    #data = z[np.where((z[:,0]>x_min)&(z[:,0]<x_max)&(z[:,1]<y_max))]
+    data = z
+    #data = z
+    #print("z(3,1)= "+str(z[3,2]))
+    #input()
+    #print("x="+str(x_list))
+    #print("y="+str(y_list))
+    #print(data)
+    #input()
+
+    df = pd.DataFrame(data, columns=["x", "y"])
+    g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
+    g.plot_joint(plt.scatter, c="m", s=15, linewidth=1, marker=".",label = r"$\rm{HM \ (34\ samples)}$")
+    g.ax_joint.collections[0].set_alpha(0)
+    #g.set_axis_labels("$X$", "$Y$")
+    #g.ax_joint.legend_.remove()
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163, -15.386,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    #plt.xlim((0.11,0.225))
+    #plt.ylim((-18.1,-11.9))
+    plt.xticks(np.arange(x_min,x_max+0.0001,x_gap),fontsize = 10)
+    #plt.yticks(np.arange(lower_range,uper_range+0.0001,gap),fontsize = 10)
+
+    #plt.ylim((-21,-5))
+    plt.xlim((x_min,x_max))
+    plt.xlabel(r"$R_{\rm{skin}} \ [\rm{fm}]$",fontsize=fontsize_y_label)
+    plt.ylabel(r"$\alpha_D S \ [\rm{MeV} \ \rm{fm}^{3}]$",fontsize=fontsize_x_label)
+
+    plot_path = 'Pb208_34_samples_alphaD_Rs_CC.pdf'
+    plt.savefig(plot_path)
+    plt.close('all')
+
+####################################################
+    fig2 = plt.figure('fig2')
+#    plt.figure(figsize=(5,10))
+#    plt.subplots_adjust(wspace =0.3, hspace =0.4)
+
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+#    ax = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    #ax.set_title("saturation density")
+
+#   range ajustment
+    #regulator = (x_max-x_min)/(y_max-y_min)
+    x_list = list_4
+    y_list = list_1*list_2
+#    l = plt.scatter(x_list,y_list,color='crimson',s = 20, marker = '    o')
+
+    sns.set(color_codes=True)
+
+    z = np.zeros((len(list_3),2))
+    for loop1 in range(0,len(list_3)):
+        z[loop1,0] = x_list[loop1]
+        z[loop1,1] = y_list[loop1]
+    #data = z[np.where((z[:,0]>x_min)&(z[:,0]<x_max)&(z[:,1]<y_max))]
+    data = z
+    #data = z
+    #print("z(3,1)= "+str(z[3,2]))
+    #input()
+    #print("x="+str(x_list))
+    #print("y="+str(y_list))
+    #print(data)
+    #input()
+
+    df = pd.DataFrame(data, columns=["x", "y"])
+    g=sns.jointplot(x="x", y="y", data=df, kind="kde", color="g",bbox =[3,0.1])
+    g.plot_joint(plt.scatter, c="m", s=15, linewidth=1, marker=".",label = r"$\rm{HM \ (34\ samples)}$")
+    g.ax_joint.collections[0].set_alpha(0)
+    #g.set_axis_labels("$X$", "$Y$")
+    #g.ax_joint.legend_.remove()
+    plt.legend(loc='upper right',fontsize = fontsize_legend)
+    #l2 = plt.scatter (0.163,31.5 ,color = 'red' ,marker = 'o',zorder=5,label = r"$\rm{DNNLO}_{\rm{GO}}(394)$")
+    plt.xlim((x_min,x_max))
+    plt.xticks(np.arange(x_min,x_max+0.0001,x_gap),fontsize = 10)
+    plt.xlabel(r"$R_{\rm{skin}} \ [\rm{fm}]$",fontsize=fontsize_y_label)
+    plt.ylabel(r"$\alpha_D S \ [\rm{MeV} \  \rm{fm}^{3}]$",fontsize=fontsize_x_label)
+
+
+    plot_path = 'Pb208_34_samples_alphaD_Rs_IMSRG.pdf'
+    plt.savefig(plot_path)
 
 
 ################################

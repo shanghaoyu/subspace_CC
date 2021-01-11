@@ -1007,6 +1007,195 @@ def emulator6(subtract_count,LEC_target,tolerance):
 
     return ev_ultra.real,Rn2,Rp2, eigvals_1, vote
 
+
+######################################################
+######################################################
+#### emulator7
+######################################################
+######################################################
+def emulator7(subtract_count,LEC_target,tolerance,cc_gs,cc_Rn2_temp,cc_Rp2_temp):
+    split = 100
+    sample_each_slice = 30
+    vote_need = round(0.75*split)
+
+    H = np.zeros((subspace_dimension,subspace_dimension))
+
+    for loop1 in range(LEC_num):
+        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
+    H = H + C
+    subtract = [subtract_count]
+#    H1 = np.delete(H,subtract,axis = 0)
+#    H1 = np.delete(H1,subtract,axis = 1)
+#    N1 = np.delete(N,subtract,axis = 0)
+#    N1 = np.delete(N1,subtract,axis = 1)
+    H1 = H
+    N1 = N
+
+### solve the general eigval problem
+    eigvals_1,eigvec_L_1, eigvec_R_1 = spla.eig(H,N,left =True,right=True)
+
+### sort with eigval
+    x = np.argsort(eigvals_1)
+    eigvals_1  = eigvals_1[x]
+    eigvals_1_real_x = np.where(abs(eigvals_1.imag)<0.01)
+    eigvals_1_real = eigvals_1[eigvals_1_real_x]
+
+    eigvec_L_1 = eigvec_L_1.T
+    eigvec_L_1 = eigvec_L_1[x]
+    eigvec_R_1 = eigvec_R_1.T
+    eigvec_R_1 = eigvec_R_1[x]
+
+    Rn2_all = observable_batch_cal(eigvec_R_1,N1,Rn2_matrix)
+    Rn2_all = np.array(Rn2_all)
+    Rn2_all_real_x = np.where(abs(Rn2_all.imag)<0.0001)
+    Rn2_all_real = Rn2_all[Rn2_all_real_x]
+
+
+    Rp2_all = observable_batch_cal(eigvec_R_1,N1,Rp2_matrix)
+    Rp2_all = np.array(Rp2_all)
+    Rp2_all_real_x = np.where(abs(Rp2_all.imag)<0.0001)
+    Rp2_all_real = Rp2_all[Rp2_all_real_x]
+
+
+### drop states with imaginary part
+#    eigvals_new_1   = eigvals_1[np.where(abs(eigvals_1.imag) < 0.01)]
+#    eigvec_R_new_1 =  eigvec_R_1[np.where(abs(eigvals_1.imag)< 0.01)]
+
+### divide training samples into few parts
+    serial_all = range(0,subspace_dimension)
+    eigvals       = []
+    eigvals_len = np.zeros(split)
+    for loop in range(split):
+        wf_all   = np.zeros((subspace_dimension,subspace_dimension)) 
+        slice_1  = random.sample(serial_all,sample_each_slice)
+        subtract = np.delete(range(subspace_dimension),slice_1)
+        remain   = np.delete(serial_all,subtract)
+        H2 = np.delete(H1,subtract,axis = 0)
+        H2 = np.delete(H2,subtract,axis = 1)
+        N2 = np.delete(N1,subtract,axis = 0)
+        N2 = np.delete(N2,subtract,axis = 1)
+        
+
+
+
+        #print("remain"+str(remain))
+###     solve the general eigval problem
+        eigvals_2,eigvec_L_2, eigvec_R_2 = spla.eig(H2,N2,left =True,right=True)
+
+###     sort with eigval
+        x = np.argsort(eigvals_2)
+        eigvals_2  = eigvals_2[x]
+        eigvec_R_2 = eigvec_R_2.T
+        eigvec_R_2 = eigvec_R_2[x]
+        eigvals_len[loop] = len(eigvals_2)
+        eigvals.append(eigvals_2[:])
+
+    score  = np.zeros((len(eigvals_1),split))
+    ev_ultra = 0
+
+    for loop in range(split):
+        for loop1 in range(int(eigvals_len[loop])):
+            for loop2 in range(len(eigvals_1)):
+                if ( np.abs((eigvals[loop][loop1].real - eigvals_1[loop2].real )/eigvals[loop][loop1]) < tolerance ):
+                    score[loop2,loop] = score[loop2,loop] + 1
+
+
+
+
+#    # vote for the lowest ture state
+#    for loop in range(len(eigvals_1)):
+#        vote = 0
+#        for loop1 in range(split):
+#            if score[loop,loop1] > 0:
+#                vote = vote + 1
+#        if vote >= vote_need :
+#            ev_ultra = eigvals_1[loop]
+#            break
+
+    # vote for the lowest ture state
+    vote = np.zeros(len(eigvals_1))
+    for loop in range(len(eigvals_1)):
+        for loop1 in range(split):
+            if score[loop,loop1] > 0:
+                vote[loop] = vote[loop]+1
+
+    for loop in range(len(eigvals_1)):
+        if vote[loop] >= vote_need:
+            ev_ultra = eigvals_1[loop]
+            if abs(ev_ultra.imag) > 0.01:
+                xx = np.where((abs(eigvals_1.real) < abs(ev_ultra.real)*(1+0.02)) &\
+                              (abs(eigvals_1.real) > abs(ev_ultra.real)*(1-0.02)) &\
+                              (abs(eigvals_1.imag) < 0.01))
+                xx = xx[0]
+                if len(xx) == 0:
+                    Rn2_ultra = Rn2_all[loop]
+                    Rp2_ultra = Rp2_all[loop]
+         # temp test
+                    Rn2_ultra = Rn2_all_real[1]
+                    Rp2_ultra = Rp2_all_real[1]
+
+                    break    
+                #print("xx"+str(xx))
+                #print("eigvals_real"+str(eigvals_1[xx]))
+                #print("Rn2_real"+str(Rn2_all[xx])) 
+                Rn2_1 = Rn2_all[np.array(xx)] 
+                Rp2_1 = Rp2_all[np.array(xx)]
+                #print("Rn2_1"+str(Rn2_1[0])) 
+                Rn2_ultra = Rn2_1[0]
+                Rp2_ultra = Rp2_1[0]
+ # temp test
+                Rn2_ultra = Rn2_all_real[1]
+                Rp2_ultra = Rp2_all_real[1]
+
+
+                #Rn2_1 = Rn2_1.mean()
+                #Rp2_1 = Rp2_1.mean()
+                break 
+            #ev_ultra_vec_R = eigvec_R_1[loop]
+            #ev_ultra_vec_L = eigvec_L_1[loop]
+
+            Rn2_ultra = Rn2_all[loop]
+            Rp2_ultra = Rp2_all[loop]
+            #ev_ultra_1 = eigvals_all[loop]
+            #print("loop_energy="+str(loop))
+            break
+#    for loop in range(len(eigvals_1)):
+#        if vote[loop] >= vote_need :
+#            ev_ultra = eigvals_1[loop]
+#            ev_ultra_vec_R = eigvec_R_1[loop]
+#            ev_ultra_vec_L = eigvec_L_1[loop]
+#            break
+#
+#    norm = np.dot(np.dot(ev_ultra_vec_R.T,N),ev_ultra_vec_R) 
+#    Rn2 =np.dot( np.dot(ev_ultra_vec_R.T, Rn2_matrix), ev_ultra_vec_R)/norm
+#    Rp2 =np.dot( np.dot(ev_ultra_vec_R.T, Rp2_matrix), ev_ultra_vec_R)/norm
+
+    cc_Rs = np.sqrt(cc_Rn2_temp) - np.sqrt(cc_Rp2_temp)
+    #print("cc_Rn2_temp="+str(cc_Rn2_temp))
+    #print("cc_Rp2_temp="+str(cc_Rp2_temp))
+    emulator_Rs = np.sqrt(Rn2_ultra) - np.sqrt(Rp2_ultra)
+    print("cc_Rs="+str(cc_Rs))
+    print("emulator_Rs="+str(emulator_Rs))
+    #print("emulator_Rs_all="+str(Rs_ultra))
+   # print("norm="+str(norm))
+    if (abs(cc_Rs - emulator_Rs)/abs(cc_Rs)> 0.10):
+        print("cc_gs="+str(cc_gs)) 
+        print("ev_emulator="+str(ev_ultra)) 
+        print("eigvals_1="+str(eigvals_1))
+        print("cc_Rn2 = "+str(cc_Rn2_temp))
+        print("Rn2_emulator="+str(Rn2_ultra))
+        print("cc_Rp2 = "+str(cc_Rp2_temp))
+        print("Rp2_emulator="+str(Rp2_ultra))
+        #Rn2_all = Rn2_all[np.where(abs(Rn2_all.imag) < 0.01)]
+
+        print("Rn2="+str(Rn2_all))
+
+    return ev_ultra.real,Rn2_ultra,Rp2_ultra,ev_ultra,vote
+
+
+
+
+
 ######################################################
 ######################################################
 #### validation
@@ -1060,7 +1249,7 @@ def validation2(tolerance):
     for loop in range(len(LEC_batch)):
         print("###############loop"+str(loop)+"###############")
         #gs = emulator4(LEC_batch[loop])
-        gs,Rn2,Rp2,eigvals,vote = emulator5(0,LEC_batch[loop],tolerance,ccsdt_temp[loop],cc_Rn2_temp[loop],cc_Rp2_temp[loop])
+        gs,Rn2,Rp2,eigvals,vote = emulator7(0,LEC_batch[loop],tolerance,ccsdt_temp[loop],cc_Rn2_temp[loop],cc_Rp2_temp[loop])
         #gs,Rn2,Rp2 = emulator(LEC_batch[loop])
 
         emulator_data.append(gs)
@@ -1281,7 +1470,7 @@ def plot_1(emulator_data,ccsdt_data,emulator_Rn2,cc_Rn2,emulator_Rp2,cc_Rp2   , 
 
 
     #plot_path =  'Pb208_CV_emulator8_tolerance_%s_test_3_9sample_subtract.pdf' %(str(tolerance))
-    plot_path =  'Pb208_CV_emulator8_tolerance_%s_test_8.pdf' %(str(tolerance))
+    plot_path =  'Pb208_CV_emulator9_tolerance_%s.pdf' %(str(tolerance))
     plt.savefig(plot_path)
 
 #####################################################

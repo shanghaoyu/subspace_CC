@@ -9,11 +9,11 @@
 ! cnlo(7)
 2.505389, 0.700499,-0.387960 , -0.964856, 1.002189, 0.452523, -0.883122
 ! number of particles
-28
+14
 ! specify: pnm/snm, input type: density/kfermi
-snm, density
+pnm, density
 ! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)
-generate_Ehf_matrix
+PBC
 ! dens/kf, ntwist,  nmax
 0.16, 1, 2
 ! specify cluster approximation: CCD, CCDT
