@@ -15,7 +15,7 @@ pnm, density
 ! specify boundary conditions (PBC/TABC/TABCsp/subspace_cal/subspace_cal_dens/solve_general_EV)
 PBC
 ! dens/kf, ntwist,  nmax
-0.16, 1, 2
+0.16, 1, 3 
 ! specify cluster approximation: CCD, CCDT
 CCD
 ! tnf switch (T/F) and specify 3nf approximation: 0=tnf0b, 1=tnf1b, 2=tnf2b
