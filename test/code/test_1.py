@@ -170,7 +170,7 @@ print("done loading NM ")
 #        f.write(str(loop)+"   pnm: "+str(raw_data[1])+ "   snm:"+str(raw_data[2])+"\n")
 #
 #
-sample_count             = 589
+sample_count             = 34 
 samples_num              = np.zeros(sample_count)
 saturation_density_batch = np.zeros(sample_count)
 saturation_energy_batch  = np.zeros(sample_count) 
@@ -178,51 +178,21 @@ symmetry_energy_batch    = np.zeros(sample_count)
 L_batch                  = np.zeros(sample_count)
 K_batch                  = np.zeros(sample_count)
 
-file_path = "NM_ccd_589_samples.txt"
-with open(file_path,"r") as f_1:
-    count = len(open(file_path,"rU").readlines())
-    data  = f_1.readlines()
-    wtf = re.match('#','abc',flags=0)
-    for loop1 in range(0,count-1):
-        temp_1 = re.findall(r"[-+]?\d+\.?\d*",data[loop1+1])
-        samples_num[loop1]              = float(temp_1[0])
-        saturation_density_batch[loop1] = float(temp_1[1])
-        saturation_energy_batch[loop1]  = float(temp_1[2]) 
-        symmetry_energy_batch[loop1]    = float(temp_1[3])
-        L_batch[loop1]                  = float(temp_1[4])
-        K_batch[loop1]                  = float(temp_1[5])
+density_count = 8                     
+validation_count = 34
+ccd_pnm_batch_all = np.zeros((validation_count,density_count)) 
+ccd_snm_batch_all = np.zeros((validation_count,density_count))                  
+density_batch_all = np.zeros((validation_count,density_count))
 
-       
-#file_path = "NM_ccd_589_samples_new.txt"
-#with open(file_path,"w") as f_2:
-#    f_2.write("num, saturation density[fm^-3], saturation energy[MeV], symmetry energy[MeV],       L,       K\n")
-#
-#for loop in range(len(LEC_batch)):
-#    with open(file_path,"a") as f_2:
-#        if ( float(saturation_density_batch[loop])==0.12 or float(saturation_density_batch[loop])==0.20 ):
-#            f_2.write("%2d,            ,                            ,                     ,                  ,        \n" % (loop))
-#        else:
-#            f_2.write("%2d,          %.4f,                  %.6f,             %.6f,          %.2f,   %.1f \n" % (int(samples_num[loop]),float(saturation_density_batch[loop]),float(saturation_energy_batch[loop]),float(symmetry_energy_batch[loop]),float(L_batch[loop]),float(K_batch[loop])))
+database_dir = "/home/slime/subspace_CC/test/emulator/DNNLO394/christian_34points/"
+for loop1 in range(density_count):
+    dens = 0.06 + loop1 * 0.02
+    input_dir = database_dir + "%s_%d_%.2f_DNNLO_christian_34points/ccdt.out" % ('pnm',66,dens)
+    ccd_pnm_batch_all[:,loop1] = io_1.read_ccd_data(input_dir = input_dir, data_count = validation_count )/66
 
-
-samples_num_cut              = samples_num[np.where(saturation_density_batch!=0.12)]
-saturation_density_batch_cut = saturation_density_batch[np.where(saturation_density_batch!=0.12)]
-saturation_energy_batch_cut  = saturation_energy_batch [np.where(saturation_density_batch!=0.12)]
-symmetry_energy_batch_cut    = symmetry_energy_batch [np.where(saturation_density_batch!=0.12)]
-L_batch_cut                  = L_batch [np.where(saturation_density_batch!=0.12)]
-K_batch_cut                  = K_batch [np.where(saturation_density_batch!=0.12)]
-
-
-#samples_num_cut              = samples_num_cut             [np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-#saturation_density_batch_cut = saturation_density_batch_cut[np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-#saturation_energy_batch_cut  = saturation_energy_batch_cut [np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-#symmetry_energy_batch_cut    = symmetry_energy_batch_cut   [np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-#L_batch_cut                  = L_batch_cut                 [np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-#K_batch_cut                  = K_batch_cut                 [np.where((K_batch_cut < 800) & (K_batch_cut > 0))]
-                  
-print("samples_num_cut:"+str(samples_num_cut)) 
-
-
+    input_dir = database_dir + "%s_%d_%.2f_DNNLO_christian_34points/ccdt_n3.out" % ('snm',132,dens)
+    ccd_snm_batch_all[:,loop1] = io_1.read_ccd_data(input_dir = input_dir, data_count = validation_count )/132
+    density_batch_all[:,loop1] = dens
 
 #for loop in range(density_count):
 #    density = round(density_min + loop*density_gap,2)
@@ -245,76 +215,28 @@ print("samples_num_cut:"+str(samples_num_cut))
 #    particle_num  = 132
 #    ccd_snm_batch_all[:,loop]=emulator.read_ccd_data(input_dir = cc_data_path % (matter_type,particle_num,density,"ccdt_n3.out"),data_count=validation_count)/particle_num
 #
+for loop in range(validation_count):
+    saturation_density, saturation_energy, symmetry_energy,L,K,raw_data = io_1.generate_NM_observable(ccd_pnm_batch_all[loop],ccd_snm_batch_all[loop],density_batch_all[loop],switch="GP")
+    #sub_saturation_iX = ((saturation_density * 0.7 - density_batch_all.min())/(density_batch_all.max()-density_batch_all.min()) * len(raw_data[16])).astype(int)
+    sub_saturation_iX  = round((0.11-0.06)/(0.20-0.06)*1400)
+    print(sub_saturation_iX)
+    print(raw_data[3][sub_saturation_iX])
+    K_batch[loop]               = raw_data[16][sub_saturation_iX]
+    symmetry_energy_batch[loop] = raw_data[17][sub_saturation_iX]
+    L_batch[loop]               = raw_data[18][sub_saturation_iX]
 
-
-#print(density_batch_all)
-#print(len(ccd_pnm_batch_all[:]))
-#print(len(ccd_snm_batch_all[:]))
-#saturation_density_batch, saturation_energy_batch, symmetry_energy_batch,L_batch,K_batch = io_1.generate_NM_observable_batch(ccd_pnm_batch_all,ccd_snm_batch_all,density_batch_all,"interpolate")
 #with open("pb208_NM_ccdt.txt","w") as f:
 #    f.write("##  saturation density[fm^-3]  saturation energy[MeV]  symmetry energy[MeV]      L     K\n")
 #    for loop in range(validation_count):
 #        f.write("%2d        %.4f                   %.6f              %.6f           %.2f       %.1f \n" % (loop, saturation_density_batch[loop],saturation_energy_batch[loop], symmetry_energy_batch[loop],L_batch[loop],K_batch[loop]))
 #     
 
-io_1.plot_3(saturation_density_batch_cut,saturation_energy_batch_cut,symmetry_energy_batch_cut,K_batch_cut,L_batch_cut)
+#io_1.plot_3(saturation_density_batch_cut,saturation_energy_batch_cut,symmetry_energy_batch_cut,K_batch_cut,L_batch_cut)
 
 
-#rskin_batch = io_1.read_rskin_data("./pb208_rskin.txt",validation_count)
+rskin_batch = io_1.read_rskin_data("./pb208_rskin.txt",validation_count,1,3)
 #
-#io_1.plot_4(rskin_batch,symmetry_energy_batch,L_batch,K_batch)
+io_1.plot_4(rskin_batch,symmetry_energy_batch,L_batch,K_batch)
 #print(rskin_batch)
 
-
-#ccd_pnm_batch_1 =  [11.50824259, 13.52328119,15.77696707,18.23395481,20.85337956]
-#ccd_snm_batch_1 =  [-14.43847422,-15.11123482,-15.38290713,-15.23134748,-14.65166185]
-#density_batch_1 =  [0.12,0.14,0.16,0.18,0.20]
-##
-#saturation_density_batch, saturation_energy_batch, symmetry_energy_batch,L_batch,K_batch,raw_data = io_1.generate_NM_observable(ccd_pnm_batch_1,ccd_snm_batch_1,density_batch_1,"GP")
-#train_x   = raw_data[0]
-#train_y_1 = raw_data[1]
-#train_y_2 = raw_data[2]
-#dens_list = raw_data[3].T[0]
-#pnm       = raw_data[4] 
-#pnm_cov   = raw_data[5] 
-#d_pnm     = raw_data[6] 
-#d_pnm_cov = raw_data[7] 
-#dd_pnm    = raw_data[8] 
-#dd_pnm_cov= raw_data[9] 
-#snm       = raw_data[10] 
-#snm_cov   = raw_data[11] 
-#d_snm     = raw_data[12] 
-#d_snm_cov = raw_data[13]
-#dd_snm    = raw_data[14] 
-#dd_snm_cov= raw_data[15] 
-#
-#
-#saturation_density_batch, saturation_energy_batch, symmetry_energy_batch,L_batch,K_batch,raw_data = io_1.generate_NM_observable(ccd_pnm_batch_1,ccd_snm_batch_1,density_batch_1,"interpolation")
-#
-#dens_list_2 = raw_data[0]
-#pnm_2     = raw_data[1] 
-#d_pnm_2   = raw_data[3] 
-#dd_pnm_2  = raw_data[5] 
-#snm_2     = raw_data[7] 
-#d_snm_2   = raw_data[9] 
-#dd_snm_2  = raw_data[11] 
-#
-#
-##io_1.plot_6(train_x, train_y_1,train_y_2,dens_list,pnm,pnm_cov,d_pnm,d_pnm_cov, dd_pnm,dd_pnm_cov,snm,snm_cov,d_snm, d_snm_cov, dd_snm, dd_snm_cov,dens_list_2,pnm_2,d_pnm_2,dd_pnm_2,snm_2,d_snm_2, dd_snm_2 )
-#
-#print(saturation_density_batch)
-#print(saturation_energy_batch)
-#print(symmetry_energy_batch)
-#print(L_batch)
-#print(K_batch)
-
-#sympy.E
-#x1 = sympy.Symbol('x1')
-#x2 = sympy.Symbol('x2')
-#a = sympy.Symbol('a')
-#l = sympy.Symbol('l')
-#f = sympy.Function('f')(x1,x2,a,l)
-#
-#f = a**2* sympy.E**(-(x1-x2)**2/2/l**2)
-#print(sympy.diff(f,x1,2,x2,2).subs(l,2))
 

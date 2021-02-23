@@ -1,3 +1,4 @@
+from mpi4py import MPI
 import numpy as np
 import re
 import os
@@ -117,6 +118,11 @@ def evaluate_NM(domain_point):
 ## main
 ################################
 time_start = time.time()
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+nprocs = comm.Get_size()
+
+if rank == 0: print("nprpcs = "+str(nprocs))
 #ccd_batch = io_1.read_ccd_data(input_dir="/home/slime/subspace_CC/test/emulator/DNNLO394/pnm_66_0.12_DNNLOgo_christian_64points/ccd.out",data_count = 64)
 
 #cc_data_path  = "/home/slime/subspace_CC/test/emulator/DNNLO394/christian_34points/%s_%d_%.2f_DNNLO_christian_34points/%s"
@@ -136,8 +142,8 @@ LEC_batch     = io_1.read_LEC_batch("LEC_read5.txt")
 LEC_set_num   = np.arange(len(LEC_batch))
 LEC_set_num   = LEC_set_num.reshape(-1,1)
 LEC_batch_new = np.concatenate((LEC_set_num,LEC_batch),axis=1)
-print(len(LEC_batch))
-print(LEC_batch_new)
+if rank == 0: print(len(LEC_batch))
+if rank == 0: print(LEC_batch_new)
 
 # load emulator matrix
 path = "/home/slime/subspace_CC/test/emulator/DNNLO394/"
@@ -183,7 +189,7 @@ for loop in range(density_count):
         in_dir = database_dir+"LEC_hf_"+str(loop1+1)+"_matrix"
         hf_matrices_pnm.append(np.loadtxt(in_dir))
 
-    print("loading " + database_dir + " pnm data")
+    if rank == 0: print("loading " + database_dir + " pnm data")
 
 
 for loop in range(density_count):
@@ -218,10 +224,10 @@ for loop in range(density_count):
         in_dir = database_dir+"LEC_hf_"+str(loop1+1)+"_matrix"
         hf_matrices_snm.append(np.loadtxt(in_dir))
 
-    print("loading " + database_dir + " snm data")
+    if rank == 0: print("loading " + database_dir + " snm data")
 
 
-print("done loading NM ")
+if rank==0: print("done loading NM ")
 
 ### check for single point
 #LEC_test = io_1.read_LEC("ccm_in_DNNLO394")
@@ -244,32 +250,37 @@ print("done loading NM ")
 #print("wtf")
 #print(np.array_split(LEC_batch[0:10],3,axis=0))
 
-nprocs = psutil.cpu_count(logical=False)
-os.environ["OMP_NUM_THREADS"] = "1"
-print("nprocs = "+str(nprocs))
 
-#observables_batch = evaluate_NM_batch(LEC_batch[0:5])
+### parallel
+#nprocs = psutil.cpu_count(logical=False)
+#os.environ["OMP_NUM_THREADS"] = "1"
+#print("nprocs = "+str(nprocs))
+#with mp.Pool(processes= nprocs) as p:
+#    observables_batch = p.map(evaluate_NM_batch,np.array_split(LEC_batch_new[0:8],nprocs,axis=0))
+#observables_batch = np.vstack(observables_batch)
 #print(observables_batch)
 
-with mp.Pool(processes= nprocs) as p:
-    observables_batch = p.map(evaluate_NM_batch,np.array_split(LEC_batch_new[0:8],nprocs,axis=0))
-observables_batch = np.vstack(observables_batch)
-#for loop in range(len(observables_batch)):
-#    print(observables_batch[loop])
-#
-#print(observables_batch)
+###  maping input data for each procs
+#if rank==0 : print(np.array_split(LEC_batch_new[0:8],nprocs,axis=0)[rank])
+sample_cal = 8
 
-
+comm.Barrier()
+observables_batch = evaluate_NM_batch(np.array_split(LEC_batch_new[0:sample_cal],nprocs,axis=0)[rank])
+observables_batch = comm.gather(observables_batch, root=0)
+if rank==0: print(observables_batch)
 time_end = time.time()
-print('time cost',time_end-time_start,'s')
+if rank==0: print('time cost',time_end-time_start,'s')
 
-for loop in range(8):
-    with open("NM_ccd_800k_samples.txt","a") as f:
-        f.write("%6d   %.4f   %.6f   %.6f   %.2f   %.1f       " % ( observables_batch[loop][0] ,observables_batch[loop][1] , observables_batch[loop][2] ,observables_batch[loop][3] ,observables_batch[loop][4], observables_batch[loop][5]))
-        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][6] ,observables_batch[loop][7] , observables_batch[loop][8] ,observables_batch[loop][9] ,observables_batch[loop][10]))
-        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][11],observables_batch[loop][12], observables_batch[loop][13],observables_batch[loop][14],observables_batch[loop][15]))
-        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][16],observables_batch[loop][17], observables_batch[loop][18],observables_batch[loop][19],observables_batch[loop][20]))
-        f.write("%.4f  %.4f  %.4f  %.4f  %.4f \n "        % ( observables_batch[loop][21],observables_batch[loop][22], observables_batch[loop][23],observables_batch[loop][24],observables_batch[loop][25]))
+
+### print data
+#print(len(observables_batch))
+#for loop in range(len(observables_batch)):
+#    with open("NM_ccd_800k_samples.txt","a") as f:
+#        f.write("%6d   %.4f   %.6f   %.6f   %.2f   %.1f       " % ( observables_batch[loop][0] ,observables_batch[loop][1] , observables_batch[loop][2] ,observables_batch[loop][3] ,observables_batch[loop][4], observables_batch[loop][5]))
+#        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][6] ,observables_batch[loop][7] , observables_batch[loop][8] ,observables_batch[loop][9] ,observables_batch[loop][10]))
+#        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][11],observables_batch[loop][12], observables_batch[loop][13],observables_batch[loop][14],observables_batch[loop][15]))
+#        f.write("%.4f  %.4f  %.4f  %.4f  %.4f  "          % ( observables_batch[loop][16],observables_batch[loop][17], observables_batch[loop][18],observables_batch[loop][19],observables_batch[loop][20]))
+#        f.write("%.4f  %.4f  %.4f  %.4f  %.4f \n "        % ( observables_batch[loop][21],observables_batch[loop][22], observables_batch[loop][23],observables_batch[loop][24],observables_batch[loop][25]))
 
 
 #sample_count             = 589
