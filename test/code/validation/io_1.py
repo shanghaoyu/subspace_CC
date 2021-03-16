@@ -15,6 +15,8 @@ import pandas as pd
 from scipy.special import loggamma,gamma
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel,  WhiteKernel
 from numpy.linalg import solve, cholesky
+from matplotlib.patches import Ellipse, Rectangle
+import matplotlib.transforms as transforms
 ######################################################
 ######################################################
 ### read LECs set from file
@@ -72,6 +74,24 @@ def read_ccd_data(input_dir,data_count):
     ccd_batch = ccd_batch[xx]
     return ccd_batch
 
+def read_correlation_energy_data(input_dir,data_count):
+    ccd_batch   = np.zeros(data_count)
+    file_count  = np.zeros(data_count)
+    with open(input_dir,'r') as f:   
+        count = len(open(input_dir,'rU').readlines())    
+        data  = f.readlines()
+        wtf = re.match('#', 'abc',flags=0)
+        for loop1 in range(count):
+            temp_1           = re.findall(r"[-+]?\d+\.?\d*",data[loop1])
+            file_count[loop1]=round(float(temp_1[0]))-1
+            ccd_batch[loop1]=float(temp_1[1])
+    assert data_count == count
+    xx = np.argsort(file_count)
+    ccd_batch = ccd_batch[xx]
+    return ccd_batch
+
+
+
 def read_rskin_data(input_dir,data_count,start_line,position):
     rskin_batch   = np.zeros(data_count)
     file_count  = np.zeros(data_count)
@@ -127,6 +147,46 @@ def kf_density(kf,g):  # pnm:g=2 ; snm:g=4
 def density_kf(density,g):  # pnm:g=2 ; snm:g=4
     kf = pow(density*6*pow(math.pi,2)/g,1/3)
     return kf
+
+# ---------------------------
+# Statistics helper functions (From Chrisitian)
+# ---
+def hdi(samples, hdi_prob=0.68):
+    '''
+    Extract a Highest Denisty Interval (HDI). Only works for unimodal distributions.
+
+    The HDI is the minimum width Bayesian credible interval (BCI). This method is inspired by Arviz
+    https://arviz-devs.github.io/arviz/_modules/arviz/stats/stats.html#hdi
+
+    Args:
+        samples: obj
+               object containing posterior samples.
+        hdi_prob: float, optional
+                Prob for which the highest density interval will be computed. Defaults to 0.68.
+
+    Returns:
+        np.ndarray. lower and upper values of the interval.
+    '''
+    samples = np.array(samples)
+    nsamples = len(samples)
+
+    samples = np.sort(samples)
+
+    interval_idx_inc = int(np.floor(hdi_prob * nsamples)) # Number of samples in the HDI
+    n_intervals = nsamples - interval_idx_inc             # Number of possible intervals
+    # Differences between the first and last blocks
+    interval_width = np.subtract(samples[interval_idx_inc:], samples[:n_intervals], dtype=np    .float_)
+
+    if len(interval_width) == 0:
+        raise ValueError("Too few elements for interval calculation. ")
+
+    min_idx = np.argmin(interval_width) # Finding the shortest interval
+    hdi_min = samples[min_idx]
+    hdi_max = samples[min_idx + interval_idx_inc]
+
+    return np.array([hdi_min, hdi_max])
+
+
 
 ######################################################
 ######################################################
@@ -413,8 +473,51 @@ class GP_test:
         
         #print("mine: det_factor="+str(det_factor))
 
+        return log_pr_yk_l_Q
+
+    def log_likelihood_l_Q_method_error(self,l):
+        # update cn with l:
+        self.update_c_square_bar(l)
+        C = 1 / pow(np.linalg.det( 2*math.pi * self.R_l ) ,self.n_c) 
+        #C = C * ()
+        
+        T1 = loggamma(self.nu/2) - self.nu/2 * np.log(self.nu_tau_square/2)
+        T2 = loggamma(self.nu_0/2) - self.nu_0/2 * np.log(self.nu_tau_square_0/2)
+
+        log_det_corr_mine = np.linalg.slogdet( 2*np.pi*self.R_l )[1] 
+        #print("This is what I have:")
+        #print(log_det_corr_mine)
+
+        corr_L = np.linalg.cholesky(self.R_l)
+        log_det_corr = 2 * np.sum(np.log(2 * np.pi * np.diagonal(corr_L)))
+        #print("This is what they have:")
+        #print(log_det_corr)
+
+        ### for gp 
+        Kyy = self.c_square * self.R_l
+
+        alpha = np.linalg.inv(Kyy) @ self.ck_matrix.T 
+
+        log_pr_ck_l = -0.5 * np.einsum("ik,ik->k",self.ck_matrix.T,alpha) - 0.5 * np.linalg.slogdet(Kyy)[1] - 0.5 *self.N * np.log(2 * np.pi)
+        log_pr_ck_l = log_pr_ck_l.sum(-1) 
+
+        #print("mine : y_train="+str(self.ck_matrix))
+        #print("mine : alpha="+str(np.linalg.inv(Kyy) @ self.ck_matrix.T))
+        #print("mine : T2+T3="+str(- 0.5 * np.linalg.slogdet(Kyy)[1] - 0.5 *self.N * np.log(2 * np.pi)))
+        #print("mine : T_1  = "+str((-0.5 * self.ck_matrix.dot(np.linalg.inv(Kyy)).dot(self.ck_matrix.T)).sum(-1)))
+        #print("mine : T_all="+str(log_pr_ck_l))
+
+        orders_fit     = [0, 2, 3]
+
+        #det_factor = np.sum(self.n_c * np.log(np.abs(self.y_ref)) + np.sum(orders_fit) * np.log(np.abs(self.Q_series)))
+        log_pr_yk_l_Q  = log_pr_ck_l 
+
+        #print("mine: "+str(Q_series))
+        
+        #print("mine: det_factor="+str(det_factor))
 
         return log_pr_yk_l_Q
+
 
     def student_t_test_log_like(self):
         kernel = RBF(length_scale=0.7) + WhiteKernel(noise_level=1e-10)
@@ -446,6 +549,9 @@ class GP_test:
         print("#################################") 
         print("###setup cross covariance matirx") 
         print("#################################") 
+        mag = 1
+        l1 = l1 * mag
+        l2 = l2 * mag
 
         def truncation_error_cov_matrix_element(order,y_ref_x,y_ref_xp,Q_x,Q_xp,kernel_matrix_element):
             return y_ref_x * y_ref_xp * pow(Q_x * Q_xp,order+1)/(1 - Q_x * Q_xp) * kernel_matrix_element
@@ -504,7 +610,9 @@ class GP_test:
             # choose cross kernel 
             kernel_xy = RBF(length_scale=(pow((l1**2+l2**2)/2,0.5)))# + WhiteKernel(noise_level=1e-10)
             rho      = pow((2*l1*l2/(l1**2+l2**2)),0.5)
-    #        print("rho = "+str(rho))
+            print("our rho = "+str(rho))
+            rho      = rho_empirical 
+
             K_xy     = sigma1 * sigma2 * rho * kernel_xy(x_series.reshape(-1,1))
             cov_XX = np.zeros((len(x_series),len(x_series)))
             cov_YY = np.zeros((len(x_series),len(x_series)))
@@ -570,6 +678,9 @@ class GP_test:
             cov_all = np.vstack((cov_all,temp_))
     
             return cov_all 
+
+        # third way:  
+        # l1 and l2 for diagnal component, (l1+l2)/2 for off-diagonal component
         elif method_switch == 3:
             kernel_xx = RBF(length_scale=l1) + WhiteKernel(noise_level=1e-10)
             K_xx      = variance1 * kernel_xx(x_series.reshape(-1,1))
@@ -751,7 +862,15 @@ def generate_NM_observable(pnm_data,snm_data,density_sequence,switch):
         raw_data.append(S_rho)
         raw_data.append(L_rho)
         raw_data.append(iX)
-        
+        if iX == (len(snm)-1) or  iX == 0 :
+        #print("iX out of range")
+            saturation_density  = np.nan
+            saturation_energy   = np.nan
+            symmetry_energy     = np.nan
+            L                   = np.nan
+            K                   = np.nan
+
+
         #plot_5(train_x, train_y_1,train_y_2,test_x,pnm,pnm_cov,d_pnm,d_pnm_cov, dd_pnm,dd_pnm_cov,snm,snm_cov,d_snm,d_snm_cov, dd_snm, dd_snm_cov )
 
     elif (switch =="fit_curve_quadratic"):
@@ -783,9 +902,9 @@ def generate_NM_observable(pnm_data,snm_data,density_sequence,switch):
         symmetry_energy    = pnm[iX]-snm[iX]
 
     elif (switch =="interpolation"):
-        #interpol_count = 1000
-        spl_ccd_snm    = interpolate.UnivariateSpline(density_sequence,snm_data,k=2)
-        spl_ccd_pnm    = interpolate.UnivariateSpline(density_sequence,pnm_data,k=2)
+        #### here k = 2,3,4 , also one can set "s = 0" forcing the curve to go through all training point
+        spl_ccd_snm    = interpolate.UnivariateSpline(density_sequence,snm_data,k=4,s=0)
+        spl_ccd_pnm    = interpolate.UnivariateSpline(density_sequence,pnm_data,k=4,s=0)
         #spldens        = np.linspace(density_sequence[0],density_sequence[len(density_sequence)-1],num=interpol_count)
         
         spldens  = np.arange(density_sequence.min(),density_sequence.max(),density_accuracy)
@@ -916,7 +1035,61 @@ def generate_NM_observable_batch(pnm_batch_all,snm_batch_all,density_sequence_al
         saturation_density_batch[loop], saturation_energy_batch[loop], symmetry_energy_batch[loop],L_batch[loop], K_batch[loop], raw_data= generate_NM_observable(pnm_batch_all[loop,:],snm_batch_all[loop,:],density_sequence_all[loop,:],switch)
 
     return saturation_density_batch, saturation_energy_batch,symmetry_energy_batch,L_batch, K_batch
-  
+ 
+def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
+    """
+    Create a plot of the covariance confidence ellipse of *x* and *y*.
+
+    Parameters
+    ----------
+    x, y : array-like, shape (n, )
+        Input data.
+
+    ax : matplotlib.axes.Axes
+        The axes object to draw the ellipse into.
+
+    n_std : float
+        The number of standard deviations to determine the ellipse's radiuses.
+
+    **kwargs
+        Forwarded to `~matplotlib.patches.Ellipse`
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+    """
+    if x.size != y.size:
+        raise ValueError("x and y must be the same size")
+
+    cov = np.cov(x, y)
+    pearson = cov[0, 1]/np.sqrt(cov[0, 0] * cov[1, 1])
+    # Using a special case to obtain the eigenvalues of this
+    # two-dimensionl dataset.
+    ell_radius_x = np.sqrt(1 + pearson)
+    ell_radius_y = np.sqrt(1 - pearson)
+    ellipse = Ellipse((0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2,
+                      facecolor=facecolor, **kwargs)
+
+    # Calculating the stdandard deviation of x from
+    # the squareroot of the variance and multiplying
+    # with the given number of standard deviations.
+    scale_x = np.sqrt(cov[0, 0]) * n_std
+    mean_x = np.mean(x)
+
+    # calculating the stdandard deviation of y ...
+    scale_y = np.sqrt(cov[1, 1]) * n_std
+    mean_y = np.mean(y)
+
+    transf = transforms.Affine2D() \
+        .rotate_deg(45) \
+        .scale(scale_x, scale_y) \
+        .translate(mean_x, mean_y)
+
+    ellipse.set_transform(transf + ax.transData)
+    return ax.add_patch(ellipse)
+
+
+ 
 ################################
 ## plots
 ################################
@@ -2047,7 +2220,7 @@ def plot_11():
     label = []
     for loop in range(34):
         if loop == 0:
-            label.append("HM (34 samples)")
+            label.append("with truncation error")
         else:
             label.append("")
 
@@ -2147,7 +2320,7 @@ def plot_11():
     plot_path = 'Pb208_34_samples_EOS_test.pdf'
     plt.savefig(plot_path)
 
-def plot_12(list_x,list_y_1,list_y_2,list_y_3,list_y_1cov,list_y_2cov,list_y_3cov,list_x_2,list_y_11,list_y_22,list_y_33,matter_type): ## plot GP cn
+def plot_12(list_x,list_y_1,list_y_2,list_y_3,list_y_1cov,list_y_2cov,list_y_3cov,list_x_2,list_y_11,list_y_22,list_y_33,matter_type,observable_type): ## plot GP cn
     fontsize_x_label = 20
     fontsize_y_label = 20
     fontsize_legend  = 20
@@ -2169,26 +2342,26 @@ def plot_12(list_x,list_y_1,list_y_2,list_y_3,list_y_1cov,list_y_2cov,list_y_3co
    
     x_list = list_x
     y_list = list_y_1
-    confidence = 2*np.sqrt(np.diag(list_y_1cov))
+    #confidence = 2*np.sqrt(np.diag(list_y_1cov))
     #plt.fill_between(x_list, y_list + confidence, y_list - confidence,color='orange', alpha=0.1)
     #plt.fill_between(x_list, y_list , y_list - 1, alpha=0.1)
     l = plt.scatter(list_x_2,list_y_11,s = 20,color='orange', marker = 'o')
     print(list_x_2)
     print(list_y_11)
-    l = plt.plot(x_list,y_list,color='orange',lw = 2, marker = '',markersize=markersize,label = "c0")
+    l = plt.plot(x_list,y_list,color='orange',lw = 2, marker = '',markersize=markersize,label = "%s0" %(observable_type))
  
     x_list = list_x
     y_list = list_y_2
-    confidence = 2*np.sqrt(np.diag(list_y_2cov))
+    #confidence = 2*np.sqrt(np.diag(list_y_2cov))
     l = plt.scatter(list_x_2,list_y_22,s = 20,color='green',marker = 'o')
-    l = plt.plot(x_list,y_list,color='green',lw = 2, marker = '',markersize=markersize,label = "c2")
+    l = plt.plot(x_list,y_list,color='green',lw = 2, marker = '',markersize=markersize,label = "%s1" %(observable_type))
     #plt.fill_between(x_list, y_list + confidence, y_list - confidence,color='green', alpha=0.1)
 
     x_list = list_x
     y_list = list_y_3
-    confidence = 2*np.sqrt(np.diag(list_y_3cov))
+    #confidence = 2*np.sqrt(np.diag(list_y_3cov))
     l = plt.scatter(list_x_2,list_y_33,s = 20,color='blue', marker = 'o')
-    l = plt.plot(x_list,y_list,color='blue',lw = 2, marker = '',markersize=markersize,label = "c3")
+    l = plt.plot(x_list,y_list,color='blue',lw = 2, marker = '',markersize=markersize,label =  "%s2" %(observable_type))
     #plt.fill_between(x_list, y_list + confidence, y_list - confidence,color='blue', alpha=0.1)
     #plt.ylim((-2.5,2.5))
     plt.xlim((0.06,0.38))
@@ -2197,7 +2370,7 @@ def plot_12(list_x,list_y_1,list_y_2,list_y_3,list_y_1cov,list_y_2cov,list_y_3co
     plt.xlabel(r"$ \rm{Density} \ \it{\rho} \ [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
     plt.ylabel(r"$\rm{Energy} \ \rm{per} \ \rm{particle} \ \it{E/A}$",fontsize=fontsize_y_label)
 
-    plot_path = 'Observable_coefficients_cn_%s.pdf' % (matter_type)
+    plot_path = 'Observable_coefficients_%s_%s.pdf' % (observable_type,matter_type)
     plt.savefig(plot_path)
 
  
@@ -2243,6 +2416,249 @@ def plot_13(list_1,list_2,list_3,list_4):
     plot_path = 'saturaion_point_with_all_error_test.pdf'
     plt.savefig(plot_path)
     plt.close('all')
+
+def plot_14( density_,pnm_,snm_,density_batch,pnm_batch,snm_batch):
+    n = len(pnm_batch)
+    print(n) 
+### plot
+    fontsize_x_label = 20
+    fontsize_y_label = 20
+    fontsize_legend  = 20
+    markersize       = 10
+    label = []
+    for loop in range(n):
+        if loop == 0:
+            label.append("")
+        else:
+            label.append("")
+
+    sns.set_style("white")
+    colors = ["blue", "crimson", "green", "gold", "violet"]
+#    sns.set_palette(cmap)
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(10,14))
+    plt.subplots_adjust(wspace =0.3, hspace =0.2)
+#####################################################
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax = plt.subplot(211)
+    ax.grid(False)
+    ax.spines['top'].set_linewidth(2)
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['right'].set_linewidth(2)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=1,color="k")
+#   range ajustment
+    #regulator = (x_max-x_min)/(y_max-y_min)
+    #x_list = density_batch_all[0]
+    #y_list = ccd_pnm_batch_all[0]
+    #l = plt.plot(x_list,y_list,color='blue',lw = 0.5, marker = '.',markersize=markersize,label="HM (34 samples)")
+    x_list = density_
+    y_list = pnm_
+    l = plt.plot(x_list,y_list,color='k',lw = 2, marker = 's',markersize=markersize,label="EOS without error")
+    for loop in range(n):
+        x_list = density_batch[loop]
+        y_list = pnm_batch[loop]
+        l = plt.plot(x_list,y_list,color=colors[loop],lw = 2, marker = '',markersize=markersize,label = label[loop])
+
+    plt.legend(loc='upper left',fontsize = fontsize_legend)
+    #plt.xlim((x_min,x_max))
+    #plt.xticks(np.arange(x_min,x_max+0.0001,x_gap),fontsize = 10)
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$E_{\rm{pnm}}/A \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+
+
+    ax = plt.subplot(212)
+    ax.grid(False)
+    ax.spines['top'].set_linewidth(2)
+    ax.spines['bottom'].set_linewidth(2)
+    ax.spines['left'].set_linewidth(2)
+    ax.spines['right'].set_linewidth(2)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2,color="k")
+
+    x_list = density_
+    y_list = snm_
+    l = plt.plot(x_list,y_list,color='k',lw = 2, marker = 's',markersize=markersize,label= "EOS without error")
+
+    for loop in range(n):
+        x_list = density_batch[loop]
+        y_list = snm_batch[loop]
+        l = plt.plot(x_list,y_list,color=colors[loop],lw = 2, marker = '',markersize=markersize,label = label[loop])
+
+    plt.legend(loc='upper left',fontsize = fontsize_legend)
+    #plt.xlim((x_min,x_max))
+    #plt.xticks(np.arange(x_min,x_max+0.0001,x_gap),fontsize = 10)
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$E_{\rm{snm}}/A \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+
+    plot_path = 'EOS_with_error.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+#####################################################
+#####################################################
+#####################################################
+def plot_confidence_EOS(density_series,pnm_,snm_,pnm_batch,snm_batch,q):
+    sns.set_style("white")
+
+    fig1 = plt.figure('fig1')
+    plt.figure(figsize=(6,10))
+    plt.subplots_adjust(wspace =0, hspace =0)
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+### plot pnm
+    ax1 = plt.subplot(211)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax1.spines['bottom'].set_linewidth(2)
+    ax1.spines['top'].set_linewidth(2)
+    ax1.spines['left'].set_linewidth(2)
+    ax1.spines['right'].set_linewidth(2)
+    ax1.grid(False)
+
+    x_list   =  density_series
+    y_list_1 =  np.zeros(len(density_series))
+    y_list_2 =  np.zeros(len(density_series))
+#   
+    for loop in range(len(x_list)):
+        y_list_temp = hdi(pnm_batch[:,loop], hdi_prob=q)
+        y_list_1[loop] = y_list_temp[0] 
+        y_list_2[loop] = y_list_temp[1] 
+
+    plt.fill_between(x_list, y_list_1 , y_list_2, alpha=0.3, label="68%")
+    plt.plot(x_list, pnm_, marker = "s",label="interaction #20")
+
+    ax1.legend()
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.xlim((0.10,0.1801)) 
+    plt.ylim((0,30)) 
+    ax1.set_xticklabels([])
+    #plt.xticks([])
+
+### plot snm
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+    ax2 = plt.subplot(212)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+    ax2.spines['bottom'].set_linewidth(2)
+    ax2.spines['top'].set_linewidth(2)
+    ax2.spines['left'].set_linewidth(2)
+    ax2.spines['right'].set_linewidth(2)
+    ax2.grid(False)
+    for loop in range(len(x_list)):
+        y_list_temp = hdi(snm_batch[:,loop], hdi_prob=q)
+        y_list_1[loop] = y_list_temp[0] 
+        y_list_2[loop] = y_list_temp[1] 
+
+
+    plt.fill_between(x_list, y_list_1 , y_list_2, alpha=0.3,label="68%")
+    plt.plot(x_list, snm_, marker = "s",label="interaction #20")
+
+    ax2.legend()
+    plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
+    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.xlim((0.10,0.1801)) 
+    plt.ylim((-20,-7)) 
+    #plt.xticks([])
+    plot_path = 'EOS_confidence_region_2.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+    sns.set()
+    fig2 = plt.figure('fig2')
+    plt.figure(figsize=(13,5))
+    plt.subplots_adjust(wspace =0.1, hspace =0)
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+### plot pnm
+    ax1 = plt.subplot(121)
+    print(len(pnm_batch))
+
+    y_list_temp=[]
+    density_new = [0.11]
+    for loop in range(len(pnm_batch)):
+        spl  = interpolate.UnivariateSpline(x_list,pnm_batch[loop,:],k=4,s=0)
+        y_   = spl(density_new)
+        y_list_temp.append(y_[0])        
+    
+     
+    sns.distplot(y_list_temp)    
+    standard_deviation=np.std(y_list_temp)
+    ax1.set_title("pnm(%.2f fm^3): standard deviation %.4f" %(density_new[0],standard_deviation),fontsize=12)
+    plt.ylabel('')
+
+    ax2 = plt.subplot(122)
+    print(len(pnm_batch))
+
+    y_list_temp=[]
+    for loop in range(len(pnm_batch)):
+        spl  = interpolate.UnivariateSpline(x_list,snm_batch[loop,:],k=4,s=0)
+        y_   = spl(density_new)
+        y_list_temp.append(y_[0])        
+    
+     
+    sns.distplot(y_list_temp)    
+    standard_deviation=np.std(y_list_temp)
+    ax2.set_title("snm(%.2f fm^3): standard deviation %.4f" %(density_new[0],standard_deviation),fontsize=12)
+    plt.ylabel('')
+    plot_path = 'EOS_given_density_.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+
+
+#        y_list_1[loop] = y_list_temp[0] 
+#        y_list_2[loop] = y_list_temp[1] 
+
+
+
+
+
+#####################################################
+#####################################################
+#####################################################
+def plot_confidence_ellipse(x,y):
+    fontsize_x_label = 20
+    fontsize_y_label = 20
+    fontsize_legend  = 20
+
+    sns.set_style("white")
+    cmap = sns.cubehelix_palette(8)
+
+    matplotlib.rcParams['xtick.direction'] = 'in'
+    matplotlib.rcParams['ytick.direction'] = 'in'
+
+    fig, ax_nstd = plt.subplots(figsize=(6, 6))
+    ax_nstd.grid(False)
+    ax_nstd.spines['top'].set_linewidth(2)
+    ax_nstd.spines['bottom'].set_linewidth(2)
+    ax_nstd.spines['left'].set_linewidth(2)
+    ax_nstd.spines['right'].set_linewidth(2)
+    plt.tick_params(top=True,bottom=True,left=True,right=True,width=1,color="k")
+    
+    ax_nstd.scatter(x, y, s=0.1,color = cmap[0],alpha = 0.4)
+    
+    confidence_ellipse(x, y, ax_nstd, n_std=1,
+                       label='68%', edgecolor= cmap[3],linestyle='-.',lw = 2,alpha = 0.9)
+    confidence_ellipse(x, y, ax_nstd, n_std=2,
+                       label='95%', edgecolor=cmap[1] ,linestyle='--',lw = 2, alpha = 0.9)
+    #confidence_ellipse(x, y, ax_nstd, n_std=3,
+    #                   label=r'$3\sigma$', edgecolor='royalblue', linestyle=':', alpha = 0.8)
+    rect = Rectangle((0.15,-16.5),0.02,1,linewidth=1.5,edgecolor='k',facecolor = 'grey',alpha = 0.3)
+    ax_nstd.add_patch(rect) 
+    #ax_nstd.scatter(mu[0], mu[1], c='red', s=3)
+    ax_nstd.legend()
+    plt.xlabel(r"$\rho \ [\rm{fm}^{-3}]$",fontsize=fontsize_x_label)
+    plt.ylabel(r"$E/A \ [\rm{MeV}]$",fontsize=fontsize_y_label)
+    plt.xlim((0.12,0.2001))
+    plt.ylim((-20,-12))
+
+
+    plot_path = 'saturation_point_credible_interval.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+
 
 
 def plot_corner_plot(df_plot):
@@ -2341,12 +2757,17 @@ def plot_corner_plot(df_plot):
     weights = np.ones(len(df_plot))
 
 
-### start corner plot 
-    g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
+### start corner plot
+    #palette='hls'
+    g = sns.PairGrid(df_plot,corner=True, hue = "rho",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
-    g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=df_plot["set_num"])
+    #g.map_diag(sns.histplot, kde=True, weights=weights, bins=20);
+    g.map_diag(sns.kdeplot);
+    g.add_legend() 
 
-    for irow,row_obs in enumerate(df_plot.columns):
+ 
+    for irow,row_obs in enumerate(df_plot.columns[0:5]):
         # Extract exp value
         try: 
             obs_dict = obs_exp[row_obs]
@@ -2355,7 +2776,7 @@ def plot_corner_plot(df_plot):
             if err is None: row_val = [val]
             else: row_val = [val-err, val+err]
         except KeyError: row_val=[]
-        for icol,col_obs in enumerate(df_plot.columns):
+        for icol,col_obs in enumerate(df_plot.columns[0:5]):
             ax = g.axes[irow,icol]
             # Check if axis is in upper triangle
             if ax is None: continue
@@ -2398,7 +2819,7 @@ def plot_corner_plot(df_plot):
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
 
-    plot_path = 'corner_plot_NM_rho_1_method_3.pdf' 
+    plot_path = 'test_1.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
 
