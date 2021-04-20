@@ -378,17 +378,18 @@ def prepare_training_data(matter_type):
 #    print(c2)
 #    print(c3)
     
-    #  use 5 density points for the truncation error study
-    y_ref_new     = np.zeros(5)
-    kf_series_new = np.zeros(5)
-    density_series_new = np.zeros(5)
-    ck_new        = np.zeros((len(ck),5))
-    y_all_new     = np.zeros((len(ck),5))
-    Q_series_new  = np.zeros(5)
-    mk_new        = np.zeros((len(ck),5))# for method error
+    #  use n density points for the truncation error study
+    n = 5
+    gap = 0.08
+    y_ref_new     = np.zeros(n)
+    kf_series_new = np.zeros(n)
+    density_series_new = np.zeros(n)
+    ck_new        = np.zeros((len(ck),n))
+    y_all_new     = np.zeros((len(ck),n))
+    Q_series_new  = np.zeros(n)
+    mk_new        = np.zeros((len(ck),n))# for method error
 
-    for loop in range(5):
-        gap = 0.08
+    for loop in range(n):
         count = int(gap / 0.02)
         kf_series_new[loop]      = kf_series[0+loop*count]
         density_series_new[loop] = density_series[0+loop*count]
@@ -525,8 +526,8 @@ print("###### Pb208 project")
 print("#######################################")
 density_series = np.arange(0.12,0.21,0.02)
 #temp!!! 
-#density_series = np.arange(0.10,0.20,0.02)
-
+#density_series = np.arange(0.06,0.21,0.02)
+density_count  = len(density_series)
 print("density = "+str(density_series))
 
 def y_ref_2(y_ref_raw,density_raw,density_new):
@@ -579,19 +580,17 @@ Q_series_snm   = Q_(kf_series_snm)
 #################################################
 # empirical Pearson correlation coefficient
 #################################################
-def empirical_Pearson_correlation(x, y):
-    #x      = np.array([ 1 , 1.01 , 1.02 , 1.03, 1, 2, 3,4] )
-    #y      = np.array([ 1 , 0.99 , 0.99,  0.98, 1, 2 , 3, 4])
+def empirical_Pearson_correlation(x, y, observable_type):
     density_count_per_order = 18
     x      = x[density_count_per_order*1 : density_count_per_order *3]
     y      = y[density_count_per_order*1 : density_count_per_order *3]
     #print(x)
     #print(y)
     
-    x1    = ck_snm_raw.flatten()[density_count_per_order:density_count_per_order *2]
-    y1    = ck_pnm_raw.flatten()[density_count_per_order:density_count_per_order *2]
-    x2    = ck_snm_raw.flatten()[density_count_per_order *2:density_count_per_order *3]
-    y2    = ck_pnm_raw.flatten()[density_count_per_order *2:density_count_per_order *3]
+    x1    = x[density_count_per_order *0 :density_count_per_order *1]
+    y1    = y[density_count_per_order *0 :density_count_per_order *1]
+    x2    = x[density_count_per_order *1 :density_count_per_order *2]
+    y2    = y[density_count_per_order *1 :density_count_per_order *2]
     print(x1)
     print(y1)
     def plot_Pearson_correlation(x1,y1,x2,y2):
@@ -599,15 +598,15 @@ def empirical_Pearson_correlation(x, y):
         matplotlib.rcParams['xtick.direction'] = 'in'
         matplotlib.rcParams['ytick.direction'] = 'in'
         plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
-        plt.plot(x1,y1,label = "c2")
-        plt.plot(x2,y2,label = "c3")
+        plt.plot(x1,y1,label = "%s2"%(observable_type))
+        plt.plot(x2,y2,label = "%s3"%(observable_type))
     
         plt.xlabel("E/A",fontsize=15)
         plt.ylabel("E/N",fontsize=15)
-        plt.xlim((-4,4))
-        plt.ylim((-2,2))
-       
-        plot_path = "Pearson_correlation.pdf"
+        #plt.xlim((-4,4))
+        #plt.ylim((-2,2))
+        plt.legend() 
+        plot_path = "Pearson_correlation_%s.pdf" %(observable_type)
         plt.savefig(plot_path,bbox_inches = 'tight')
         plt.close('all')
     
@@ -624,13 +623,15 @@ def empirical_Pearson_correlation(x, y):
     r_xy   =  np.sum ((x-x_mean) * (y-y_mean))\
     / pow(np.sum((x-x_mean)**2) * np.sum((y-y_mean)**2),0.5)
     print("Pearson correlation coefficient = "+str(r_xy))
-    print("ck_snm="+str(ck_snm))
-    print(ck_snm.flatten())
+   #print("ck_snm="+str(ck_snm))
+   #print(ck_snm.flatten())
     #print(pearsonr(x[0:5],-1*y[0:5]))
     return r_xy
+mk_scale = 50
+rho_empirical    = empirical_Pearson_correlation(ck_snm_raw.flatten(),ck_pnm_raw.flatten(),"c")
+rho_empirical_mk = empirical_Pearson_correlation(mk_snm_raw.flatten()/50,mk_pnm_raw.flatten()/50,"m")
+print("mk_snm"+str(mk_snm_raw.flatten()))
 
-rho_empirical    = empirical_Pearson_correlation(ck_snm_raw.flatten(),ck_pnm_raw.flatten())
-rho_empirical_mk = empirical_Pearson_correlation(mk_snm_raw.flatten(),mk_pnm_raw.flatten())
 
 #################################
 ####setup cross covariance matrix
@@ -646,6 +647,7 @@ rho = [rho_empirical,0,0.5]
 ###################################################
 cross_cov_matrix_1 = gpr.setup_cross_cov_matrix(truncation_order,variance_pnm,l_pnm,variance_snm,l_snm,kf_series_pnm,y_ref_pnm,y_ref_snm,Q_series_pnm,Q_series_snm,rho_empirical,cov_method_switch)
 #print(cross_cov_matrix_1[0:5,0:5] + cross_cov_matrix_1[5:10,5:10])
+np.savetxt("cov_matrix_snm.txt",cross_cov_matrix_1[density_count::,density_count::],fmt='%.4f')
 
 cross_cov_matrix_2 = gpr.setup_cross_cov_matrix(truncation_order,variance_pnm,l_pnm,variance_snm,l_snm,kf_series_pnm,y_ref_pnm,y_ref_snm,Q_series_pnm,Q_series_snm,0,cov_method_switch)
 #print(cross_cov_matrix_2[0:5,0:5] + cross_cov_matrix_2[5:10,5:10])
@@ -741,7 +743,7 @@ ccdt_snm_correlation_energy_new = np.zeros(density_count)
 for loop1 in range(density_count):
     #temp!!!
     dens = 0.12 + loop1 * 0.02
-    #dens = 0.10 + loop1 * 0.02
+    #dens = 0.06 + loop1 * 0.02
     ccdt_pnm_correlation_energy_new[loop1] = ccdt_pnm_correlation_energy[loop1+3] 
     ccdt_snm_correlation_energy_new[loop1] = ccdt_snm_correlation_energy[loop1+3]
     input_dir = database_dir + "%s_%d_%.2f_DNNLO_christian_34points/ccdt.out" % ('pnm',66,dens)
@@ -755,6 +757,10 @@ print(ccdt_pnm_correlation_energy_new)
 print("ccdt_snm_correlation_energy_new")
 print(ccdt_snm_correlation_energy_new)
 
+#print(ccdt_snm_batch_all[20])
+#spl  = interpolate.UnivariateSpline(np.arange(0.06,0.201,0.02),ccdt_snm_batch_all[20],k=4,s=0)
+#print(spl(np.arange(0.06,0.161,0.01)))
+#os._exit(0)
 ################################################################
 ####sample from the GP distribution with cross covariance matrix
 ################################################################

@@ -2759,7 +2759,9 @@ def plot_corner_plot(df_plot):
 
 ### start corner plot
     #palette='hls'
-    g = sns.PairGrid(df_plot,corner=True, hue = "rho",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    #g = sns.PairGrid(df_plot,corner=True, hue = "rho",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    #g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
     #g.map_lower(sns.scatterplot, alpha=0.8, size=df_plot["set_num"])
     #g.map_diag(sns.histplot, kde=True, weights=weights, bins=20);
@@ -2767,7 +2769,7 @@ def plot_corner_plot(df_plot):
     g.add_legend() 
 
  
-    for irow,row_obs in enumerate(df_plot.columns[0:5]):
+    for irow,row_obs in enumerate(df_plot.columns[0:4]):
         # Extract exp value
         try: 
             obs_dict = obs_exp[row_obs]
@@ -2776,7 +2778,7 @@ def plot_corner_plot(df_plot):
             if err is None: row_val = [val]
             else: row_val = [val-err, val+err]
         except KeyError: row_val=[]
-        for icol,col_obs in enumerate(df_plot.columns[0:5]):
+        for icol,col_obs in enumerate(df_plot.columns[0:4]):
             ax = g.axes[irow,icol]
             # Check if axis is in upper triangle
             if ax is None: continue
@@ -2819,7 +2821,7 @@ def plot_corner_plot(df_plot):
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
 
-    plot_path = 'test_1.pdf' 
+    plot_path = '800k_sample_NM_corner_plot.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
 

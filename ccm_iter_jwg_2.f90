@@ -2650,15 +2650,15 @@ SUBROUTINE print_gs_amplitudes(subspace_count)
   if ( iam == 0 ) write(6,*) 'channels_num ', channels%number_hhpp_confs
   if ( iam == 0 ) write(6,*) 'wtf end '
   open (223,file=t2_file)
-!  do channel   = 1, channels%number_hhpp_confs
-!     do bra = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
-!        do ket = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
-!
-!         if ( iam == 0 )  write(223,'(3(I4,1x),1x,2(g20.10,1x))') channel, bra, ket, &
-!                REAL(t2_ccm(channel)%val(ket,bra)), AIMAG(t2_ccm(channel)%val(ket,bra))
-!        end do
-!     end do
-!  end do
+  do channel   = 1, channels%number_hhpp_confs
+     do bra = 1, size(  lookup_hhpp_configs(1,channel)%ival, 2)
+        do ket = 1, size(  lookup_hhpp_configs(2,channel)%ival, 2)
+
+         if ( iam == 0 )  write(223,'(3(I4,1x),1x,2(g20.10,1x))') channel, bra, ket, &
+                REAL(t2_ccm(channel)%val(ket,bra)), AIMAG(t2_ccm(channel)%val(ket,bra))
+        end do
+     end do
+  end do
   
   if ( iam == 0 ) write(223,*) 'converge_flag=', converge_flag
   if ( iam == 0 ) write(223,*) 'dens=', dens

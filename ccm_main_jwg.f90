@@ -372,7 +372,7 @@ PROGRAM ccm_kspace
      eccsdt_av = eccsdt
 
   case( 'subspace_cal_read_file' )  !calculate t_ij_ab for different LECs
-     subspace_num   = 34
+     subspace_num   = 5
 
      LEC_num = 17 
      if ( .not. allocated(LEC_read_all)) allocate( LEC_read_all(subspace_num,LEC_num))
@@ -398,7 +398,7 @@ PROGRAM ccm_kspace
      !call compute_v3nf_memory
 
 
-     do loop = subspace_start, subspace_end
+     do loop = 1,  subspace_num
        LEC_c1_input     = LEC_read_all(loop,12)
        LEC_c2_input     = LEC_read_all(loop,13)  
        LEC_c3_input     = LEC_read_all(loop,14)
@@ -449,8 +449,8 @@ PROGRAM ccm_kspace
 
 
   case( 'solve_general_EV' ) !solve the general eigenvalue problem
-     wf_dir = "/home/slime/subspace_CC/test/backup/DNNLOgo_20percent_64points/"
-     subspace_num = 64
+     wf_dir = "/home/slime/subspace_CC/test/backup/DNNLOgo394_one_parameter_5point/"
+     subspace_num = 5
 
      call setup_N3LO_int_mesh(10)
      twist_angle = 0.d0 
