@@ -231,6 +231,7 @@ subspace_norm_matrix_NM_snm.append([N])
 in_dir = database_dir+"C_matrix.txt"
 C = np.loadtxt(in_dir)
 subspace_matrices_NM_snm.append([C])
+
 for loop1 in range(domain_dimension):
     in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
     mtx = np.loadtxt(in_dir)

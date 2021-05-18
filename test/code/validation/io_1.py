@@ -2661,7 +2661,7 @@ def plot_confidence_ellipse(x,y):
 
 
 
-def plot_corner_plot(df_plot):
+def plot_corner_plot(df_plot,weights):
     obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
                     'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
                     'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
@@ -2754,18 +2754,19 @@ def plot_corner_plot(df_plot):
                         'author': None, 'abbrev': None, 'exp': True}
 
 # Option 1
-    weights = np.ones(len(df_plot))
+#    weights = np.ones(len(df_plot))
 
 
 ### start corner plot
     #palette='hls'
-    #g = sns.PairGrid(df_plot,corner=True, hue = "rho",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    g = sns.PairGrid(df_plot,corner=True, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     #g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
-    g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    #g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+
     g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
     #g.map_lower(sns.scatterplot, alpha=0.8, size=df_plot["set_num"])
-    #g.map_diag(sns.histplot, kde=True, weights=weights, bins=20);
-    g.map_diag(sns.kdeplot);
+    g.map_diag(sns.histplot,  weights=weights, bins=20);
+    #g.map_diag(sns.kdeplot);
     g.add_legend() 
 
  
@@ -2779,6 +2780,7 @@ def plot_corner_plot(df_plot):
             else: row_val = [val-err, val+err]
         except KeyError: row_val=[]
         for icol,col_obs in enumerate(df_plot.columns[0:4]):
+
             ax = g.axes[irow,icol]
             # Check if axis is in upper triangle
             if ax is None: continue
@@ -2821,15 +2823,332 @@ def plot_corner_plot(df_plot):
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
 
-    plot_path = '800k_sample_NM_corner_plot.pdf' 
+    plot_path = '5k_NM_corner_plot_both_weights.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+def plot_corner_plot_1(df_plot,weights):
+    obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
+                    'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
+                    'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
+                    'E3-208Pb':r'$E_{3^-}(^{208}\mathrm{Pb})$ [MeV]',\
+                    'Rp208Pb':r'$R_\mathrm{pt-p}(^{208}\mathrm{Pb})$ [fm]',\
+                    'Rp48Ca':r'$R_\mathrm{pt-p}(^{48}\mathrm{Ca})$ [fm]',\
+                    'saturation_energy':r'$E_0/A$ [MeV]',\
+                    'saturation_density':r'$\rho_0$ [fm$^{-3}$]',\
+                    'Rskin48Ca':r'$R_\mathrm{skin}(^{48}\mathrm{Ca})$ [fm]',\
+                    'Rskin208Pb':r'$R_\mathrm{skin}(^{208}\mathrm{Pb})$ [fm]',\
+                    'aD208Pb':r'$\alpha_D(^{208}\mathrm{Pb})$ [fm$^3$]',\
+                    'symmetry_energy':r'$S$ [MeV]',\
+                    'L':r'$L$ [MeV]',\
+                    'K':r'$K$ [MeV]',\
+                    'E2H':r'$E(^{2}\mathrm{H})$ [MeV]',\
+                    'Rp2H':r'$R_p(^{2}\mathrm{H})$ [fm]',\
+                    'Q2H':r'$Q(^{2}\mathrm{H})$ [e fm$^2$]',\
+                    'E3H':r'$E(^{3}\mathrm{H})$ [MeV]',\
+                    'E4He':r'$E(^{4}\mathrm{He})$ [MeV]',\
+                    'Rp4He':r'$R_p(^{4}\mathrm{He})$ [fm]',\
+                    'E16O':r'$E(^{16}\mathrm{O})$ [MeV]',\
+                    'Rp16O':r'$R_p(^{16}\mathrm{O})$ [fm]'}
+    
+    obs_exp={}
+    # ---
+    # 48Ca
+    # ---
+    # Exp. refs missing
+    obs_exp['EA48Ca']={'val':-416/48, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E2+48Ca']={'val':3.83, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    # Rch = 3.477(2), ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp48Ca']={'val':3.393, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # Hagen et al, Nat. Phys. 12, 186-190 (2016)
+    obs_exp['Rskin48Ca']={'val':0.135, 'err':0.015, 'ref': 'Nat. Phys. 12, 186-190 (2016)', \
+                          'author': 'Hagen et al.', 'abbrev': 'Hagen', 'exp': False}
+    # ---
+    # 208Pb
+    # ---
+    # Exp. refs missing
+    obs_exp['EA208Pb']={'val':-1636.4/208, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3-208Pb']={'val':2.614, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    #
+    # Rch = 5.5012 +/- 0.0013, ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp208Pb']={'val':5.4498, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # alpha_D = 20.1 +/- 0.6 fm^3, A. Tamii et al, Phys. Rev. Lett. 107, 062502 (2011).
+    obs_exp['aD208Pb']={'val':20.1, 'err':0.6, 'ref': 'Phys. Rev. Lett. 107, 062502 (2011).', \
+                       'author': 'Tamii et al', 'abbrev': 'Tamii', 'exp': True}
+    # ---
+    # NM
+    # ---
+    # Bender et al, Rev. Mod. Phys. 75, 121–180 (2003).
+    # Hebeler, et al, Phys. Rev. C 83, 031301 (2011).
+    # or E0 = −15.9±0.4 MeV, n0 = 0.164±0.007 fm−3 (Drischler et al. 2016)
+    obs_exp['saturation_energy']={'val':-16., 'err':0.5, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    obs_exp['saturation_density']={'val':0.16, 'err':0.01, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    # Lattimer & Lim (2013); Lattimer & Steiner (2014)
+    obs_exp['symmetry_energy']={'val':31., 'err':1., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    obs_exp['L']={'val':50., 'err':10., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    # Shlomo et al. 2006; Piekarewicz 2010
+    obs_exp['K']={'val':240., 'err':20., 'ref': 'Shlomo et al. 2006; Piekarewicz 2010', \
+                          'author': 'Shlomo et al.', 'abbrev': 'Shlomo', 'exp': False}
+
+    # ---
+    # A=2-16
+    # ---
+    # Values from PRX table.
+    obs_exp['E2H']={'val':-2.2298, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp2H']={'val':np.sqrt(3.903), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Q2H']={'val':0.27, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3H']={'val':-8.4818, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E4He']={'val':-28.2956, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp4He']={'val':np.sqrt(2.1176), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E16O']={'val':-127.62, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp16O']={'val':np.sqrt(6.66), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    #g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
+    
+    #cmap = sns.cubehelix_palette(8)
+    #cmap = sns.color_palette("Paired")
+    #sns.set_palette(cmap)
+    g = sns.PairGrid(df_plot,corner=True, diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    # Careful with KDE plots when there are too many data!
+    #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
+    
+    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
+    g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+    g.add_legend() 
+    for irow,row_obs in enumerate(df_plot.columns[0:5]):
+ 
+        # Extract exp value
+        try: 
+            obs_dict = obs_exp[row_obs]
+            val = obs_dict['val']
+            err = obs_dict['err']
+            if err is None: row_val = [val]
+            else: row_val = [val-err, val+err]
+        except KeyError: row_val=[]
+        for icol,col_obs in enumerate(df_plot.columns[0:5]):
+            ax = g.axes[irow,icol]
+            # Check if axis is in upper triangle
+            if ax is None: continue
+            # Use correct axis label
+            if ax.is_first_col():
+                try: ax.set_ylabel(obs_label[row_obs])
+                except KeyError: ax.set_ylabel(row_obs)
+            if ax.is_last_row():
+                try: ax.set_xlabel(obs_label[col_obs])
+                except KeyError: ax.set_xlabel(col_obs)
+            # Extract exp value
+            try: 
+                obs_dict = obs_exp[col_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: col_val = [val]
+                else: col_val = [val-err, val+err]
+            except KeyError: col_val=[]
+            # Plot exp values
+            if icol==irow:
+                if len(row_val)==2:
+                    ax.axvline(row_val[0],color='r',alpha=0.5)
+                    ax.axvline(row_val[1],color='r',alpha=0.5)
+                    ax.axvspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axvline(row_val[0],color='r')
+            else:
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+    
+    plot_path = '800k_sample_NM_corner_plot_1.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
 
 
 
-################################
-## main
-################################
 
-#plot_11()
+def plot_corner_plot_2(df_plot,weights):
+    obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
+                    'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
+                    'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
+                    'E3-208Pb':r'$E_{3^-}(^{208}\mathrm{Pb})$ [MeV]',\
+                    'Rp208Pb':r'$R_\mathrm{pt-p}(^{208}\mathrm{Pb})$ [fm]',\
+                    'Rp48Ca':r'$R_\mathrm{pt-p}(^{48}\mathrm{Ca})$ [fm]',\
+                    'saturation_energy':r'$E_0/A$ [MeV]',\
+                    'saturation_density':r'$\rho_0$ [fm$^{-3}$]',\
+                    'Rskin48Ca':r'$R_\mathrm{skin}(^{48}\mathrm{Ca})$ [fm]',\
+                    'Rskin208Pb':r'$R_\mathrm{skin}(^{208}\mathrm{Pb})$ [fm]',\
+                    'aD208Pb':r'$\alpha_D(^{208}\mathrm{Pb})$ [fm$^3$]',\
+                    'symmetry_energy':r'$S$ [MeV]',\
+                    'L':r'$L$ [MeV]',\
+                    'K':r'$K$ [MeV]',\
+                    'E2H':r'$E(^{2}\mathrm{H})$ [MeV]',\
+                    'Rp2H':r'$R_p(^{2}\mathrm{H})$ [fm]',\
+                    'Q2H':r'$Q(^{2}\mathrm{H})$ [e fm$^2$]',\
+                    'E3H':r'$E(^{3}\mathrm{H})$ [MeV]',\
+                    'E4He':r'$E(^{4}\mathrm{He})$ [MeV]',\
+                    'Rp4He':r'$R_p(^{4}\mathrm{He})$ [fm]',\
+                    'E16O':r'$E(^{16}\mathrm{O})$ [MeV]',\
+                    'Rp16O':r'$R_p(^{16}\mathrm{O})$ [fm]'}
+    
+    obs_exp={}
+    # ---
+    # 48Ca
+    # ---
+    # Exp. refs missing
+    obs_exp['EA48Ca']={'val':-416/48, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E2+48Ca']={'val':3.83, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    # Rch = 3.477(2), ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp48Ca']={'val':3.393, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # Hagen et al, Nat. Phys. 12, 186-190 (2016)
+    obs_exp['Rskin48Ca']={'val':0.135, 'err':0.015, 'ref': 'Nat. Phys. 12, 186-190 (2016)', \
+                          'author': 'Hagen et al.', 'abbrev': 'Hagen', 'exp': False}
+    # ---
+    # 208Pb
+    # ---
+    # Exp. refs missing
+    obs_exp['EA208Pb']={'val':-1636.4/208, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3-208Pb']={'val':2.614, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    #
+    # Rch = 5.5012 +/- 0.0013, ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp208Pb']={'val':5.4498, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # alpha_D = 20.1 +/- 0.6 fm^3, A. Tamii et al, Phys. Rev. Lett. 107, 062502 (2011).
+    obs_exp['aD208Pb']={'val':20.1, 'err':0.6, 'ref': 'Phys. Rev. Lett. 107, 062502 (2011).', \
+                       'author': 'Tamii et al', 'abbrev': 'Tamii', 'exp': True}
+    # ---
+    # NM
+    # ---
+    # Bender et al, Rev. Mod. Phys. 75, 121–180 (2003).
+    # Hebeler, et al, Phys. Rev. C 83, 031301 (2011).
+    # or E0 = −15.9±0.4 MeV, n0 = 0.164±0.007 fm−3 (Drischler et al. 2016)
+    obs_exp['saturation_energy']={'val':-16., 'err':0.5, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    obs_exp['saturation_density']={'val':0.16, 'err':0.01, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    # Lattimer & Lim (2013); Lattimer & Steiner (2014)
+    obs_exp['symmetry_energy']={'val':31., 'err':1., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    obs_exp['L']={'val':50., 'err':10., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    # Shlomo et al. 2006; Piekarewicz 2010
+    obs_exp['K']={'val':240., 'err':20., 'ref': 'Shlomo et al. 2006; Piekarewicz 2010', \
+                          'author': 'Shlomo et al.', 'abbrev': 'Shlomo', 'exp': False}
+
+    # ---
+    # A=2-16
+    # ---
+    # Values from PRX table.
+    obs_exp['E2H']={'val':-2.2298, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp2H']={'val':np.sqrt(3.903), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Q2H']={'val':0.27, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3H']={'val':-8.4818, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E4He']={'val':-28.2956, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp4He']={'val':np.sqrt(2.1176), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E16O']={'val':-127.62, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp16O']={'val':np.sqrt(6.66), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    #g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
+    
+    #cmap = sns.cubehelix_palette(8)
+    #cmap = sns.color_palette("Paired")
+    #sns.set_palette(cmap)
+    g = sns.PairGrid(df_plot,corner=True, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    # Careful with KDE plots when there are too many data!
+    #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
+    
+    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
+    g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+    g.add_legend() 
+    for irow,row_obs in enumerate(df_plot.columns[0:5]):
+ 
+        # Extract exp value
+        try: 
+            obs_dict = obs_exp[row_obs]
+            val = obs_dict['val']
+            err = obs_dict['err']
+            if err is None: row_val = [val]
+            else: row_val = [val-err, val+err]
+        except KeyError: row_val=[]
+        for icol,col_obs in enumerate(df_plot.columns[0:5]):
+            ax = g.axes[irow,icol]
+            # Check if axis is in upper triangle
+            if ax is None: continue
+            # Use correct axis label
+            if ax.is_first_col():
+                try: ax.set_ylabel(obs_label[row_obs])
+                except KeyError: ax.set_ylabel(row_obs)
+            if ax.is_last_row():
+                try: ax.set_xlabel(obs_label[col_obs])
+                except KeyError: ax.set_xlabel(col_obs)
+            # Extract exp value
+            try: 
+                obs_dict = obs_exp[col_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: col_val = [val]
+                else: col_val = [val-err, val+err]
+            except KeyError: col_val=[]
+            # Plot exp values
+            if icol==irow:
+                if len(row_val)==2:
+                    ax.axvline(row_val[0],color='r',alpha=0.5)
+                    ax.axvline(row_val[1],color='r',alpha=0.5)
+                    ax.axvspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axvline(row_val[0],color='r')
+            else:
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+    
+    plot_path = '5k_NM_corner_plot_both_weights_5.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
 

@@ -59,7 +59,8 @@ def txt_to_pickle():
     df.to_pickle('NM_ccd_800k_samples.pickle')
 
 txt_to_pickle()
-df_800k_NM = pd.read_pickle("NM_ccd_800k_samples.pickle")
+df_800k_NM     = pd.read_pickle("NM_ccd_800k_samples.pickle")
+df_800k_NM_new = df_800k_NM.dropna(axis=0,how='any') 
 
 df_12k_NM  = df_800k_NM.iloc[index_12k,:]
 df_8k_NM   = df_12k_NM.dropna(axis=0,how='any') 
@@ -93,7 +94,7 @@ print (df_5k_NM_A16)
 print (df_5k_NM)
 print (df_5k_NM.shape)
 # option 1
-#weights = np.ones(len(df_5k_NM))
+weights_0  = np.ones(len(df_800k_NM_new))
 # option 2
 weights_1  = np.exp(df_logL_5k['A2-4'].values)
 #weights_1  = minmax_scale(weights_1)
@@ -177,7 +178,8 @@ print(len(weights))
 # draw corner plot
 #######################
 
-io_1.plot_corner_plot_2(df_5k_NM.loc[:,['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K','weights_option']],weights)
+#io_1.plot_corner_plot_2(df_5k_NM.loc[:,['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K','weights_option']],weights)
+io_1.plot_corner_plot_1(df_800k_NM_new.loc[:,['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K']],weights_0)
 
 #io_1.plot_3(saturation_density_batch_cut,saturation_energy_batch_cut,symmetry_energy_batch_cut,K_batch_cut,L_batch_cut)
 

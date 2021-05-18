@@ -34,7 +34,7 @@ def hf_emulator(LEC_all_matrix,C,LEC_target):
 ######################################################
 def emulator(switch,matter_type,H_matrix,C,N,subtract,LEC_target,hyperparameter):
     if(switch == 1):
-        ev_ultra,eigvals,vote = emulator1(H_matrix,C,N,subtract,LEC_target)
+        ev_ultra,eigvals,vote = emulator1(H_matrix,C,N,subtract,LEC_target,0)
     elif(switch == 2):
         ev_ultra,eigvals,vote = emulator2(H_matrix,C,N,subtract,LEC_target,0.03)
     elif(switch == 3):
@@ -45,7 +45,7 @@ def emulator(switch,matter_type,H_matrix,C,N,subtract,LEC_target,hyperparameter)
         if matter_type == "pnm":
             ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.01)
         if matter_type == "snm":
-            ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.018)
+            ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.02)
 
 
     else:
@@ -59,7 +59,7 @@ def emulator(switch,matter_type,H_matrix,C,N,subtract,LEC_target,hyperparameter)
 ### Emulator1
 ######################################################
 ######################################################
-def emulator1(H_matrix,C,N,subtract,LEC_target):
+def emulator1(H_matrix,C,N,subtract,LEC_target,tolerance):
     subspace_dimension = np.size(H_matrix,1)
     LEC_num            = np.size(H_matrix,0)
     H = np.zeros((subspace_dimension,subspace_dimension))
@@ -141,8 +141,8 @@ def emulator1(H_matrix,C,N,subtract,LEC_target):
                     f_1.write('%2d: %.5f%%  ' % (loop2+1,abs(eigvec_R[loop1,loop2])**2*100))
                     if ((loop2+1)%5==0): f_1.write('\n')
                 f_1.write('\n################################\n')
-    vote = []
-    return eigvals_new[0] , eigvec_R_new, vote
+    vote = 0
+    return eigvals_new[0] , eigvec_R_new[0], vote
 
 
 ######################################################
@@ -150,7 +150,8 @@ def emulator1(H_matrix,C,N,subtract,LEC_target):
 ### Emulator!!!
 ######################################################
 ######################################################
-def emulator2(subtract_count,LEC_target,tolerance):
+def emulator2(H_matrix,C,N,subtract,LEC_target,tolerance):
+
     split = 5
     #vote_need = 5
     subspace_dimension = np.size(H_matrix,1)
@@ -161,7 +162,6 @@ def emulator2(subtract_count,LEC_target,tolerance):
         H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
     H = H + C
 
-    subtract = [subtract_count]
     H1 = np.delete(H,subtract,axis = 0)
     H1 = np.delete(H1,subtract,axis = 1)
     N1 = np.delete(N,subtract,axis = 0)
@@ -254,7 +254,7 @@ def emulator2(subtract_count,LEC_target,tolerance):
     eigvals_1 = eigvals_1[np.where(eigvals_1.real!=0)]
     eigvals_new_1 = eigvals_new_1[np.where(eigvals_new_1.real!=0)]
     #return eigvals_1[0].real
-
+    vote = 0
     return ev_ultra.real, eigvals_1, vote
 
 
@@ -332,8 +332,8 @@ def emulator3(H_matrix,C,N,subtract,LEC_target,tolerance):
         if flag == 1 :
             ev_ultra = eigvals_1[loop]
             break
-
-    return ev_ultra.real
+    vote = 0
+    return ev_ultra.real, eigvals_1, vote
 
 
 ######################################################
@@ -459,7 +459,7 @@ def emulator4(H_matrix,C,N,subtract,LEC_target,tolerance):
         if vote[loop] == max(vote) :
             ev_ultra = eigvals_1[loop]
             break
-
+    vote = 0
     return ev_ultra.real, eigvals_1, vote
 
 
@@ -469,9 +469,10 @@ def emulator4(H_matrix,C,N,subtract,LEC_target,tolerance):
 ######################################################
 ######################################################
 def emulator5(H_matrix,C,N,subtract,LEC_target,tolerance):
-    split = 50
+    split = 100
     sample_each_slice = 30
-    vote_need = round(0.70*split)
+    vote_need = round(0.7*split)
+    #vote_need = round(1*split)
     subspace_dimension = np.size(H_matrix,1)
     LEC_num            = np.size(H_matrix,0)
 

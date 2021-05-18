@@ -19,10 +19,11 @@ def validation(matter_type,particle_num):
         density = round(density_min + loop*density_gap,2)
         database_dir = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/" % (matter_type,particle_num,density)
         #print(database_dir)
-        file_path    = my_path + "LEC_read6.txt"
+        #file_path    = my_path + "LEC_read6.txt"
         #input_dir    = my_path + "emulator/DNNLO394/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
         #print(input_dir)
-        validation_dir=my_path + "validation/DNNLO394_validation_new/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
+        #validation_dir=my_path + "validation/DNNLO394_validation_new/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
+        validation_dir=my_path + "validation/DNNLO394_validation/%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
     
         with open(validation_dir,'r') as f_1:
             count = len(open(validation_dir,'rU').readlines())
@@ -55,9 +56,9 @@ def validation(matter_type,particle_num):
         #        density_data.append(density)
     return ccd_data 
 
-def evaluate_NM(domain_point):
-    emulator_switch=5
-    interpolation_choice = 'GP'
+def evaluate_NM(domain_point,emulator_switch):
+    #emulator_switch=5
+    #interpolation_choice = 'GP'
     
     density_count = 5
     density_batch =  [0.12,0.14,0.16,0.18,0.20]
@@ -116,7 +117,7 @@ density_gap   = 0.02
 density_count = 5
 validation_count  = 50
 
-LEC_batch     = io_1.read_LEC_batch("LEC_read6.txt")
+LEC_batch     = io_1.read_LEC_batch("LEC_read2.txt")
 LEC_batch     = LEC_batch[0:50]
 LEC_set_num   = np.arange(len(LEC_batch))
 LEC_set_num   = LEC_set_num.reshape(-1,1)
@@ -189,22 +190,57 @@ ccd_snm = validation('snm',132)/132
 print(ccd_pnm)
 print(ccd_snm)
 
-emulator_pnm = np.zeros((validation_count,density_count))
-emulator_snm = np.zeros((validation_count,density_count))
+emulator_pnm_1 = np.zeros((validation_count,density_count))
+emulator_snm_1 = np.zeros((validation_count,density_count))
+emulator_pnm_2 = np.zeros((validation_count,density_count))
+emulator_snm_2 = np.zeros((validation_count,density_count))
+
 emulator_pnm_vote = np.zeros((validation_count,density_count))
 emulator_snm_vote = np.zeros((validation_count,density_count))
 
 
 for loop in range(validation_count):
-    temp_pnm,temp_snm,temp_pnm_vote,temp_snm_vote = evaluate_NM(LEC_batch_new[loop])
-    emulator_pnm[loop,:]= temp_pnm
-    emulator_snm[loop,:]= temp_snm
+    temp_pnm,temp_snm,temp_pnm_vote,temp_snm_vote = evaluate_NM(LEC_batch_new[loop],1)
+    emulator_pnm_1[loop,:]= temp_pnm
+    emulator_snm_1[loop,:]= temp_snm
     emulator_pnm_vote[loop,:]= temp_pnm_vote
     emulator_snm_vote[loop,:]= temp_snm_vote
 
 
-print(emulator_pnm)
-print(emulator_snm)
+for loop in range(validation_count):
+    temp_pnm,temp_snm,temp_pnm_vote,temp_snm_vote = evaluate_NM(LEC_batch_new[loop],5)
+    emulator_pnm_2[loop,:]= temp_pnm
+    emulator_snm_2[loop,:]= temp_snm
+print(emulator_pnm_2)
+print(emulator_snm_2)
+
+#for loop in range(validation_count):
+#    temp_pnm,temp_snm,temp_pnm_vote,temp_snm_vote = evaluate_NM(LEC_batch_new[loop],1)
+#    emulator_pnm_1[loop,:]= temp_pnm
+#    emulator_snm_1[loop,:]= temp_snm
+#   # emulator_pnm_vote[loop,:]= temp_pnm_vote
+#   # emulator_snm_vote[loop,:]= temp_snm_vote
+#
+#
+#
+#for loop in range(validation_count):
+#    temp_pnm,temp_snm,temp_pnm_vote,temp_snm_vote = evaluate_NM(LEC_batch_new[loop],5)
+#    emulator_pnm_2[loop,:]= temp_pnm
+#    emulator_snm_2[loop,:]= temp_snm
+#print(emulator_pnm_2)
+#print(emulator_snm_2)
+
+#np.savetxt("emulator_pnm_1.txt",emulator_pnm_1)
+#np.savetxt("emulator_snm_1.txt",emulator_snm_1)
+#np.savetxt("emulator_pnm_2.txt",emulator_pnm_2)
+#np.savetxt("emulator_snm_2.txt",emulator_snm_2)
+emulator_pnm_1 = np.loadtxt("emulator_pnm_1.txt")
+emulator_snm_1 = np.loadtxt("emulator_snm_1.txt")
+emulator_pnm_2 = np.loadtxt("emulator_pnm_2.txt")
+emulator_snm_2 = np.loadtxt("emulator_snm_2.txt")
+
+
+
 
 #ccd_pnm =           ccd_pnm[:,]
 #ccd_snm =           ccd_snm[:,]
@@ -214,31 +250,44 @@ print(emulator_snm)
 # plot
 x_list_1_pnm = ccd_pnm 
 x_list_1_pnm_vote = emulator_pnm_vote
-y_list_1_pnm = (emulator_pnm - ccd_pnm)/abs(ccd_pnm)
-y_list_11_pnm = emulator_pnm 
+y_list_1_pnm = (emulator_pnm_1 - ccd_pnm)/abs(ccd_pnm)
+y_list_11_pnm = emulator_pnm_1 
+y_list_111_pnm = (emulator_pnm_2 - ccd_pnm)/abs(ccd_pnm)
 
 x_list_1_snm = ccd_snm
 x_list_1_snm_vote = emulator_snm_vote
-y_list_1_snm = (emulator_snm - ccd_snm)/abs(ccd_snm)
-y_list_11_snm = emulator_snm
+y_list_1_snm = (emulator_snm_1 - ccd_snm)/abs(ccd_snm)
+y_list_11_snm = emulator_snm_1
+y_list_111_snm = (emulator_snm_2 - ccd_snm)/abs(ccd_snm)
+
+x_min_1 = 5 
+x_max_1 = 35
+y_min_1 = -0.05
+y_max_1 = 0.25
+
+
+x_min_2 = -25
+x_max_2 = -5
+y_min_2 = -0.05
+y_max_2 = 0.25
 
 sns.set_style("white")
 fig1 = plt.figure('fig1')
-plt.figure(figsize=(5,9))
-plt.subplots_adjust(wspace =0.3, hspace =0.2)
+plt.figure(figsize=(10,10))
+plt.subplots_adjust(wspace =0.25, hspace =0.2)
 matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
-ax = plt.subplot(211)
+ax = plt.subplot(221)
 ax.grid(False)
 ax.spines['top'].set_linewidth(2)
 ax.spines['bottom'].set_linewidth(2)
 ax.spines['left'].set_linewidth(2)
 ax.spines['right'].set_linewidth(2)
 plt.tick_params(top=True,bottom=True,left=True,right=True,length = 4,width=1.5,color="k")
-
-plt.hlines(0,5 , 35,linestyle=':',alpha = 0.6)
+plt.text(30, -0.7, "(a)", size = 20)
+plt.hlines(0,x_min_1 , x_max_1,linestyle=':',alpha = 0.6)
 l1 = plt.plot(x_list_1_pnm,y_list_1_pnm,color = 'b', linestyle="",marker = 's',markersize=5,zorder=1,label="CCD calculation")
-#plt.xlim(5,25)
+plt.xlim(x_min_1,x_max_1)
 #plt.ylim(5,25)
 #plt.xlim(5,35)
 #plt.ylim(-7.5,0.5)
@@ -249,7 +298,7 @@ plt.xlabel('CCD $E/N$ [MeV]',fontsize=18)
 #plt.xlabel('Votes',fontsize=18)
 
 
-ax = plt.subplot(212)
+ax = plt.subplot(223)
 ax.grid(False)
 ax.spines['top'].set_linewidth(2)
 ax.spines['bottom'].set_linewidth(2)
@@ -257,9 +306,10 @@ ax.spines['left'].set_linewidth(2)
 ax.spines['right'].set_linewidth(2)
 plt.tick_params(top=True,bottom=True,left=True,right=True,length = 4,width=1.5,color="k")
 
-
-plt.hlines(0,-20 , -5,linestyle=':',alpha = 0.6)
+plt.text(-24, -0.2, "(b)", size = 20)
+plt.hlines(0,x_min_2 , x_max_2,linestyle=':',alpha = 0.6)
 l1 = plt.plot(x_list_1_snm,y_list_1_snm,color = 'b', linestyle="",marker = 's',markersize=5,zorder=1,label="CCD calculation")
+plt.xlim(x_min_2,x_max_2)
 #plt.xlim(-22.5,-11.5)
 #plt.ylim(-22.5,-11.5)
 #plt.xlim(-20,-5)
@@ -271,7 +321,47 @@ plt.xlabel('CCD $E/A$ [MeV]',fontsize=18)
 #plt.xlabel('Votes',fontsize=18)
 
 
-plot_path = 'emulator_vs_ccd_with_small_batch_voting_test.pdf'
+ax = plt.subplot(222)
+ax.grid(False)
+ax.spines['top'].set_linewidth(2)
+ax.spines['bottom'].set_linewidth(2)
+ax.spines['left'].set_linewidth(2)
+ax.spines['right'].set_linewidth(2)
+plt.tick_params(top=True,bottom=True,left=True,right=True,length = 4,width=1.5,color="k")
+
+plt.text(30, 0.22, "(c)", size = 20)
+plt.hlines(0,x_min_1 ,x_max_1,linestyle=':',alpha = 0.6)
+l1 = plt.plot(x_list_1_pnm,y_list_111_pnm,color = 'b', linestyle="",marker = 's',markersize=5,zorder=1,label="CCD calculation")
+plt.xlim(x_min_1,x_max_1)
+plt.ylim(y_min_1,y_max_1)
+#plt.xlim(5,25)
+#plt.ylim(5,25)
+#plt.xlim(5,35)
+#plt.ylim(-7.5,0.5)
+#plt.ylabel(r'$\rm{CCD}-\rm{emulator}$  [MeV]',fontsize=18)
+#plt.ylabel(r'$(\rm{CCD}-\rm{emulator})/|CCD|$  ',fontsize=18)
+#plt.ylabel('Relative Change',fontsize=18)
+plt.xlabel('CCD $E/N$ [MeV]',fontsize=18)
+#plt.xlabel('Votes',fontsize=18)
+
+
+ax = plt.subplot(224)
+ax.grid(False)
+ax.spines['top'].set_linewidth(2)
+ax.spines['bottom'].set_linewidth(2)
+ax.spines['left'].set_linewidth(2)
+ax.spines['right'].set_linewidth(2)
+plt.tick_params(top=True,bottom=True,left=True,right=True,length = 4,width=1.5,color="k")
+
+plt.text(-24, 0.22, "(d)", size = 20)
+plt.hlines(0,x_min_2 , x_max_2,linestyle=':',alpha = 0.6)
+l1 = plt.plot(x_list_1_snm,y_list_111_snm,color = 'b', linestyle="",marker = 's',markersize=5,zorder=1,label="CCD calculation")
+
+plt.xlabel('CCD $E/A$ [MeV]',fontsize=18)
+plt.xlim(x_min_2,x_max_2)
+plt.ylim(y_min_2,y_max_2)
+
+plot_path = 'emulator_vs_ccd_with_without_small_batch_voting.pdf'
 #plot_path = 'emulator_vs_ccd_without_small_batch_voting_new.pdf'
 plt.savefig(plot_path,bbox_inches='tight')
 
