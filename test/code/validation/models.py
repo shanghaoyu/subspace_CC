@@ -663,6 +663,7 @@ class BaseConjugateProcess:
                         "requires that all bounds are finite.")
                 bounds = self.kernel_.bounds
                 for iteration in range(self.n_restarts_optimizer):
+
                     theta_initial = \
                         self._rng.uniform(bounds[:, 0], bounds[:, 1])
                     optima.append(
@@ -694,6 +695,7 @@ class BaseConjugateProcess:
         """
         if self.kernel is None:  # Use an RBF kernel as default
             self.kernel_ = clone(self._default_kernel)
+            print("self.kernel_"+str(self.kernel_))
         else:
             self.kernel_ = clone(self.kernel)
         self._rng = check_random_state(self.random_state)
@@ -967,8 +969,8 @@ class ConjugateGaussianProcess(BaseConjugateProcess):
             kernel = self.kernel_
             if note == 3.15:
                 print("They kernel start: "+str(kernel))
+                print("They theta: "+str(theta))
         kernel = kernel.clone_with_theta(theta)
-
         X = self.X_train_ if X is None else X
         y = self.y_train_ if y is None else y
 
@@ -1550,7 +1552,6 @@ class TruncationProcess:
         
         orders_mask = ~ np.isin(orders, self.excluded)
         coeffs = coefficients(y=y, ratio=ratio, ref=ref, orders=orders)[:, orders_mask]
-
         result = self.coeffs_process.log_marginal_likelihood(theta, eval_gradient=eval_gradient, X=X, y=coeffs, note = 3.15)
         if eval_gradient:
             coeff_log_like, coeff_log_like_gradient = result

@@ -635,7 +635,7 @@ rho_empirical_mk = empirical_Pearson_correlation(mk_snm_raw.flatten(),mk_pnm_raw
 #################################
 ####setup cross covariance matrix
 #################################
-truncation_order = 3
+truncation_order = 2
 cov_method_switch = 1 
 # 1 and 2 as in Drischler's paper: PHYSICAL REVIEW C 102, 054315 (2020),||| 1:C16,17 ||| 2:C18 ||| 
 # 3:l1 and l2 for diagonal component, (l1+l2)/2 for off-diagonal component, c_bar_square = c_snm * c_pnm * rho(empirical correlation coefficient)
@@ -938,7 +938,7 @@ print(raw_data)
 #####################################
 observables = ['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K','rho','set_num']
 df_nm = pd.DataFrame(raw_data,columns=observables)
-df_nm.to_pickle('NM_ccdt_sampling_from_one_of_34.pickle')
+df_nm.to_pickle('NM_ccd_sampling_from_one_of_5k.pickle')
 pd.options.display.float_format = '{:.2f}'.format
 print(df_nm)
 #######################

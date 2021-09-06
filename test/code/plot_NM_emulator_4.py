@@ -12,6 +12,9 @@ from validation import io_1
 from validation import NM_emulator
 
 my_LEC_label = ['cE','cD','c1','c2','c3','c4','Ct1S0pp','Ct1S0np','Ct1S0nn','Ct3S1','C1S0','C3P0','C1P1','C3P1','C3S1','CE1','C3P2']
+my_LEC_label_ = ['$c_E$','$c_D$','$c_1$','$c_2$','$c_3$','$c_4$',r'$\tilde{C}_{1S0}^{pp}$',r'$\tilde{C}_{1S0}^{np}$',r'$\tilde{C}_{1S0}^{nn}$',r'$\tilde{C}_{3S1}$','$C_{1S0}$','$C_{3P0}$','$C_{1P1}$','$C_{3P1}$','$C_{3S1}$','$C_{E1}$','$C_{3P2}$']
+my_LEC_label_2 = ['$cE$','$cD$','$c1$','$c2$','$c3$','$c4$',r'$\tilde{C}1S0pp$',r'$\tilde{C}1S0np$',r'$\tilde{C}1S0nn$',r'$\tilde{C}3S1$','$C1S0$','$C3P0$','$C1P1$','$C3P1$','$C3S1$','$CE1$','$C3P2$']
+
 LEC_batch    = io_1.read_LEC_batch("LEC_read1.txt")
 LEC_batch    = LEC_batch[0:64]
 LEC_batch    = np.array(LEC_batch)
@@ -45,7 +48,7 @@ for ket in range(4):
                 ax.set_xticklabels([round(x_min,2),round(x_max,2)])
             elif round_ <0:
                 ax.set_xticklabels([round(x_min,3),round(x_max,3)])
-            ax.set_xlabel("%s" %(my_LEC_label[fig_count]),fontsize = 20)
+            ax.set_xlabel("%s" %(my_LEC_label_2[fig_count]),fontsize = 20)
             ax.tick_params(labelsize=14)
             if bar == 0:
                 ax.set_ylabel("count")

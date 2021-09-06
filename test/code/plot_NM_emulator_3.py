@@ -5,6 +5,12 @@ from validation import NM_emulator
 import sympy
 import pandas as pd
 from sklearn.preprocessing import minmax_scale
+import seaborn as sns
+import matplotlib
+matplotlib.use('PS')
+import matplotlib.pyplot as plt
+
+import corner
 
 ################################
 ## main
@@ -179,12 +185,71 @@ print(len(weights))
 
 io_1.plot_corner_plot_2(df_5k_NM.loc[:,['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K','weights_option']],weights)
 
-#io_1.plot_3(saturation_density_batch_cut,saturation_energy_batch_cut,symmetry_energy_batch_cut,K_batch_cut,L_batch_cut)
 
 
-#rskin_batch = io_1.read_rskin_data("./pb208_rskin.txt",validation_count)
-#
-#io_1.plot_4(rskin_batch,symmetry_energy_batch,L_batch,K_batch)
-#print(rskin_batch)
+###################
+### new corner plot
+###################
+df_array = df_5k_NM.loc[:,['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K']].values
+#print(df_array.shape)
+#print(df_array)
+df_array_1 = df_array[0:round(len(df_array)/2)]
+df_array_2 = df_array[round(len(df_array)/2)::]
+weights_1 = weights[0:round(len(df_array)/2)]
+weights_2 = weights[round(len(df_array)/2)::]
+labels = [r'$\rho_0$ [fm$^{-3}$]'  ,r'$E_0/A$ [MeV]', r'$S$ [MeV]',r'$L$ [MeV]',r'$K$ [MeV]' ]
+
+#plt.grid(False)
+#plt.spines['top'].set_linewidth(2)
+#plt.spines['bottom'].set_linewidth(2)
+#plt.spines['left'].set_linewidth(2)
+#plt.spines['right'].set_linewidth(2)
+#matplotlib.rcParams['xtick.direction'] = 'in'
+#matplotlib.rcParams['ytick.direction'] = 'in'
+#matplotlib.rcParams['ax.set_linewidth'] = 2
+#plt.tick_params(top=True,bottom=True,left=True,right=True,width=2)
+sns.set_style("white")
+x = df_array_1[:,0]
+y = df_array_1[:,1]
+#print(x)
+#print(y)
+#hist, xedges, yedges = np.histogram2d(x, y, bins=10)
+#hist = hist.T
+#print(hist)
+#print(np.sum(hist))
+#print(xedges)
+#print(yedges)
+##print(len(np.where((x> 0.1201) & (x< 0.12804) &(y>-19.310045)&(y<-17.9880777))))
+#xx  = np.where((x> 0.1201) & (x< 0.12804))
+#print(xx) 
+#print(len(x[xx])) 
+#print(sum(weights_1[xx]))
+##print(np.where((x> 0.1598) & (x< 0.16774) &(y>-19.310045)&(y<-17.9880777)))
+##print(sum(weights_1[ ((x> 0.1598) & (x< 0.16774) &(y>-19.310045)&(y<-17.9880777))]))
+
+hist, xedges, yedges = np.histogram2d(x, y, bins=10,weights=weights_1)
+hist = hist.T
+print(hist)
+print(np.sum(hist))
+sorted_ = np.flipud(np.sort(hist.ravel()))
+pct     = np.cumsum(sorted_) / np.sum(sorted_)
+cutoffs = np.searchsorted(pct, [0.68,0.95])
+levels  = np.sort(sorted_[cutoffs])
+print(sorted_)
+print(np.sum(sorted_))
+print(np.cumsum(sorted_))
+print(cutoffs)
+print(levels)
+
+#hist, xedges, yedges = np.histogram2d(x, y, bins=10,density= True, weights= )
+
+fig = corner.hist2d(df_array_1[:,0],df_array_1[:,1],bins=10, labels=labels, colors='red',plot_contour=True,levels = levels[1],weights= weights_1)
+
+#fig = contour(X=xedges,Y=yedges ,Z=hist, [levels], **kwargs)
+
+#axes = axes.reshape((5,5))
+#axes[3,0].set_ylim(0,75)
+
+plt.savefig('custom_corner_plot_1.pdf', bbox_inches='tight')
 
 

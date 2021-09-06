@@ -267,7 +267,17 @@ sample_cal = 8
 comm.Barrier()
 observables_batch = evaluate_NM_batch(np.array_split(LEC_batch_new[0:sample_cal],nprocs,axis=0)[rank])
 observables_batch = comm.gather(observables_batch, root=0)
-if rank==0: print(observables_batch)
+
+if rank==0:
+    print(observables_batch)
+    observables_batch = [item for l in observables_batch for item in l]
+    print("numpy array:"+str(np.array(observables_batch)))
+    observables_batch = np.reshape(observables_batch, (sample_cal, 26))
+    print(observables_batch)
+    print(type(observables_batch))
+    print(len(observables_batch))
+
+
 time_end = time.time()
 if rank==0: print('time cost',time_end-time_start,'s')
 

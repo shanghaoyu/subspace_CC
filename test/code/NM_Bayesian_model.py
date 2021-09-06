@@ -526,7 +526,8 @@ print("###### Pb208 project")
 print("#######################################")
 density_series = np.arange(0.12,0.21,0.02)
 #temp!!! 
-#density_series = np.arange(0.06,0.21,0.02)
+#density_series = np.arange(0.1382,0.2283,0.02)
+#density_series = np.arange(0.16,0.241,0.02)
 density_count  = len(density_series)
 print("density = "+str(density_series))
 
@@ -742,8 +743,8 @@ ccdt_snm_correlation_energy_new = np.zeros(density_count)
 
 for loop1 in range(density_count):
     #temp!!!
-    dens = 0.12 + loop1 * 0.02
-    #dens = 0.06 + loop1 * 0.02
+    #dens = 0.12 + loop1 * 0.02
+    dens = density_series[loop1]
     ccdt_pnm_correlation_energy_new[loop1] = ccdt_pnm_correlation_energy[loop1+3] 
     ccdt_snm_correlation_energy_new[loop1] = ccdt_snm_correlation_energy[loop1+3]
     input_dir = database_dir + "%s_%d_%.2f_DNNLO_christian_34points/ccdt.out" % ('pnm',66,dens)
@@ -860,7 +861,6 @@ def sample_obs_from_cross_cov_matrix(cross_cov_matrix, rho, set_num,sample_count
 #    pnm_batch = np.array(pnm_batch)
 #    snm_batch = np.array(snm_batch)
 #    io_1.plot_confidence_EOS(density_batch_all[0,:],ccdt_pnm_batch_all[set_num],ccdt_snm_batch_all[set_num],pnm_batch,snm_batch,q=0.68)
-
     #snm_batch = np.array(snm_batch)
     #print(ccdt_snm_batch_all[set_num])
     #print(snm_batch[:,1])
@@ -874,7 +874,7 @@ def sample_obs_from_cross_cov_matrix(cross_cov_matrix, rho, set_num,sample_count
 ### test for one set of LEC
 #############################
 #set_num =20 
-#sample_count =10000
+#sample_count =1000
 #raw_data_1 = sample_obs_from_cross_cov_matrix(cross_cov_matrix_1, rho[0], set_num,sample_count,method_error_flag = False)
 #
 #os._exit(0)
@@ -907,15 +907,20 @@ def sample_obs_from_cross_cov_matrix(cross_cov_matrix, rho, set_num,sample_count
 ##########################################################
 # read likelihood pickle file
 sample_count = 10000
-likelihood_switch = 1
+likelihood_switch = 3 
 method_error_flag = True # decide whether to include method error or not
 method_error_switch = 1
 
-df_likelihood = pd.read_pickle('NIsamples_with_likelihood.pickle') 
-#print(df_likelihood.columns)
-#print(df_likelihood)
+df_likelihood = pd.read_pickle('NIsamples_with_likelihood_A48_208.pickle') 
+
+print(df_likelihood.columns)
+print(df_likelihood)
+
+#os._exit(0)
+
 df_likeli     = df_likelihood.values
 normal_likeli = df_likeli[:,7+likelihood_switch] / sum(df_likeli[:,7+likelihood_switch])
+
 if likelihood_switch == 0:
     normal_likeli =  1./34 * np.ones(34)
 #print(np.where(normal_likeli== np.max(normal_likeli)))
@@ -943,9 +948,10 @@ print(raw_data)
 ## save sample results in pickle file
 #####################################
 observables = ['saturation_density', 'saturation_energy','symmetry_energy', 'L', 'K','rho','set_num']
+raw_data = raw_data[np.where(raw_data[:,5]==0.9)]
 df_nm = pd.DataFrame(raw_data,columns=observables)
-df_nm.to_pickle('NM_ccdt_sampling_from_one_of_34.pickle')
-pd.options.display.float_format = '{:.2f}'.format
+df_nm.to_pickle('NM_ccdt_sampling_from_34_interaction_likelihood_%d.pickle' % (likelihood_switch))
+#pd.options.display.float_format = '{:.2f}'.format
 print(df_nm)
 #######################
 # draw corner plot
@@ -967,26 +973,84 @@ io_1.plot_confidence_ellipse(df_['saturation_density'].to_numpy(),df_['saturatio
 ### quantile 68% 90% for each observable
 ########################################
 def quantile_(df,q,rho):
+    significant_digits = 3
+
+
     df_BCI = pd.DataFrame(columns=df.columns[0:5])
-    print(df_BCI)
-    print('############################################################')
-    print("%.0f%% Bayesian credible interval, rho = %.2f " % (q*100,rho))
+#    print(df_BCI)
+#    print('############################################################')
+#    print("%.0f%% Bayesian credible interval, rho = %.2f " % (q*100,rho))
     df_ = df.dropna(axis=0,how='any')
     df_ = df_.loc[(df_['rho']==rho) ]
+
+    header = ''
+    for row_obs in df_BCI.columns:
+        header += f' {row_obs:>10}    '
+    header += 'Likelihood, Correlation'
+    print(header+'\n '+'-'*112)
     
     new = [io_1.hdi(df_[col_obs], hdi_prob=q) for icol, col_obs in enumerate(df_.columns[0:5]) ]
     #df_BCI=df_BCI.append(new,ignore_index=True)
     df_BCI.loc[0] = new
-    pd.options.display.float_format = '{:.2f}'.format
-    print(df_BCI)
+    #pd.options.display.float_format = '{:.2f}'.format
+    #print(df_BCI)
+
+    rowstr = ''
+    for icol, col_obs in enumerate(df_.columns[0:5]): 
+        (x_lo,x_hi) = io_1.hdi(df_[col_obs], hdi_prob=q)
+        # Round to three significant digits
+        x_lo_round = round(x_lo, significant_digits - int(math.floor(math.log10(abs(x_lo)))) - 1)
+        x_hi_round = round(x_hi, significant_digits - int(math.floor(math.log10(abs(x_hi)))) - 1)
+        #if row_obs in ['EA_NM','S_NM','L_NM']: 
+        if col_obs in ['saturation_energy','symmetry_energy','L']: 
+            rowstr += f' [{x_lo_round:5.1f}, {x_hi_round:5.1f}]'
+        #elif row_obs in ['rho_NM','Rskin208Pb']: 
+        elif col_obs in ['saturation_density','Rskin208Pb']: 
+            rowstr += f' [{x_lo_round:5.3f}, {x_hi_round:5.3f}]'
+        elif col_obs in ['K']: 
+            rowstr += f' [{x_lo_round:3.0f}, {x_hi_round:3.0f}]'
+    #rowstr += f' {likelihood_spec[0]:>13}, {likelihood_spec[1]}'
+    #rowster + = f'df_likeli.columns[:,7+likelihood_switch]'
+    print(rowstr)
+
+    #x_lo_round = round(x_lo, significant_digits - int(math.floor(math.log10(abs(x_lo)))
+    #x_hi_round = round(x_hi, significant_digits - int(math.floor(math.log10(abs(x_hi)))
+
     print('\n')
 
 
-quantile_(df_nm,0.68,0)
-quantile_(df_nm,0.9,0)
-quantile_(df_nm,0.68,0.5)
-quantile_(df_nm,0.9,0.5)
+#quantile_(df_nm,0.68,0)
+#quantile_(df_nm,0.9,0)
+#quantile_(df_nm,0.68,0.5)
+#quantile_(df_nm,0.9,0.5)
 quantile_(df_nm,0.68,np.round(rho_empirical,2))
-quantile_(df_nm,0.9,np.round(rho_empirical,2))
+#quantile_(df_nm,0.9,np.round(rho_empirical,2))
+
+significant_digits = 3
+#header = ''
+#for row_obs in df_plot.columns:
+#    header += f' {row_obs:>10}    '
+#header += 'Likelihood, Correlation'
+#print(header+'\n '+'-'*112)
+#for likelihood_spec in likelihood_specs:
+#    rowstr = ''
+#    for row_obs in df_plot.columns:
+#        cred_list = d_cred[(row_obs,likelihood_spec)]
+#        x_med = cred_list[0]
+#        (x_lo,x_hi) = cred_list[1]
+#        # Round to three significant digits
+#        x_lo_round = round(x_lo, significant_digits - int(math.floor(math.log10(abs(x_lo)))) - 1)
+#        x_hi_round = round(x_hi, significant_digits - int(math.floor(math.log10(abs(x_hi)))) - 1)
+#        if row_obs in ['EA_NM','S_NM','L_NM']: 
+#            rowstr += f' [{x_lo_round:5.1f}, {x_hi_round:5.1f}]'
+#        elif row_obs in ['rho_NM','Rskin208Pb']: 
+#            rowstr += f' [{x_lo_round:5.3f}, {x_hi_round:5.3f}]'
+#        elif row_obs in ['K_NM']: 
+#            rowstr += f' [{x_lo_round:3.0f}, {x_hi_round:3.0f}]'
+#    rowstr += f' {likelihood_spec[0]:>13}, {likelihood_spec[1]}'
+#    print(rowstr)
+#
+#
+
 
 

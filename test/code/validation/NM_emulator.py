@@ -12,19 +12,198 @@ import seaborn as sns
 import random
 from random import choice
 import matplotlib.colors as mcolors
+from . import io_1
+
+################################################
+################################################
+### Emulator tool
+################################################
+################################################
+class emulator_tool:
+    def __init__(self):
+        self.path = "/home/slime/subspace_CC/test/emulator/DNNLO394/"
+        self.density_count =  5
+        self.density_min   =  0.12
+        self.density_gap   =  0.02
+        self.domain_dimension =  17
+        self.subspace_dimension = 64
+        self.subspace_matrices_NM_snm = []
+        self.subspace_matrices_NM_pnm = []
+        self.subspace_norm_matrix_NM_snm = []
+        self.subspace_norm_matrix_NM_pnm = []
+        self.subtract_snm = []
+        self.subtract_pnm = []
+        self.hf_matrices_snm  = []
+        self.hf_matrices_pnm  = []
+        self.hyperparameter   = []
+
+    def load_emulator_matrix(self):
+        
+        for loop in range(self.density_count):
+            matter_type = 'pnm'
+            particle_num = 66
+            density = self.density_min + loop * self.density_gap
+            database_dir = self.path + '%s_%d_%.2f_DNNLOgo_christian_64points/' % (matter_type,particle_num,density)
+            input_dir = self.path + "%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
+            in_dir = database_dir+"N_matrix.txt"
+            N = np.loadtxt(in_dir)
+            self.subspace_norm_matrix_NM_pnm.append([N])
+            in_dir = database_dir+"C_matrix.txt"
+            C = np.loadtxt(in_dir)
+            self.subspace_matrices_NM_pnm.append([C])
+            for loop1 in range(self.domain_dimension):
+                in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+                mtx = np.loadtxt(in_dir)
+                self.subspace_matrices_NM_pnm.append([mtx])
+        
+            # load hf matrix
+            database_dir = self.path + 'hf_emulator/%s_%d_%.2f_hf/' % (matter_type,particle_num,density)
+            in_dir = database_dir+"LEC_hf_C_matrix"
+            self.hf_matrices_pnm.append(np.loadtxt(in_dir))
+            for loop1 in range(self.domain_dimension):
+                in_dir = database_dir+"LEC_hf_"+str(loop1+1)+"_matrix"
+                self.hf_matrices_pnm.append(np.loadtxt(in_dir))
+
+        for loop in range(self.density_count):
+            matter_type = 'snm'
+            particle_num = 132
+            density = self.density_min + loop * self.density_gap
+            database_dir = self.path + '%s_%d_%.2f_DNNLOgo_christian_64points/' % (matter_type,particle_num,density)
+            input_dir = self.path + "%s_%d_%.2f_DNNLOgo_christian_64points/ccd.out" % (matter_type,particle_num,density)
+        
+            in_dir = database_dir+"N_matrix.txt"
+            N = np.loadtxt(in_dir)
+            self.subspace_norm_matrix_NM_snm.append([N])
+            in_dir = database_dir+"C_matrix.txt"
+            C = np.loadtxt(in_dir)
+            self.subspace_matrices_NM_snm.append([C])
+            for loop1 in range(self.domain_dimension):
+                in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+                mtx = np.loadtxt(in_dir)
+                self.subspace_matrices_NM_snm.append([mtx])
+
+            # load hf matrix
+            database_dir = self.path + 'hf_emulator/%s_%d_%.2f_hf/' % (matter_type,particle_num,density)
+            in_dir = database_dir+"LEC_hf_C_matrix"
+            self.hf_matrices_snm.append(np.loadtxt(in_dir))
+            for loop1 in range(self.domain_dimension):
+                in_dir = database_dir+"LEC_hf_"+str(loop1+1)+"_matrix"
+                self.hf_matrices_snm.append(np.loadtxt(in_dir))
+
+
+
+    def evaluate_NM_batch(self,domain_points):
+        observable_batch = []
+        for loop in range(len(domain_points)):
+            observable_batch.append(evaluate_NM(domain_points[loop]))
+        return observable_batch
+    
+    def evaluate_NM(self,domain_point):
+        """
+        Evaluate NM observable with emulator at a single domain point
+    
+        Returns:
+            observables (array of floats): eigvals[0], obs_vals
+        """
+        emulator_switch= 5
+        interpolation_choice = 'GP'
+        hyperparameter  = self.hyperparameter         
+ 
+        density_batch = np.array( [0.12,0.14,0.16,0.18,0.20])
+        pnm_data      = np.zeros(self.density_count)
+        snm_data      = np.zeros(self.density_count)
+        pnm_hf_data   = np.zeros(self.density_count)
+        snm_hf_data   = np.zeros(self.density_count)
+        LEC_target    = np.zeros(self.domain_dimension)
+        #LEC_target    = domain_point[1:18]
+        LEC_target    = domain_point
+        # test
+        #LEC_target    =  read_LEC("/home/slime/history_matching/O28_prediction/history_matching/emulators/ccm_in_DNNLO394")
+    
+        ###########################################
+        ##### pnm calculation for different density
+        ###########################################
+        H_matrix = np.zeros((self.domain_dimension,self.subspace_dimension,self.subspace_dimension))
+        LEC_all_matrix = np.zeros(self.domain_dimension)
+    
+    
+        for loop in range(self.density_count):
+            for loop1 in range(self.domain_dimension):
+                H_matrix[loop1,:,:] = self.subspace_matrices_NM_pnm[loop*18+ loop1+1][0]
+            C  = self.subspace_matrices_NM_pnm[loop*18][0]
+            N  = self.subspace_norm_matrix_NM_pnm[loop][0]
+            pnm_data[loop],eigvec_temp,vote_temp = self.emulator(emulator_switch,'pnm',H_matrix, C, N, [],LEC_target,hyperparameter)
+            pnm_data[loop]    = pnm_data[loop]/66
+    
+    
+            C = self.hf_matrices_pnm[loop*18]
+            LEC_all_matrix = self.hf_matrices_pnm[loop*18+1:loop*18+19]
+            pnm_hf_data[loop] = self.hf_emulator(LEC_all_matrix,C,LEC_target)
+    
+    
+        ###########################################
+        ##### snm calculation for different density
+        ###########################################
+        for loop in range(self.density_count):
+            for loop1 in range(self.domain_dimension):
+    
+                H_matrix[loop1,:,:] = self.subspace_matrices_NM_snm[loop*18+ loop1+1][0]
+            C  = self.subspace_matrices_NM_snm[loop*18][0]
+            N  = self.subspace_norm_matrix_NM_snm[loop][0]
+            snm_data[loop],eigvec_temp,vote_temp = self.emulator(emulator_switch,'snm',H_matrix, C, N, [],LEC_target,hyperparameter)
+            snm_data[loop] = snm_data[loop]/132
+    
+            C = self.hf_matrices_snm[loop*18]
+            LEC_all_matrix = self.hf_matrices_snm[loop*18+1:loop*18+19]
+            snm_hf_data[loop] = self.hf_emulator(LEC_all_matrix,C,LEC_target)
+        #print(pnm_hf_data)
+        #print(snm_hf_data)
+    
+        #print("pnm："+str(pnm_data))
+        #print("snm: "+str(snm_data))
+        ###########################################
+        ##### calculate NM observables
+        ###########################################
+        saturation_density, saturation_energy, symmetry_energy,L,K,raw_data = io_1.generate_NM_observable(pnm_data,snm_data,density_batch,"GP")
+    
+        #print("saturation_density="+str(saturation_density))
+        #print("saturation_energy="+str(saturation_energy))
+        #print("symmetry_energy="+str(symmetry_energy))
+        #print("L="+str(L))
+        #print("K="+str(K))
+    
+        #observables = np.array([saturation_density]+ [saturation_energy]+ [symmetry_energy]+[L]+[K])
+        observables = np.zeros(26)
+        observables[0] =  domain_point[0]
+        observables[1] =  saturation_density
+        observables[2] =  saturation_energy
+        observables[3] =  symmetry_energy
+        observables[4] =  L
+        observables[5] =  K
+        observables[6:11]  = pnm_data[0:5]
+        observables[11:16] = snm_data[0:5]
+        observables[16:21] = pnm_hf_data[0:5]
+        observables[21:26] = snm_hf_data[0:5]
+    
+        #print("observables="+str(observables))
+        return observables #, eigvec_temp, raw_data
+
+
+
+
 
 ######################################################
 ######################################################
 ### hf emulator!!!
 ######################################################
 ######################################################
-def hf_emulator(LEC_all_matrix,C,LEC_target):
-    LEC_num = len(LEC_target)
-    H = 0
-    for loop1 in range(LEC_num):
-        H = H + LEC_target[loop1] * LEC_all_matrix[loop1]
-    H = H + C
-    return H
+    def hf_emulator(self,LEC_all_matrix,C,LEC_target):
+        LEC_num = len(LEC_target)
+        H = 0
+        for loop1 in range(LEC_num):
+            H = H + LEC_target[loop1] * LEC_all_matrix[loop1]
+        H = H + C
+        return H
 
 
 ######################################################
@@ -32,26 +211,26 @@ def hf_emulator(LEC_all_matrix,C,LEC_target):
 ### Emulator!!!
 ######################################################
 ######################################################
-def emulator(switch,matter_type,H_matrix,C,N,subtract,LEC_target,hyperparameter):
-    if(switch == 1):
-        ev_ultra,eigvals,vote = emulator1(H_matrix,C,N,subtract,LEC_target,0)
-    elif(switch == 2):
-        ev_ultra,eigvals,vote = emulator2(H_matrix,C,N,subtract,LEC_target,0.03)
-    elif(switch == 3):
-        ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
-    elif(switch == 4):
-        ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
-    elif(switch == 5):
-        if matter_type == "pnm":
-            ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.01)
-        if matter_type == "snm":
-            ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.02)
-
-
-    else:
-        print("NM emulator choice error.")
-
-    return ev_ultra, eigvals, vote
+    def emulator(self,switch,matter_type,H_matrix,C,N,subtract,LEC_target,hyperparameter):
+        if(switch == 1):
+            ev_ultra,eigvals,vote = emulator1(H_matrix,C,N,subtract,LEC_target,0)
+        elif(switch == 2):
+            ev_ultra,eigvals,vote = emulator2(H_matrix,C,N,subtract,LEC_target,0.03)
+        elif(switch == 3):
+            ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
+        elif(switch == 4):
+            ev_ultra,eigvals,vote = emulator4(H_matrix,C,N,subtract,LEC_target,0.04)
+        elif(switch == 5):
+            if matter_type == "pnm":
+                ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.01)
+            if matter_type == "snm":
+                ev_ultra,eigvals,vote = emulator5(H_matrix,C,N,subtract,LEC_target,0.01)
+    
+    
+        else:
+            print("NM emulator choice error.")
+    
+        return ev_ultra, eigvals, vote
 
 
 ######################################################

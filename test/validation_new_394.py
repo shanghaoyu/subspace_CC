@@ -9,7 +9,8 @@ import scipy.linalg as spla
 from scipy import interpolate
 from scipy import optimize
 import seaborn as sns
-
+import random
+import pandas as pd
 
 #quadratic_curve
 def f_2(x, A, B, C):
@@ -822,7 +823,122 @@ def emulator3(database_dir,LEC_target,subtract,tolerance):
 #    #return eigvals_new , eigvals_R_new
 #    eigvals_1 = eigvals_1[np.where(eigvals_1.real!=0)]
 #    return eigvals_1[0].real
+######################################################
+######################################################
+#### emulator5
+######################################################
+######################################################
+def emulator5(database_dir,LEC_target,subtract,tolerance):
 
+    H = np.zeros((subspace_dimension,subspace_dimension))
+    N = np.zeros((subspace_dimension,subspace_dimension))
+    C = np.zeros((subspace_dimension,subspace_dimension))
+    H_matrix = np.zeros((LEC_num,subspace_dimension,subspace_dimension))
+    in_dir = database_dir+"N_matrix.txt"
+    N = np.loadtxt(in_dir)
+    in_dir = database_dir+"C_matrix.txt"
+    C = np.loadtxt(in_dir)
+    for loop1 in range(LEC_num):
+        in_dir = database_dir+"LEC_"+str(loop1+1)+"_matrix"
+        H_matrix[loop1,:,:] = np.loadtxt(in_dir)
+    #H = LECs[0]*H_matrix + K_matrix
+    for loop1 in range(LEC_num):
+        H = H + LEC_target[loop1] * H_matrix[loop1,:,:]
+    H = H + C
+
+    split = 100
+    sample_each_slice = 30
+    vote_need = round(0.7*split)
+
+
+    #subtract = [subtract_count]
+    H1 = np.delete(H,subtract,axis = 0)
+    H1 = np.delete(H1,subtract,axis = 1)
+    N1 = np.delete(N,subtract,axis = 0)
+    N1 = np.delete(N1,subtract,axis = 1)
+
+
+### solve the general eigval problem
+    eigvals_1,eigvec_L_1, eigvec_R_1 = spla.eig(H1,N1,left =True,right=True)
+
+### sort with eigval
+    x = np.argsort(eigvals_1)
+    eigvals_1  = eigvals_1[x]
+    eigvec_R_1 = eigvec_R_1.T
+    eigvec_R_1 = eigvec_R_1[x]
+
+### drop states with imaginary part
+#    eigvals_new_1   = eigvals_1[np.where(abs(eigvals_1.imag) < 0.01)]
+#    eigvec_R_new_1 =  eigvec_R_1[np.where(abs(eigvals_1.imag)< 0.01)]
+
+### divide training samples into few parts
+    remain = range(0,subspace_dimension-1)
+
+    eigvals       = []
+    eigvals_len = np.zeros(split)
+    for loop in range(split):
+        slice_1 = random.sample(remain,sample_each_slice)
+        subtract = np.delete(range(subspace_dimension),slice_1)
+        H2 = np.delete(H1,subtract,axis = 0)
+        H2 = np.delete(H2,subtract,axis = 1)
+        N2 = np.delete(N1,subtract,axis = 0)
+        N2 = np.delete(N2,subtract,axis = 1)
+        #print("remain"+str(remain))
+###     solve the general eigval problem
+        eigvals_2,eigvec_L_2, eigvec_R_2 = spla.eig(H2,N2,left =True,right=True)
+
+###     sort with eigval
+        x = np.argsort(eigvals_2)
+        eigvals_2  = eigvals_2[x]
+        eigvec_R_2 = eigvec_R_2.T
+        eigvec_R_2 = eigvec_R_2[x]
+        eigvals_len[loop] = len(eigvals_2)
+        eigvals.append(eigvals_2[:])
+
+    score  = np.zeros((len(eigvals_1),split))
+    ev_ultra = 0
+
+    for loop in range(split):
+        for loop1 in range(int(eigvals_len[loop])):
+            for loop2 in range(len(eigvals_1)):
+                if ( np.abs((eigvals[loop][loop1].real - eigvals_1[loop2].real )/eigvals[loop][loop1]) < tolerance ):
+                    score[loop2,loop] = score[loop2,loop] + 1
+
+#    # vote for the lowest ture state
+#    for loop in range(len(eigvals_1)):
+#        vote = 0
+#        for loop1 in range(split):
+#            if score[loop,loop1] > 0:
+#                vote = vote + 1
+#        if vote >= vote_need :
+#            ev_ultra = eigvals_1[loop]
+#            break
+
+    # vote for the lowest ture state
+    vote = np.zeros(len(eigvals_1))
+    for loop in range(len(eigvals_1)):
+        for loop1 in range(split):
+            if score[loop,loop1] > 0:
+                vote[loop] = vote[loop]+1
+   # print("ccsdt-1"+str(ccsdt_1))
+   # print("eigvals_1="+str(eigvals_1))
+   # print("vote="+str(vote))
+#    for loop in range(len(eigvals_1)):
+#        if ( np.abs((ccsdt_1 - eigvals_1[loop].real )/ccsdt_1) < 0.01 ):
+#            print("emulator_should_be="+str(eigvals_1[loop]))
+#            print("the vote it gets="+str(vote[loop]))
+    if vote.max() < vote_need:
+        vote_need_new = vote.max()
+    else:
+        vote_need_new = vote_need
+    for loop in range(len(eigvals_1)):
+        if vote[loop] >= vote_need_new :
+            ev_ultra = eigvals_1[loop]
+            vote_ultra = vote[loop]
+            break
+
+
+    return ev_ultra.real
  
 ######################################################
 ######################################################
@@ -905,7 +1021,7 @@ def validation(matter_type,particle_num,tolerance):
                 ccd_data.append(ccd_1[loop1-1])
                 #eigvalue, eigvec = emulator1(database_dir,LEC,subtract)
     #            #gs = eigvalue[0]
-                gs = emulator3(database_dir,LEC,subtract,tolerance)
+                gs = emulator5(database_dir,LEC,subtract,tolerance)
                 emulator_data.append(gs)
                 density_data.append(density)
     return emulator_data,ccd_data,density_data
@@ -958,7 +1074,7 @@ def plot_(matter_type,emulator_data,ccd_data,density_data):
     plt.xlabel(r"$\rm{CCD} \ [\rm{MeV}]$",fontsize=20)
     plt.ylabel(r"$\rm{emulator} \ [\rm{MeV}]$",fontsize=20)
     
-    plot_path = 'DNNLO394_%s_1.pdf' % (matter_type)
+    plot_path = 'DNNLO394_new_%s_1.pdf' % (matter_type)
     plt.savefig(plot_path,bbox_inches='tight')
     plt.close('all')
     #
@@ -974,7 +1090,7 @@ def plot_(matter_type,emulator_data,ccd_data,density_data):
     plt.ylabel("count")
     plt.xlabel("error: (emulator - ccd)/abs(ccd)")
     #plt.xlim((-0.1,0.1))
-    plot_path = 'DNNLO394_%s_1_hist.pdf' % (matter_type)
+    plot_path = 'DNNLO394_new_%s_1_hist.pdf' % (matter_type)
     plt.savefig(plot_path)
 
 def generate_observable(pnm_data,snm_data,density_sequence,switch):
@@ -1224,7 +1340,7 @@ def plot_2(observable,emulator_data_1,ccd_data_1,emulator_data_2,ccd_data_2,emul
     plt.xlim((-0.1,0.1))
     plt.xticks(np.arange(-0.1,0.11,0.05),fontsize = 10)
 
-    plot_path = 'DNNLO394_NM_observable_test_GP_tolerance_0.5.pdf' 
+    plot_path = 'DNNLO394_new_NM_observable_test_GP_tolerance_0.1.pdf' 
     plt.savefig(plot_path)
 
 
@@ -1273,11 +1389,14 @@ particle_num = 66
 remain_sample_num = 64 
 
 
+emulator_data,ccd_data,density_data = validation("pnm",66,0.01)
+print("emulator_data"+str(emulator_data))
+print("ccd_data"+str(ccd_data))
+print("density_data"+str(density_data))
 
-emulator_data,ccd_data,density_data = validation("pnm",66,0.05)
 plot_("pnm",emulator_data,ccd_data,density_data) 
 
-validation_count=int(len(emulator_data)/density_count)
+validation_count  = int(len(emulator_data)/density_count)
 emulator_data_snm = np.zeros((validation_count,density_count))
 emulator_data_pnm = np.zeros((validation_count,density_count))
 ccd_data_snm      = np.zeros((validation_count,density_count))
@@ -1292,10 +1411,8 @@ for loop1 in range(validation_count):
         density_data_pnm[loop1,loop2]  = density_data[loop2*validation_count+loop1]
 
 
-emulator_data,ccd_data,density_data = validation("snm",132,0.05)
-plot_("snm",emulator_data,ccd_data,density_data) 
 
-emulator_data,ccd_data,density_data = validation("snm",132,0.05)
+emulator_data,ccd_data,density_data = validation("snm",132,0.02)
 plot_("snm",emulator_data,ccd_data,density_data) 
 
 
@@ -1317,12 +1434,12 @@ saturation_energy_ccd  = np.zeros(validation_count)
 symmetry_energy_ccd    = np.zeros(validation_count)
 
 for loop1 in range(validation_count):
-    saturation_density_emulator[loop1], saturation_energy_emulator[loop1], symmetry_energy_emulator[loop1] = generate_observable(emulator_data_pnm[loop1,:]/66,emulator_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"fit_curve_quadratic")#"fit_curve_quadratic")
+    saturation_density_emulator[loop1], saturation_energy_emulator[loop1], symmetry_energy_emulator[loop1] = generate_observable(emulator_data_pnm[loop1,:]/66,emulator_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"GP")#"fit_curve_quadratic")
 
     saturation_density_ccd[loop1], saturation_energy_ccd[loop1], symmetry_energy_ccd[loop1] = generate_observable(ccd_data_pnm[loop1,:]/66,ccd_data_snm[loop1,:]/132,density_data_pnm[loop1,:],"interpolate")
 
 
-#plot_2("saturation_density",saturation_density_emulator,saturation_density_ccd, saturation_energy_emulator,saturation_energy_ccd, symmetry_energy_emulator,symmetry_energy_ccd)
+plot_2("saturation_density",saturation_density_emulator,saturation_density_ccd, saturation_energy_emulator,saturation_energy_ccd, symmetry_energy_emulator,symmetry_energy_ccd)
 
 print("saturation_density")
 print(saturation_density_emulator)
@@ -1341,4 +1458,18 @@ print(symmetry_energy_ccd)
 print(emulator_data_pnm)
 print(ccd_data_pnm)
 print(density_data_pnm)
-# 
+#
+
+df = pd.DataFrame(columns=['saturation_density_emulator','saturation_density_ccd','saturation_energy_emulator','saturation_energy_ccd','symmetry_energy_emulator','symmetry_energy_ccd'])
+df['saturation_density_emulator'] = saturation_density_emulator
+df['saturation_density_ccd']      = saturation_density_ccd
+df['saturation_energy_emulator']  = saturation_energy_emulator
+df['saturation_energy_ccd']       = saturation_energy_ccd
+df['symmetry_energy_emulator']    = symmetry_energy_emulator
+df['symmetry_energy_ccd']         = symmetry_energy_ccd
+
+print(df)
+df.to_pickle('NM_observable_validation_50points.pickle')
+
+
+ 

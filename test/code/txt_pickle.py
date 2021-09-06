@@ -25,14 +25,14 @@ def txt_to_pickle():
     
     
     
-    colums_name =['sample_number','saturation_density','saturation_energy','symmetry_energy','L','K',\
+    columns_name =['sample_number','saturation_density','saturation_energy','symmetry_energy','L','K',\
                   'pnm_0.12', 'pnm_0.14', 'pnm_0.16','pnm_0.18','pnm_0.20',\
                   'snm_0.12', 'snm_0.14', 'snm_0.16','snm_0.18','snm_0.20',\
                   'pnm_hf_0.12', 'pnm_hf_0.14', 'pnm_hf_0.16','pnm_hf_0.18','pnm_hf_0.20',\
                   'snm_hf_0.12', 'snm_hf_0.14', 'snm_hf_0.16','snm_hf_0.18','snm_hf_0.20!']
     
     
-    df = pd.DataFrame(raw_data,columns=colums_name)
+    df = pd.DataFrame(raw_data,columns=columns_name)
     df.to_pickle('NM_ccd_800k_samples.pickle')
     
     
@@ -52,7 +52,7 @@ def pickle_to_txt(in_file_path,out_file_path):
     np.set_printoptions(precision=12)
     np.savetxt(out_file_path,df_new,fmt='%.12f')
 
-pickle_to_txt("wave5_NM_fewbody_NI_IM1_cM3.0_select_scatt_IM1=5.5_IM2=3.0_pars.pickle","LEC_read6.txt")
+pickle_to_txt("wave5_NM_fewbody_NI_IM1_cM3.0_select_scatt_IM1=5.5_IM2=3.0_pars.pickle","LEC_read7.txt")
 
 
 #np.set_printoptions(suppress=True)

@@ -17,6 +17,9 @@ from sklearn.gaussian_process.kernels import RBF, ConstantKernel,  WhiteKernel
 from numpy.linalg import solve, cholesky
 from matplotlib.patches import Ellipse, Rectangle
 import matplotlib.transforms as transforms
+import scipy
+import scipy.stats as stats
+
 ######################################################
 ######################################################
 ### read LECs set from file
@@ -144,9 +147,28 @@ def f_3(x, A, B, C, D):
 def kf_density(kf,g):  # pnm:g=2 ; snm:g=4
     density = g* pow(kf,3)/6/pow(math.pi,2)
     return density
+
 def density_kf(density,g):  # pnm:g=2 ; snm:g=4
     kf = pow(density*6*pow(math.pi,2)/g,1/3)
     return kf
+
+def compute_sigma_levels(sigmas):
+    return 1.0 - np.exp(-0.5 * np.array(sigmas) ** 2)
+
+#def contour_levels(grid, levels=compute_sigma_levels([1.0, 2.0])):
+def contour_levels(grid, levels=[0.68, 0.95]):
+    """Compute contour levels for a gridded 2D posterior"""
+    #print("grid"+str(grid))
+    sorted_ = np.flipud(np.sort(grid.ravel()))
+    #print("sorted_"+str(sorted_))
+    pct = np.cumsum(sorted_) / np.sum(sorted_)
+    #print("pct"+str(pct))
+    cutoffs = np.searchsorted(pct, np.array(levels))
+    #print("cutoffs"+str(cutoffs))
+    return np.sort(sorted_[cutoffs])
+
+
+
 
 # ---------------------------
 # Statistics helper functions (From Chrisitian)
@@ -186,6 +208,212 @@ def hdi(samples, hdi_prob=0.68):
 
     return np.array([hdi_min, hdi_max])
 
+
+
+######################################################
+######################################################
+### KDE plot  ( from Christian )
+######################################################
+######################################################
+# Utility function to extract iso-pdf levels from quantile cuts of probability mass.
+# 
+def quantile_to_level(data, quantile):
+        """
+        Return iso-pdf levels corresponding to quantile cuts of probability mass.
+        
+        Note that the quantile cuts apply to the data range 
+        (and does not include probability mass located outside)
+        """
+        isoprop = np.asarray(quantile)
+        values = np.ravel(data)
+        sorted_values = np.sort(values)[::-1]
+        normalized_values = np.cumsum(sorted_values) / values.sum()
+        idx = np.searchsorted(normalized_values, 1 - isoprop)
+        levels = np.take(sorted_values, idx, mode="clip")
+        return levels
+
+def fit_kde_kernel(xdata, ydata, weights=None, bw=1.0, print_debug=False):
+    """
+    Returns a KDE kernel
+    
+    Args:
+        xdata: array of data
+        ydata: array of data
+        weights: (optional) set of weights
+        bw: (optional) scaling bandwidth factor
+    """
+    values = np.vstack((xdata,ydata))
+    #
+    kernel = stats.gaussian_kde(values,weights=weights)
+    kernel.set_bandwidth(kernel.factor * bw)
+    if print_debug:
+        print('KDE parameters:\n======')
+        print('Number of datapoints.')
+        print(kernel.n)
+        print('\nEffective number of datapoints.')
+        print(kernel.neff)
+        print('\nThe bandwidth factor, obtained from kde.covariance_factor, with which the covariance matrix is multiplied.')
+        print(kernel.factor)
+        print('\nThe covariance matrix of the dataset, scaled by the calculated bandwidth (kde.factor).')
+        print(kernel.covariance)
+        print('\nThe inverse of covariance.')
+        print(kernel.inv_cov)
+        print('\nSquare root of diagonal elements.')
+        print(np.sqrt(np.diag(kernel.inv_cov)))
+    return kernel
+
+def get_pdf_levels(xdata, ydata, kernel, cred_levels=[0.68, 0.90, 0.95], \
+               print_debug=False, xrange=None, yrange=None):
+    """
+    Find iso-pdf levels from given credibility regions.
+    
+    Will use the data range.
+    
+    Args:
+        xdata: array of data
+        ydata: array of data
+        kernel: KDE kernel
+        cred_levels: (optional) list of credibility regions/probability mass
+        xrange: (optional) tuple (xmin,xmax)
+        yrange: (optional) tuple (ymin, ymax)
+        
+    Returns:
+        pdf_levels_data: array of pdf levels (same length as cred_levels)
+    """
+    # Create a X-Y grid and evaluate the KDE on it.
+    if xrange is None:
+        xmin = min(xdata)
+        xmax = max(xdata)
+        dx = xmax-xmin
+        (xmin,xmax)=(xmin-dx/3,xmax+dx/3)
+    else:
+        (xmin,xmax)=xrange
+    if yrange is None:
+        ymin = min(ydata)
+        ymax = max(ydata)
+        dy = ymax-ymin
+        (ymin,ymax)=(ymin-dy/3,ymax+dy/3)
+    else:
+        (ymin,ymax)=yrange
+    X, Y = np.mgrid[xmin:xmax:200j, ymin:ymax:200j]
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    KDE_data = kernel(positions)
+    Z = np.reshape(KDE_data.T, X.shape)
+
+    cred_levels = np.asarray(cred_levels)
+    prob_outside_levels = 1.-cred_levels
+    
+    marg_pdf = kernel.integrate_box(np.array([xmin,ymin]),np.array([xmax,ymax]))
+    # Rescaling of quantiles due to finite data range
+    prob_outside_levels = np.asarray(prob_outside_levels) * marg_pdf
+    if print_debug:
+        print(f'We will consider credibility levels: {cred_levels}\n')
+        print(f'The total integral of the KDE pdf over the plot range is {marg_pdf:.3f}')
+        print(f'... which implies that {1-marg_pdf:.3f} probability mass is located outside.\n')
+    if marg_pdf < 0.99:
+        print(f'The quantile cuts are therefore: {1. - prob_outside_levels}\n')
+
+    pdf_levels_data = quantile_to_level(KDE_data,prob_outside_levels)
+    if print_debug:
+        print(f'The quantile cuts on the plot data gives the iso-pdf levels: {pdf_levels_data}')
+    return pdf_levels_data
+
+def plot_scatter_KDE(xdata,ydata,kernel,pdf_levels=None, ax=None, xrange=None, yrange=None, weights=None,colors="k",cmap="Blues",linestyles=":",alpha_1=0.6,alpha_2=0.8):
+    """
+    Args:
+        xdata: array of data
+        ydata: array of data
+        kernel: KDE kernel
+        pdf_levels: (optional) list of iso-pdf levels for countours
+        ax: (optional) axis handle to add the plots to.
+        xrange: (optional) tuple (xmin,xmax) for plotting. Default=None
+        yrange: (optional) tuple (ymin,ymax) for plotting. Default=None
+        weights: (optional) Weights for scatter plot. Default=None
+        
+    Returns:
+        ax: axis handle
+    
+    """
+#    if ax is None:
+#        fig,ax = plt.subplots(1,1,figsize=(8,8))
+        
+    # Create a X-Y grid and evaluate the KDE on it.
+    if xrange is None:
+        xmin = min(xdata)
+        xmax = max(xdata)
+        dx = xmax-xmin
+        (xmin,xmax)=(xmin-dx/3,xmax+dx/3)
+    else:
+        (xmin,xmax)=xrange
+    if yrange is None:
+        ymin = min(ydata)
+        ymax = max(ydata)
+        dy = ymax-ymin
+        (ymin,ymax)=(ymin-dy/3,ymax+dy/3)
+    else:
+        (ymin,ymax)=yrange
+    X, Y = np.mgrid[xmin:xmax:200j, ymin:ymax:200j]
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    KDE_data = kernel(positions)
+    Z = np.reshape(KDE_data.T, X.shape)
+
+    plt.contourf(X,Y,Z, cmap=cmap, levels = 100, extent=[xmin, xmax, ymin, ymax],\
+               alpha=alpha_1)
+    if not pdf_levels is None:
+        pdf_levels = np.sort(np.asarray(pdf_levels))
+        plt.contour(X,Y,Z, levels=pdf_levels,
+              extent=[xmin, xmax, ymin, ymax],colors=colors,linestyles=linestyles,alpha = alpha_2,linewidths=1.2)
+    #sns.scatterplot(xdata,ydata, alpha=0.75, size=weights, ax=ax, legend=None)
+    #ax.scatter(xdata,ydata,alpha=0.75)
+
+    #ax.set_xlim(xmin,xmax)
+    #ax.set_ylim(ymin,ymax)
+    return ax
+
+def yerr_from_xerr(xdata, ydata, xval_err, kernel, cred_levels=[0.68, 0.90, 0.95], \
+               print_debug=False, yrange=None):
+    """
+    Find y-error from a given x-error, kernel and credibility regions.
+    
+    Args:
+        xdata: array of data
+        ydata: array of data
+        xval_err: array of either length 1 (xval) or length 2 (xval_min, xval_max)
+        kernel: KDE kernel
+        cred_levels: (optional) list of credibility regions/probability mass
+        yrange: (optional) tuple (ymin,ymax) for locating y-error. Default=None
+        
+    Returns:
+        yval_err: dict with key = credibility level, value = tuple (yval_min, yval_max)
+        pdf_levels_data: array of pdf levels (same length as cred_levels)
+    """
+    pdf_levels_data=get_pdf_levels(xdata, ydata, kernel, cred_levels=cred_levels, \
+               print_debug=print_debug)
+    if yrange is None:
+        ymin = min(ydata)
+        ymax = max(ydata)
+        dy = ymax-ymin
+        (ymin,ymax)=(ymin-dy/3,ymax+dy/3)
+    else:
+        (ymin,ymax)=yrange
+    if len(xval_err)==1:
+        Y = np.linspace(ymin,ymax,num=200)
+        X = xval_err[0]*np.ones_like(Y)
+    elif len(xval_err)==2:
+        X, Y = np.mgrid[xval_err[0]:xval_err[1]:200j, ymin:ymax:200j]
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    KDE_data = kernel(positions)
+    Z = np.reshape(KDE_data.T, Y.shape)
+    #
+    yval_err={}
+    for (pdf_level, cred_level) in zip(pdf_levels_data,cred_levels):
+        try:
+            yval_min = np.min(Y[Z>pdf_level])
+            yval_max = np.max(Y[Z>pdf_level])
+            yval_err[cred_level] = (yval_min,yval_max)
+        except ValueError:
+            yval_err[cred_level] = None
+    return yval_err, pdf_levels_data
 
 
 ######################################################
@@ -294,11 +522,12 @@ class GP_test:
 
         x = np.asarray(x)
         # gaussian_noise**2 here is the variance of the gaussian like of noise in y ( y = f(x) + noise)  (noise = N (0, gaussian_noise**2))
-        Kff = self.kernel(self.train_x, self.train_x) + self.gaussian_noise**2 * np.eye(len(self.train_x))  # (N, N)
+        Kff = self.kernel(self.train_x, self.train_x) + (self.gaussian_noise*self.train_y )**2 * np.eye(len(self.train_x))  # (N, N)
+        #Kff = self.kernel(self.train_x, self.train_x) + (self.gaussian_noise)**2 * np.eye(len(self.train_x))  # (N, N)
         Kyy = self.kernel(x, x)  # (k, k)
         Kfy = self.kernel(self.train_x, x)  # (N, k)
         Kff_inv = np.linalg.inv(Kff + 1e-8 * np.eye(len(self.train_x)))  # (N, N)
-
+       # print(self.train_x)
         mu = Kfy.T.dot(Kff_inv).dot(self.train_y)
         cov = Kyy - Kfy.T.dot(Kff_inv).dot(Kfy)
         Kff11 = self.kernel_11(self.train_x, self.train_x) #+ self.gaussian_noise**2 * np.eye(l    en(self.train_x))  # (N, N)
@@ -465,11 +694,12 @@ class GP_test:
         #print("mine : T_all="+str(log_pr_ck_l))
 
         orders_fit     = [0, 2, 3]
-
+        orders_fit     = [3]
+ 
         det_factor = np.sum(self.n_c * np.log(np.abs(self.y_ref)) + np.sum(orders_fit) * np.log(np.abs(self.Q_series)))
         log_pr_yk_l_Q  = log_pr_ck_l - det_factor
 
-        #print("mine: "+str(Q_series))
+        #print("mine: "+str(np.log(np.abs(self.Q_series))))
         
         #print("mine: det_factor="+str(det_factor))
 
@@ -778,20 +1008,22 @@ def generate_NM_observable(pnm_data,snm_data,density_sequence,switch):
         #######################################################
         #######################################################
         #t1 = time.time()
-        train_x = np.arange(density_sequence.min(),density_sequence.max(),0.02)
+        train_x = np.arange(round(density_sequence.min(),2),round(density_sequence.max(),2),0.02)
         train_x = train_x.reshape(-1,1)
+        
         train_y_1 = pnm_data
         train_y_2 = snm_data
-        test_x  = np.arange(density_sequence.min(),density_sequence.max(),density_accuracy).reshape(-1,1)
+        # temp change!
+        #test_x  = np.arange(density_sequence.min(),density_sequence.max(),density_accuracy).reshape(-1,1)
+        test_x  = np.arange(0.10,0.22,density_accuracy).reshape(-1,1)
 
         gpr = GP_test()
-        gaussian_noise = 0.02
+        gaussian_noise = 0.001
 
    # def fit_data(self, x, y, gaussian_noise,sigma,length):
-        gpr.fit_data(x = train_x, y=train_y_2, gaussian_noise=gaussian_noise,sigma=0.25,length=100)
+        gpr.fit_data(x = train_x, y=train_y_2, gaussian_noise=gaussian_noise,sigma=100,length=0.25)
 
         snm, snm_cov, d_snm, d_snm_cov,dd_snm,dd_snm_cov = gpr.predict(test_x)
-
         #test_y_1  = snm.ravel()
         #test_dy_1 = d_snm.ravel()
         #confidence_1    = 2 * np.sqrt(np.diag(snm_cov))
@@ -802,7 +1034,7 @@ def generate_NM_observable(pnm_data,snm_data,density_sequence,switch):
         #print("saturation density: %.3f +/- %.3f" % (test_x[iX], 0.5*(np.max(density_range)-np.min(density_range))))
         #print("saturation energy:  %.3f +/- %.3f" % (snm[iX] , confidence_1[iX]))
         gpr = GP_test()
-        gpr.fit_data(train_x, train_y_1, gaussian_noise,0.25,100)
+        gpr.fit_data(train_x, train_y_1, gaussian_noise,100,0.25)
 
         pnm, pnm_cov, d_pnm, d_pnm_cov, dd_pnm, dd_pnm_cov = gpr.predict(test_x)
 
@@ -903,12 +1135,13 @@ def generate_NM_observable(pnm_data,snm_data,density_sequence,switch):
 
     elif (switch =="interpolation"):
         #### here k = 2,3,4 , also one can set "s = 0" forcing the curve to go through all training point
-        spl_ccd_snm    = interpolate.UnivariateSpline(density_sequence,snm_data,k=4,s=0)
-        spl_ccd_pnm    = interpolate.UnivariateSpline(density_sequence,pnm_data,k=4,s=0)
+        spl_ccd_snm    = interpolate.UnivariateSpline(density_sequence,snm_data,k=4)
+        spl_ccd_pnm    = interpolate.UnivariateSpline(density_sequence,pnm_data,k=4)
         #spldens        = np.linspace(density_sequence[0],density_sequence[len(density_sequence)-1],num=interpol_count)
         
-        spldens  = np.arange(density_sequence.min(),density_sequence.max(),density_accuracy)
+        #spldens  = np.arange(density_sequence.min(),density_sequence.max(),density_accuracy)
 
+        spldens  = np.arange(0.10,0.22,density_accuracy)
         snm = spl_ccd_snm(spldens)
         pnm = spl_ccd_pnm(spldens)
         pnm_cov = np.zeros(len(pnm))
@@ -2529,7 +2762,7 @@ def plot_confidence_EOS(density_series,pnm_,snm_,pnm_batch,snm_batch,q):
 
     ax1.legend()
     plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
-    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.ylabel(r"$E/N \ [\rm{MeV}]$",fontsize=15)
     plt.xlim((0.10,0.1801)) 
     plt.ylim((0,30)) 
     ax1.set_xticklabels([])
@@ -2556,7 +2789,7 @@ def plot_confidence_EOS(density_series,pnm_,snm_,pnm_batch,snm_batch,q):
 
     ax2.legend()
     plt.xlabel(r"$\rho [\rm{fm}^{-3}]$",fontsize=15)
-    plt.ylabel(r"$\rm{E_{pnm}/A}[\rm{MeV}]$",fontsize=15)
+    plt.ylabel(r"$E/A \ [\rm{MeV}]$",fontsize=15)
     plt.xlim((0.10,0.1801)) 
     plt.ylim((-20,-7)) 
     #plt.xticks([])
@@ -2661,7 +2894,7 @@ def plot_confidence_ellipse(x,y):
 
 
 
-def plot_corner_plot(df_plot,weights):
+def plot_corner_plot(df_plot):
     obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
                     'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
                     'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
@@ -2754,19 +2987,20 @@ def plot_corner_plot(df_plot,weights):
                         'author': None, 'abbrev': None, 'exp': True}
 
 # Option 1
-#    weights = np.ones(len(df_plot))
+    weights = np.ones(len(df_plot))
 
 
 ### start corner plot
     #palette='hls'
-    g = sns.PairGrid(df_plot,corner=True, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    g = sns.PairGrid(df_plot,corner=True, hue = "rho",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     #g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     #g = sns.PairGrid(df_plot,corner=True,diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
 
-    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
+    g.map_lower(sns.histplot, fill=True, alpha=0.8, bins=20)
+    #g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
     #g.map_lower(sns.scatterplot, alpha=0.8, size=df_plot["set_num"])
-    g.map_diag(sns.histplot,  weights=weights, bins=20);
-    #g.map_diag(sns.kdeplot);
+    #g.map_diag(sns.histplot,  weights=weights, bins=20);
+    g.map_diag(sns.kdeplot);
     g.add_legend() 
 
  
@@ -2823,11 +3057,12 @@ def plot_corner_plot(df_plot,weights):
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
 
-    plot_path = '5k_NM_corner_plot_both_weights.pdf' 
+    #plot_path = '5k_NM_corner_plot_both_weights.pdf' 
+    plot_path = 'test_4.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
 
-def plot_corner_plot_1(df_plot,weights):
+def plot_corner_plot_1(df_plot,observable_num,weights):
     obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
                     'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
                     'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
@@ -2918,6 +3153,10 @@ def plot_corner_plot_1(df_plot,weights):
                         'author': None, 'abbrev': None, 'exp': True}
     obs_exp['Rp16O']={'val':np.sqrt(6.66), 'err':None, 'ref': None, \
                         'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E6Li']={'val':-31.9940, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+
+
     #g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
     
     #cmap = sns.cubehelix_palette(8)
@@ -2926,13 +3165,43 @@ def plot_corner_plot_1(df_plot,weights):
     g = sns.PairGrid(df_plot,corner=True, diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     # Careful with KDE plots when there are too many data!
     #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
-    
-    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
-    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
-    g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
-    g.add_legend() 
-    for irow,row_obs in enumerate(df_plot.columns[0:5]):
+
  
+ #   def my_plt(x,y,bins,weights,color,**kwargs):
+ #       hist, xedges, yedges = np.histogram2d(x, y, bins=bins, weights=weights)
+ #       hist = hist.T
+ #       extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+ #       #plt.hexbin(x, y, gridsize=15, **kwargs)
+
+ #       #levels = kwargs.pop('levels', None)
+ #       #levels = compute_sigma_levels([1.0, 2.0])
+ #       levels = [0.68,0.95]
+ #       tmp = contour_levels(hist, levels)
+ #       plt.contour(hist, extent=extent, colors='xkcd:charcoal gray', linewidths=0.7, levels=tmp, alpha=0.5)
+
+
+    def my_plt(x,y,bins,weights,color,**kwargs):
+        #if label_ != kwargs['label']:
+        #    kwargs['weights'] = np.zeros(len(kwargs['weights']))
+
+        hist, xedges, yedges = np.histogram2d(x, y, bins=bins,density= True)
+        hist = hist.T
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        #levels = kwargs.pop('levels', None)
+        hist_new = scipy.ndimage.zoom(hist, 3)
+        levels = compute_sigma_levels([1.0, 2.0])
+        tmp = contour_levels(hist_new, levels)
+        plt.contour(hist_new, extent=extent, colors=color, linewidths=2, levels=tmp, alpha=0.9)
+
+
+
+    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=30)
+    g.map_lower(my_plt, bins=10, weights=weights,color = "k" )
+
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
+    g.map_diag(sns.histplot, kde=False, weights=weights, bins=30);
+    g.add_legend() 
+    for irow,row_obs in enumerate(df_plot.columns[0:observable_num]):
         # Extract exp value
         try: 
             obs_dict = obs_exp[row_obs]
@@ -2941,17 +3210,21 @@ def plot_corner_plot_1(df_plot,weights):
             if err is None: row_val = [val]
             else: row_val = [val-err, val+err]
         except KeyError: row_val=[]
-        for icol,col_obs in enumerate(df_plot.columns[0:5]):
+        for icol,col_obs in enumerate(df_plot.columns[0:observable_num]):
             ax = g.axes[irow,icol]
             # Check if axis is in upper triangle
             if ax is None: continue
             # Use correct axis label
             if ax.is_first_col():
-                try: ax.set_ylabel(obs_label[row_obs])
+                ax.tick_params(axis='y',labelsize=22)
+                try: ax.set_ylabel(obs_label[row_obs],fontsize=26)
                 except KeyError: ax.set_ylabel(row_obs)
             if ax.is_last_row():
-                try: ax.set_xlabel(obs_label[col_obs])
+                ax.tick_params(axis='x',labelsize=22)
+                try: ax.set_xlabel(obs_label[col_obs],fontsize=26)
                 except KeyError: ax.set_xlabel(col_obs)
+    
+
             # Extract exp value
             try: 
                 obs_dict = obs_exp[col_obs]
@@ -2984,7 +3257,9 @@ def plot_corner_plot_1(df_plot,weights):
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
     
-    plot_path = '800k_sample_NM_corner_plot_1.pdf' 
+    plot_path = '800k_sample_NM_corner_plot_with_Li6_E_batch_2.pdf' 
+    #plot_path = '800k_sample_NM_LEC_corner_plot_2.pdf' 
+    #plot_path = '5k_sample_NM_LEC_corner_plot_1.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
 
@@ -3087,24 +3362,57 @@ def plot_corner_plot_2(df_plot,weights):
     #cmap = sns.cubehelix_palette(8)
     #cmap = sns.color_palette("Paired")
     #sns.set_palette(cmap)
-    g = sns.PairGrid(df_plot,corner=True, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    g = sns.PairGrid(df_plot, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
     # Careful with KDE plots when there are too many data!
     #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
+
+    def my_plt(x,y,bins,label_,**kwargs):
+        #print('color')
+        #print(kwargs['color'])
+        #print(len(kwargs['weights']))
+        if label_ != kwargs['label']:
+            kwargs['weights'] = np.zeros(len(kwargs['weights']))
+
+
+        #print(kwargs)
+       
+        hist, xedges, yedges = np.histogram2d(x, y, bins=bins,density= True, weights= kwargs['weights'])
+        hist = hist.T
+        
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        #plt.hexbin(x, y, gridsize=15, **kwargs)
+
+        #levels = kwargs.pop('levels', None)
+        hist_new = scipy.ndimage.zoom(hist, 3)
+        levels = compute_sigma_levels([1.0, 2.0])
+        tmp = contour_levels(hist_new, levels)
+        plt.contour(hist_new, extent=extent, colors='xkcd:charcoal gray', linewidths=2, levels=tmp, alpha=1)
+
+
+    hue_order_1 = ['A2-4', 'A2-4, A16']
+    hue_order_2 = ['A2-4, A16', 'A2-4']
+    #current_palette = sns.color_palette() 
+    palette ={"A2-4": "C1", "A2-4, A16": "C0"}
+
+    g.map_lower(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_1 , palette = palette )
+    g.map_upper(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_2 , palette = palette)
+    g.map_lower(my_plt,bins=10,weights= weights[0:round(len(weights)/2)] ,label_ = "A2-4, A16" )
+    g.map_upper(my_plt,bins=10,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4")
     
-    g.map_lower(sns.histplot, fill=True, alpha=0.8, weights=weights, bins=20)
     #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
-    g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
-    g.add_legend() 
+    #g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+    g.map_diag(sns.histplot, kde=False,weights=weights, bins=20);
+
+
     for irow,row_obs in enumerate(df_plot.columns[0:5]):
- 
         # Extract exp value
-        try: 
-            obs_dict = obs_exp[row_obs]
-            val = obs_dict['val']
-            err = obs_dict['err']
-            if err is None: row_val = [val]
-            else: row_val = [val-err, val+err]
-        except KeyError: row_val=[]
+#        try: 
+#            obs_dict = obs_exp[row_obs]
+#            val = obs_dict['val']
+#            err = obs_dict['err']
+#            if err is None: row_val = [val]
+#            else: row_val = [val-err, val+err]
+#        except KeyError: row_val=[]
         for icol,col_obs in enumerate(df_plot.columns[0:5]):
             ax = g.axes[irow,icol]
             # Check if axis is in upper triangle
@@ -3114,9 +3422,20 @@ def plot_corner_plot_2(df_plot,weights):
                 try: ax.set_ylabel(obs_label[row_obs])
                 except KeyError: ax.set_ylabel(row_obs)
             if ax.is_last_row():
+                if icol == 0:
+                    ax.set_xlim(0.12,0.20)
+                    ax.set_xticks([0.12,0.16,0.20])
                 try: ax.set_xlabel(obs_label[col_obs])
+
                 except KeyError: ax.set_xlabel(col_obs)
-            # Extract exp value
+
+#            if ax.is_last_col():
+#                try: 
+#                    ax.set_ylabel(obs_label[row_obs])
+#                    ax.yaxis.set_ticks_position('right')
+#                except KeyError: ax.set_ylabel(row_obs)
+
+#            # Extract exp value
             try: 
                 obs_dict = obs_exp[col_obs]
                 val = obs_dict['val']
@@ -3124,15 +3443,39 @@ def plot_corner_plot_2(df_plot,weights):
                 if err is None: col_val = [val]
                 else: col_val = [val-err, val+err]
             except KeyError: col_val=[]
+            try: 
+                obs_dict = obs_exp[row_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: row_val = [val]
+                else: row_val = [val-err, val+err]
+            except KeyError: row_val=[]
+
             # Plot exp values
-            if icol==irow:
+            if icol==irow:    # diagonal
                 if len(row_val)==2:
                     ax.axvline(row_val[0],color='r',alpha=0.5)
                     ax.axvline(row_val[1],color='r',alpha=0.5)
                     ax.axvspan(*row_val,color='r',alpha=0.1)
                 elif len(row_val)==1:
                     ax.axvline(row_val[0],color='r')
-            else:
+            elif icol > irow: # upper triangle
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+#                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+
+            elif icol < irow:  # lower triangle
                 if len(row_val)==2:
                     ax.axhline(row_val[0],color='r',alpha=0.5)
                     ax.axhline(row_val[1],color='r',alpha=0.5)
@@ -3147,8 +3490,684 @@ def plot_corner_plot_2(df_plot,weights):
                     ax.axvspan(*col_val,color='r',alpha=0.1)
                 elif len(col_val)==1:
                     ax.axvline(col_val[0],color='r',alpha=0.5)
+#            if icol==1 and irow==0:
+#                 print(row_val)
+#                 g.canvas.draw()
+#                 ax.axhspan(*row_val,color='r',alpha=0.1)
+                 #rect = plt.Rectangle((0.1,0.2),0.4,0.3, color="red")
+                 #ax.add_patch(rect)
+                 #ax.axhspan(0.15,0.17,color='r',alpha=0.1)
+
+    g.add_legend() 
     
     plot_path = '5k_NM_corner_plot_both_weights_5.pdf' 
     plt.savefig(plot_path, bbox_inches = 'tight')
     plt.close('all')
+
+
+
+
+def plot_corner_plot_3(df_plot,observable_num,weights,tmp_input_3):
+    obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
+                    'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
+                    'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
+                    'E3-208Pb':r'$E_{3^-}(^{208}\mathrm{Pb})$ [MeV]',\
+                    'Rp208Pb':r'$R_\mathrm{pt-p}(^{208}\mathrm{Pb})$ [fm]',\
+                    'Rp48Ca':r'$R_\mathrm{pt-p}(^{48}\mathrm{Ca})$ [fm]',\
+                    'saturation_energy':r'$E_0/A$ [MeV]',\
+                    'saturation_density':r'$\rho_0$ [fm$^{-3}$]',\
+                    'Rskin48Ca':r'$R_\mathrm{skin}(^{48}\mathrm{Ca})$ [fm]',\
+                    'Rskin208Pb':r'$R_\mathrm{skin}(^{208}\mathrm{Pb})$ [fm]',\
+                    'aD208Pb':r'$\alpha_D(^{208}\mathrm{Pb})$ [fm$^3$]',\
+                    'symmetry_energy':r'$S$ [MeV]',\
+                    'L':r'$L$ [MeV]',\
+                    'K':r'$K$ [MeV]',\
+                    'E2H':r'$E(^{2}\mathrm{H})$ [MeV]',\
+                    'Rp2H':r'$R_p(^{2}\mathrm{H})$ [fm]',\
+                    'Q2H':r'$Q(^{2}\mathrm{H})$ [e fm$^2$]',\
+                    'E3H':r'$E(^{3}\mathrm{H})$ [MeV]',\
+                    'E4He':r'$E(^{4}\mathrm{He})$ [MeV]',\
+                    'Rp4He':r'$R_p(^{4}\mathrm{He})$ [fm]',\
+                    'E16O':r'$E(^{16}\mathrm{O})$ [MeV]',\
+                    'Rp16O':r'$R_p(^{16}\mathrm{O})$ [fm]'}
+    
+    obs_exp={}
+    # ---
+    # 48Ca
+    # ---
+    # Exp. refs missing
+    obs_exp['EA48Ca']={'val':-416/48, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E2+48Ca']={'val':3.83, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    # Rch = 3.477(2), ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp48Ca']={'val':3.393, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # Hagen et al, Nat. Phys. 12, 186-190 (2016)
+    obs_exp['Rskin48Ca']={'val':0.135, 'err':0.015, 'ref': 'Nat. Phys. 12, 186-190 (2016)', \
+                          'author': 'Hagen et al.', 'abbrev': 'Hagen', 'exp': False}
+    # ---
+    # 208Pb
+    # ---
+    # Exp. refs missing
+    obs_exp['EA208Pb']={'val':-1636.4/208, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3-208Pb']={'val':2.614, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    #
+    # Rch = 5.5012 +/- 0.0013, ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp208Pb']={'val':5.4498, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # alpha_D = 20.1 +/- 0.6 fm^3, A. Tamii et al, Phys. Rev. Lett. 107, 062502 (2011).
+    obs_exp['aD208Pb']={'val':20.1, 'err':0.6, 'ref': 'Phys. Rev. Lett. 107, 062502 (2011).', \
+                       'author': 'Tamii et al', 'abbrev': 'Tamii', 'exp': True}
+    # ---
+    # NM
+    # ---
+    # Bender et al, Rev. Mod. Phys. 75, 121–180 (2003).
+    # Hebeler, et al, Phys. Rev. C 83, 031301 (2011).
+    # or E0 = −15.9±0.4 MeV, n0 = 0.164±0.007 fm−3 (Drischler et al. 2016)
+    obs_exp['saturation_energy']={'val':-16., 'err':0.5, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    obs_exp['saturation_density']={'val':0.16, 'err':0.01, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    # Lattimer & Lim (2013); Lattimer & Steiner (2014)
+    obs_exp['symmetry_energy']={'val':31., 'err':1., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    obs_exp['L']={'val':50., 'err':10., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    # Shlomo et al. 2006; Piekarewicz 2010
+    obs_exp['K']={'val':240., 'err':20., 'ref': 'Shlomo et al. 2006; Piekarewicz 2010', \
+                          'author': 'Shlomo et al.', 'abbrev': 'Shlomo', 'exp': False}
+
+    # ---
+    # A=2-16
+    # ---
+    # Values from PRX table.
+    obs_exp['E2H']={'val':-2.2298, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp2H']={'val':np.sqrt(3.903), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Q2H']={'val':0.27, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3H']={'val':-8.4818, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E4He']={'val':-28.2956, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp4He']={'val':np.sqrt(2.1176), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E16O']={'val':-127.62, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp16O']={'val':np.sqrt(6.66), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    #g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
+    
+    #cmap = sns.cubehelix_palette(8)
+    #cmap = sns.color_palette("Paired")
+    #sns.set_palette(cmap)
+    g = sns.PairGrid(df_plot, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    # Careful with KDE plots when there are too many data!
+    #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
+
+    def my_plt(x,y,bins,label_,color,**kwargs):
+        #print('color')
+        #print(kwargs)
+        #print(len(kwargs['weights']))
+        if label_ != kwargs['label']:
+            kwargs['weights'] = np.zeros(len(kwargs['weights']))
+
+
+        #print(kwargs)
+       
+        hist, xedges, yedges = np.histogram2d(x, y, bins=bins,density= True, weights= kwargs['weights'])
+        hist = hist.T
+        
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        #plt.hexbin(x, y, gridsize=15, **kwargs)
+
+        #levels = kwargs.pop('levels', None)
+        hist_new = scipy.ndimage.zoom(hist, 3)
+        levels = compute_sigma_levels([1.0, 2.0])
+        tmp = contour_levels(hist_new, levels)
+        plt.contour(hist_new, extent=extent, colors=color, linewidths=2, levels=tmp, alpha=0.9)
+       ## plot two different cluster of points
+       # x_list =  x.loc[tmp_input_1].values 
+       # y_list =  y.loc[tmp_input_1].values
+       # plt.scatter(x_list,y_list,c = 'darkblue',marker='x',s=10) 
+
+       # x_list_2 =  x.loc[tmp_input_2].values 
+       # y_list_2 =  y.loc[tmp_input_2].values
+       # plt.scatter(x_list_2,y_list_2,c = 'darkred',marker='x',s=10) 
+
+        # plot one point 
+        #x_list_3 =  x.loc[tmp_input_3].values 
+        #y_list_3 =  y.loc[tmp_input_3].values
+        #plt.scatter(x_list_3,y_list_3,c = 'darkred',marker='d',s=10) 
+        #for i,txt in enumerate(np.arange(len(tmp_input_3))):
+        #    plt.annotate(txt,(x_list_3[i],y_list_3[i]),fontsize=0.4)
+
+
+
+
+    hue_order_1 = ['A2-4_6', 'A2-4_6, A16']
+    hue_order_2 = ['A2-4_6, A16', 'A2-4_6']
+    #current_palette = sns.color_palette() 
+    palette ={"A2-4_6": "C1", "A2-4_6, A16": "C0"}
+
+    g.map_lower(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_1 , palette = palette )
+    g.map_upper(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_2 , palette = palette)
+    g.map_lower(my_plt,bins=10,weights= weights[0:round(len(weights)/2)] ,label_ = "A2-4_6, A16",color='darkblue' )
+    g.map_lower(my_plt,bins=10,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4_6",color='darkred')
+    #g.map_upper(my_plt,bins=10,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4",color='k')
+    
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
+    #g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+    g.map_diag(sns.histplot, kde=False,weights=weights, bins=20);
+
+
+    for irow,row_obs in enumerate(df_plot.columns[0:observable_num]):
+        # Extract exp value
+#        try: 
+#            obs_dict = obs_exp[row_obs]
+#            val = obs_dict['val']
+#            err = obs_dict['err']
+#            if err is None: row_val = [val]
+#            else: row_val = [val-err, val+err]
+#        except KeyError: row_val=[]
+        for icol,col_obs in enumerate(df_plot.columns[0:observable_num]):
+            ax = g.axes[irow,icol]
+            # Check if axis is in upper triangle
+            if ax is None: continue
+            # Use correct axis label
+            if ax.is_first_col():
+                try: ax.set_ylabel(obs_label[row_obs])
+                except KeyError: ax.set_ylabel(row_obs)
+            if ax.is_last_row():
+#                if icol == 0:
+#                    ax.set_xlim(0.12,0.20)
+#                    ax.set_xticks([0.12,0.16,0.20])
+                try: ax.set_xlabel(obs_label[col_obs])
+
+                except KeyError: ax.set_xlabel(col_obs)
+
+#            if ax.is_last_col():
+#                try: 
+#                    ax.set_ylabel(obs_label[row_obs])
+#                    ax.yaxis.set_ticks_position('right')
+#                except KeyError: ax.set_ylabel(row_obs)
+
+#            # Extract exp value
+            try: 
+                obs_dict = obs_exp[col_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: col_val = [val]
+                else: col_val = [val-err, val+err]
+            except KeyError: col_val=[]
+            try: 
+                obs_dict = obs_exp[row_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: row_val = [val]
+                else: row_val = [val-err, val+err]
+            except KeyError: row_val=[]
+
+            # Plot exp values
+            if icol==irow:    # diagonal
+                if len(row_val)==2:
+                    ax.axvline(row_val[0],color='r',alpha=0.5)
+                    ax.axvline(row_val[1],color='r',alpha=0.5)
+                    ax.axvspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axvline(row_val[0],color='r')
+            elif icol > irow: # upper triangle
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+#                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+
+            elif icol < irow:  # lower triangle
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+#            if icol==1 and irow==0:
+#                 print(row_val)
+#                 g.canvas.draw()
+#                 ax.axhspan(*row_val,color='r',alpha=0.1)
+                 #rect = plt.Rectangle((0.1,0.2),0.4,0.3, color="red")
+                 #ax.add_patch(rect)
+                 #ax.axhspan(0.15,0.17,color='r',alpha=0.1)
+
+    g.add_legend() 
+    
+    #plot_path = '5k_NM_corner_plot_both_weights_10_LEC_just_for_test.pdf' 
+    plot_path = '5k_NM_corner_plot_both_weights_7_with_ELi6_batch_2_2.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+def plot_corner_plot_33(df_plot,observable_num,weights):
+    obs_label = {'EA48Ca':r'$E/A(^{48}\mathrm{Ca})$ [MeV]',\
+                    'E2+48Ca':r'$E_{2^+}(^{48}\mathrm{Ca})$ [MeV]',\
+                    'EA208Pb':r'$E/A(^{208}\mathrm{Pb})$ [MeV]',\
+                    'E3-208Pb':r'$E_{3^-}(^{208}\mathrm{Pb})$ [MeV]',\
+                    'Rp208Pb':r'$R_\mathrm{pt-p}(^{208}\mathrm{Pb})$ [fm]',\
+                    'Rp48Ca':r'$R_\mathrm{pt-p}(^{48}\mathrm{Ca})$ [fm]',\
+                    'saturation_energy':r'$E_0/A$ [MeV]',\
+                    'saturation_density':r'$\rho_0$ [fm$^{-3}$]',\
+                    'Rskin48Ca':r'$R_\mathrm{skin}(^{48}\mathrm{Ca})$ [fm]',\
+                    'Rskin208Pb':r'$R_\mathrm{skin}(^{208}\mathrm{Pb})$ [fm]',\
+                    'aD208Pb':r'$\alpha_D(^{208}\mathrm{Pb})$ [fm$^3$]',\
+                    'symmetry_energy':r'$S$ [MeV]',\
+                    'L':r'$L$ [MeV]',\
+                    'K':r'$K$ [MeV]',\
+                    'E2H':r'$E(^{2}\mathrm{H})$ [MeV]',\
+                    'Rp2H':r'$R_p(^{2}\mathrm{H})$ [fm]',\
+                    'Q2H':r'$Q(^{2}\mathrm{H})$ [e fm$^2$]',\
+                    'E3H':r'$E(^{3}\mathrm{H})$ [MeV]',\
+                    'E4He':r'$E(^{4}\mathrm{He})$ [MeV]',\
+                    'Rp4He':r'$R_p(^{4}\mathrm{He})$ [fm]',\
+                    'E16O':r'$E(^{16}\mathrm{O})$ [MeV]',\
+                    'Rp16O':r'$R_p(^{16}\mathrm{O})$ [fm]'}
+    
+    obs_exp={}
+    # ---
+    # 48Ca
+    # ---
+    # Exp. refs missing
+    obs_exp['EA48Ca']={'val':-416/48, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E2+48Ca']={'val':3.83, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    # Rch = 3.477(2), ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp48Ca']={'val':3.393, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # Hagen et al, Nat. Phys. 12, 186-190 (2016)
+    obs_exp['Rskin48Ca']={'val':0.135, 'err':0.015, 'ref': 'Nat. Phys. 12, 186-190 (2016)', \
+                          'author': 'Hagen et al.', 'abbrev': 'Hagen', 'exp': False}
+    # ---
+    # 208Pb
+    # ---
+    # Exp. refs missing
+    obs_exp['EA208Pb']={'val':-1636.4/208, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3-208Pb']={'val':2.614, 'err':None, 'ref': None, 'author': None, 'abbrev': None, 'exp': True}
+    #
+    # Rch = 5.5012 +/- 0.0013, ADNDT 99 (2013) 69-95.
+    # Translated to point-proton radius via scripts/radius.py
+    obs_exp['Rp208Pb']={'val':5.4498, 'err':None, 'ref': 'ADNDT 99 (2013) 69-95', \
+                       'author': None, 'abbrev': 'ADNDT', 'exp': True}
+    # alpha_D = 20.1 +/- 0.6 fm^3, A. Tamii et al, Phys. Rev. Lett. 107, 062502 (2011).
+    obs_exp['aD208Pb']={'val':20.1, 'err':0.6, 'ref': 'Phys. Rev. Lett. 107, 062502 (2011).', \
+                       'author': 'Tamii et al', 'abbrev': 'Tamii', 'exp': True}
+    # ---
+    # NM
+    # ---
+    # Bender et al, Rev. Mod. Phys. 75, 121–180 (2003).
+    # Hebeler, et al, Phys. Rev. C 83, 031301 (2011).
+    # or E0 = −15.9±0.4 MeV, n0 = 0.164±0.007 fm−3 (Drischler et al. 2016)
+    obs_exp['saturation_energy']={'val':-16., 'err':0.5, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    obs_exp['saturation_density']={'val':0.16, 'err':0.01, 'ref': 'Rev. Mod. Phys. 75, 121–180 (2003)', \
+                          'author': 'Bender et al.', 'abbrev': 'RMP(2003)', 'exp': False}
+    # Lattimer & Lim (2013); Lattimer & Steiner (2014)
+    obs_exp['symmetry_energy']={'val':31., 'err':1., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    obs_exp['L']={'val':50., 'err':10., 'ref': 'Lattimer & Lim (2013); Lattimer & Steiner (2014)', \
+                          'author': 'Lattimer et al.', 'abbrev': 'Lattimer', 'exp': False}
+    # Shlomo et al. 2006; Piekarewicz 2010
+    obs_exp['K']={'val':240., 'err':20., 'ref': 'Shlomo et al. 2006; Piekarewicz 2010', \
+                          'author': 'Shlomo et al.', 'abbrev': 'Shlomo', 'exp': False}
+
+    # ---
+    # A=2-16
+    # ---
+    # Values from PRX table.
+    obs_exp['E2H']={'val':-2.2298, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp2H']={'val':np.sqrt(3.903), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Q2H']={'val':0.27, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E3H']={'val':-8.4818, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E4He']={'val':-28.2956, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp4He']={'val':np.sqrt(2.1176), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['E16O']={'val':-127.62, 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    obs_exp['Rp16O']={'val':np.sqrt(6.66), 'err':None, 'ref': None, \
+                        'author': None, 'abbrev': None, 'exp': True}
+    #g = sns.PairGrid(df_plot,corner=True,layout_pad=-0.5,aspect=1.05,)
+    
+    #cmap = sns.cubehelix_palette(8)
+    #cmap = sns.color_palette("Paired")
+    #sns.set_palette(cmap)
+    g = sns.PairGrid(df_plot, hue = "weights_option",diag_sharey=False,layout_pad=-0.5,aspect=1.05,)
+    # Careful with KDE plots when there are too many data!
+    #g.map_lower(sns.kdeplot, fill=True, alpha=0.2, weights=weights)
+
+    def my_plt(x,y,bins,label_,color,linestyles,**kwargs):
+        #print('color')
+        #print(kwargs)
+        #print(len(kwargs['weights']))
+        if label_ != kwargs['label']:
+            kwargs['weights'] = np.zeros(len(kwargs['weights']))
+
+
+        #print(kwargs)
+       
+        hist, xedges, yedges = np.histogram2d(x, y, bins=bins,density= True, weights= kwargs['weights'])
+        hist = hist.T
+        
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        #plt.hexbin(x, y, gridsize=15, **kwargs)
+
+        #levels = kwargs.pop('levels', None)
+        hist_new = scipy.ndimage.zoom(hist, 3)
+        #levels = compute_sigma_levels([1.0, 2.0])
+        #print(levels )
+        levels = [0.50,0.90]
+        #levels = [0.39,0.86]
+        tmp = contour_levels(hist_new, levels)
+#        tmp = [0.5,0.9]
+        #tmp = [0.68,0.95]
+        #tmp = [0.68,0.99]
+        contour = plt.contour(hist_new, extent=extent, colors=color, linewidths=2, linestyles=linestyles, levels=tmp, alpha=0.8)
+        #dic = dict(zip(tmp,levels))
+        #print(dic)
+        #plt.clabel(contour,fontsize=5,colors=color,fmt=dic)
+
+       ## plot two different cluster of points
+       # x_list =  x.loc[tmp_input_1].values 
+       # y_list =  y.loc[tmp_input_1].values
+       # plt.scatter(x_list,y_list,c = 'darkblue',marker='x',s=10) 
+
+       # x_list_2 =  x.loc[tmp_input_2].values 
+       # y_list_2 =  y.loc[tmp_input_2].values
+       # plt.scatter(x_list_2,y_list_2,c = 'darkred',marker='x',s=10) 
+
+        # plot one point 
+        #x_list_3 =  x.loc[tmp_input_3] 
+        #y_list_3 =  y.loc[tmp_input_3]
+        #plt.scatter(x_list_3,y_list_3,c = 'darkred',marker='d',s=10) 
+
+    def my_plot_KDE(x,y,label_,colors,cmap,linestyles,alpha_1,alpha_2,**kwargs ):
+        print(kwargs)
+        print(len(kwargs['weights']))
+
+        #if label_ != kwargs['label']:
+        #    kwargs['weights'] = np.zeros(len(kwargs['weights']))
+        weights = kwargs['weights']
+        kernel_1 = fit_kde_kernel(x,y, bw=1.2, print_debug=False, weights=weights)
+        pdf_levels=get_pdf_levels(x, y, kernel_1, cred_levels=[0.50, 0.90 ],print_debug=True)
+        plot_scatter_KDE(x,y,kernel_1,pdf_levels=pdf_levels,colors=colors,cmap=cmap, weights=weights,linestyles=linestyles,alpha_1=alpha_1,alpha_2=alpha_2)
+
+    hue_order_1 = ['A2-4', 'A2-4, A16']
+    hue_order_2 = ['A2-4, A16', 'A2-4']
+    #current_palette = sns.color_palette() 
+    palette ={"A2-4": "C1", "A2-4, A16": "C0"}
+    cmap_1 = matplotlib.cm.get_cmap('Oranges')   
+    cmap_2 = matplotlib.cm.get_cmap('Blues') 
+
+    g.map_diag(sns.histplot, kde=False,weights=weights, bins=20);
+    #g.map_lower(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_1 , palette = palette )
+    #g.map_upper(sns.histplot, fill=True, alpha=1, weights=weights, bins=20, hue_order = hue_order_2 , palette = palette)
+    #g.map_lower(my_plt,bins=10,weights= weights[0:round(len(weights)/2)] ,label_ = "A2-4, A16",color='darkblue',linestyles="-")
+    #g.map_lower(my_plt,bins=10,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4",color='darkred',linestyles="--")
+    #weights_  = np.zeros(round(len(weights)/2))
+    #weights_  = np.append(weights_,weights[0:round(len(weights)/2)])
+
+    g.map_lower(my_plot_KDE,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4",colors="darkorange",cmap=cmap_1,linestyles="--",alpha_1=0.9,alpha_2 = 0.8)
+    g.map_lower(my_plot_KDE,weights= weights[0:round(len(weights)/2)] ,label_ = "A2-4, A16",colors='darkblue',cmap =cmap_2 ,linestyles="-",alpha_1=0.4,alpha_2=0.8)
+
+    #g.map_lower(sns.kdeplot,weights= weights ,levels=[0.1,0.5,0.9],bw_adjust=1.5 )
+    #g.map_lower(sns.kdeplot,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4",color='red')
+
+
+    #g.map_lower(my_plt,bins=10,weights= weights[0:round(len(weights)/2)] ,label_ = "A2-4, A16",color='darkblue' )
+
+    #g.map_upper(my_plt,bins=10,weights= weights[round(len(weights)/2)::],hue_order = hue_order_1, label_ = "A2-4",color='k')
+   
+
+ 
+    #g.map_lower(sns.scatterplot, alpha=0.8, size=weights)
+    #g.map_diag(sns.histplot, kde=False, weights=weights, bins=20);
+
+
+    for irow,row_obs in enumerate(df_plot.columns[0:observable_num]):
+        # Extract exp value
+#        try: 
+#            obs_dict = obs_exp[row_obs]
+#            val = obs_dict['val']
+#            err = obs_dict['err']
+#            if err is None: row_val = [val]
+#            else: row_val = [val-err, val+err]
+#        except KeyError: row_val=[]
+        for icol,col_obs in enumerate(df_plot.columns[0:observable_num]):
+            ax = g.axes[irow,icol]
+            # Check if axis is in upper triangle
+            if ax is None: continue
+            # Use correct axis label
+            if ax.is_first_col():
+                try: ax.set_ylabel(obs_label[row_obs])
+                except KeyError: ax.set_ylabel(row_obs)
+            if ax.is_last_row():
+#                if icol == 0:
+#                    ax.set_xlim(0.12,0.20)
+#                    ax.set_xticks([0.12,0.16,0.20])
+                try: ax.set_xlabel(obs_label[col_obs])
+
+                except KeyError: ax.set_xlabel(col_obs)
+
+#            if ax.is_last_col():
+#                try: 
+#                    ax.set_ylabel(obs_label[row_obs])
+#                    ax.yaxis.set_ticks_position('right')
+#                except KeyError: ax.set_ylabel(row_obs)
+
+#            # Extract exp value
+            try: 
+                obs_dict = obs_exp[col_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: col_val = [val]
+                else: col_val = [val-err, val+err]
+            except KeyError: col_val=[]
+            try: 
+                obs_dict = obs_exp[row_obs]
+                val = obs_dict['val']
+                err = obs_dict['err']
+                if err is None: row_val = [val]
+                else: row_val = [val-err, val+err]
+            except KeyError: row_val=[]
+
+            # Plot exp values
+            if icol==irow:    # diagonal
+                if len(row_val)==2:
+                    ax.axvline(row_val[0],color='r',alpha=0.5)
+                    ax.axvline(row_val[1],color='r',alpha=0.5)
+                    ax.axvspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axvline(row_val[0],color='r')
+            elif icol > irow: # upper triangle
+                ax.remove()
+#                fig.delaxes(axes[irow][icol])
+#                if len(row_val)==2:
+#                    ax.axhline(row_val[0],color='r',alpha=0.5)
+#                    ax.axhline(row_val[1],color='r',alpha=0.5)
+#                    #if not len(col_val)==2:
+##                    ax.axhspan(*row_val,color='r',alpha=0.1)
+#                elif len(row_val)==1:
+#                    ax.axhline(row_val[0],color='r',alpha=0.5)
+#                if len(col_val)==2:
+#                    ax.axvline(col_val[0],color='r',alpha=0.5)
+#                    ax.axvline(col_val[1],color='r',alpha=0.5)
+#                    #if not len(row_val)==2:
+#                    ax.axvspan(*col_val,color='r',alpha=0.1)
+#                elif len(col_val)==1:
+#                    ax.axvline(col_val[0],color='r',alpha=0.5)
+
+            elif icol < irow:  # lower triangle
+                if len(row_val)==2:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                    ax.axhline(row_val[1],color='r',alpha=0.5)
+                    #if not len(col_val)==2:
+                    ax.axhspan(*row_val,color='r',alpha=0.1)
+                elif len(row_val)==1:
+                    ax.axhline(row_val[0],color='r',alpha=0.5)
+                if len(col_val)==2:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                    ax.axvline(col_val[1],color='r',alpha=0.5)
+                    #if not len(row_val)==2:
+                    ax.axvspan(*col_val,color='r',alpha=0.1)
+                elif len(col_val)==1:
+                    ax.axvline(col_val[0],color='r',alpha=0.5)
+                #plt.Rectangle((row_val[0],col_val[0]),1,1,fc = "red",ec="darkred",ls="-",alpha=0.7)
+            if icol == 0:
+                 ax.set_xlim(0.10,0.2)
+            if icol == 1:
+                 ax.set_xlim(-20,-5)
+            if icol == 2:
+                 ax.set_xlim(20,35)
+            if icol == 3:
+                 ax.set_xlim(15,85)
+
+            if irow ==1:
+                 ax.set_ylim(-20,-5)
+            if irow ==2:
+                 ax.set_ylim(20,35)
+            if irow ==3:
+                 ax.set_ylim(15,85)
+            if irow ==4:
+                 ax.set_ylim(0,600)
+
+#                 print(row_val)
+#                 g.canvas.draw()
+#                 ax.axhspan(*row_val,color='r',alpha=0.1)
+                 #rect = plt.Rectangle((0.1,0.2),0.4,0.3, color="red")
+                 #ax.add_patch(rect)
+                 #ax.axhspan(0.15,0.17,color='r',alpha=0.1)
+
+    #g.add_legend() 
+    #g.legend(loc="upper right")
+    #handles = g._legend_data.values()
+    #labels = g._legend_data.keys()
+
+    handles = [plt.Rectangle((0,0),1,1,fc = cmap_1(0.2),ec="darkorange",ls="--"),  plt.Rectangle((0,0),1,1,fc = cmap_2(0.3),ec="darkblue" ,ls="-") ]
+ 
+    labels = [r'${\rm \mathbf{d}}_{A=2,3,4,6}$',r'${\rm \mathbf{d}}_{A=2,3,4,6,16}$']
+
+    print(handles)
+    print(labels)
+
+    g.fig.legend(handles=handles, labels=labels, loc='upper right', ncol=1,prop={'size': 35}) 
+
+    #plot_path = '5k_NM_corner_plot_both_weights_10_LEC_just_for_test.pdf' 
+    plot_path = '5k_NM_corner_plot_both_weights_with_ELi6_batch_2.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+
+
+def plot_corner_plot_4(df_plot,observable_num,weights):
+  #  sns.set_style("white")
+    target_observable = 'rho_E_A'
+    fig,axes = plt.subplots(4,5,figsize=(10,10),sharey='all')
+    #fig,axes = plt.subplots(4,5,figsize=(10,12))
+    plt.subplots_adjust(wspace =0.1, hspace =0.5)
+
+#    g = sns.PairGrid(df_plot,y_vars=['L'],x_vars=['cE','cD','c1','c2','c3','c4','Ct1S0pp','Ct1S0np','Ct1S0nn','Ct3S1','C1S0','C3P0','C1P1','C3P1','C3S1','CE1','C3P2'],layout_pad=-0.5,aspect=1.05, height=4)
+    # Careful with KDE plots when there are too many data!
+
+   # g.map(sns.kdeplot, fill=True, alpha=0.15, weights=weights,zorder=3.)
+    #g.map(sns.scatterplot, alpha=0.8, size=weights, legend=None, zorder=3.);
+
+
+#    g.map(sns.histplot, fill=True, alpha=1, weights=weights, bins=30)
+
+
+    x_lables = ['cE','cD','c1','c2','c3','c4','Ct1S0pp','Ct1S0np','Ct1S0nn','Ct3S1','C1S0','C3P0','C1P1','C3P1','C3S1','CE1','C3P2']
+#
+    fig_count = 0
+    for ket in range(4):
+        for bar in range(5):
+            ax = axes[ket][bar]
+            if fig_count < 17:
+                x_list =  df_plot[x_lables[fig_count]].values
+                y_list =  df_plot[target_observable].values
+                sns.histplot(df_plot,x=x_lables[fig_count],y=target_observable,bins=20,ax=ax)
+                #y_list = df_plot['L'].values
+                #x_list = df_plot[x_lables[fig_count]].values
+   #             ax.set_ylim(0,19)
+                x_min = min(x_list)
+                x_max = max(x_list)
+                x_mid = (x_max-x_min)/2
+                x_shift = x_mid *0.4
+                x_min_shift = round((x_min + x_shift),2)
+                x_max_shift = round((x_max - x_shift),2)
+                round_ = round(math.log(x_mid * 2))
+                #ax.set_xlim(x_min,x_max)
+                #ax.set_ylim(0,100)
+                ax.set_xticks([x_min_shift,x_max_shift])
+                if round_ >=0:
+                    ax.set_xticklabels([round(x_min,2),round(x_max,2)])
+                elif round_ <0:
+                    ax.set_xticklabels([round(x_min,3),round(x_max,3)])
+                #ax.set_xlabel("%s" %(my_LEC_label_2[fig_count]),fontsize = 20)
+                ax.tick_params(labelsize=12)
+                ax.set_xlabel("")
+#
+                
+                correlation = np.corrcoef(df_plot[target_observable].values,df_plot[x_lables[fig_count]].values)
+                #print(correlation[0][1])
+                #ax.set_title(x_lables[fig_count]+r" $r^{2}=$"+str(round(correlation[0,1]**2,2)),fontsize = 10)
+                ax.set_title(x_lables[fig_count]+r" $\rho=$"+str(round(correlation[0,1],2)),fontsize = 10)
+                fig_count = fig_count + 1
+            else:
+                fig.delaxes(axes[ket][bar])
+
+    
+    #plot_path = '5k_NM_corner_plot_both_weights_10_LEC_just_for_test.pdf' 
+    #plot_path = '5k_L_LEC_1.pdf' 
+    plot_path = '800k_%s_LEC_1.pdf' % ("rho_E_A") 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+
+
+def test_plot_KDE_(x,y,weights_1,weights_2):
+#    weights = np.ones_like(x)
+
+    kernel_1 = fit_kde_kernel(x,y, bw=1.5, print_debug=True, weights=weights_1)
+    pdf_levels_1=get_pdf_levels(x, y, kernel_1, cred_levels=[0.68, 0.90, 0.95],print_debug=True)
+    plot_scatter_KDE(x,y,kernel_1,pdf_levels=pdf_levels_1, weights=weights_1,colors="blue",cmap="Blues")
+
+    kernel_2 = fit_kde_kernel(x,y, bw=1.5, print_debug=True, weights=weights_2)
+    pdf_levels_2=get_pdf_levels(x, y, kernel_1, cred_levels=[0.68, 0.90, 0.95],print_debug=True)
+    plot_scatter_KDE(x,y,kernel_2,pdf_levels=pdf_levels_2, weights=weights_2,colors="red",cmap="Reds")
+
+
+    plot_path = '5k_NM_corner_plot_both_weights_74.pdf' 
+    plt.savefig(plot_path, bbox_inches = 'tight')
+    plt.close('all')
+
+
 
